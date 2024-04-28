@@ -60,7 +60,7 @@ public class Member extends BaseTime {
     private Double mannerGrade;
 
     @Column(name = "status", nullable = false)
-    @ColumnDefault("active")
+    @ColumnDefault("'active'")
     private String status;
 
     @Column(name = "complaintCount", nullable = false)
