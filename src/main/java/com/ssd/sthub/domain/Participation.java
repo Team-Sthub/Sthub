@@ -22,8 +22,9 @@ public class Participation extends BaseTime {
 
     private String content; // 추가사항
 
-    @Column(nullable = false, columnDefinition = "boolean default false")
-    private boolean agree; // 수락 여부
+    @Column(nullable = false, columnDefinition = "default 0")
+    @ColumnDefault("0")
+    private int accept; // 수락 여부 0(대기) 1(수락) 2(거절)
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "groupBuyingId")
