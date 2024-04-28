@@ -1,6 +1,7 @@
 package com.ssd.sthub.domain;
 
 import com.fasterxml.jackson.databind.ser.Serializers;
+import com.ssd.sthub.domain.enumerate.Bank;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
