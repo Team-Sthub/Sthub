@@ -19,4 +19,8 @@ public class Purchase extends BaseTime{
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="secondhandId")
     private SecondHand secondHand;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "memberId")
+    private Member member;
 }
