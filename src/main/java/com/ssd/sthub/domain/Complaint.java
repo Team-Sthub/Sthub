@@ -17,7 +17,7 @@ public class Complaint {
     @Id
     @Column(name="complaintId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long complaintId;
+    private Long id;
 
     // 조건 (각 항목은 노션에 정리되어 있음)
     @Column(nullable = false)
@@ -52,6 +52,12 @@ public class Complaint {
     private LocalDateTime createdAt;
 
     // 공동구매 조인
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "groupBuyingId")
+    private GroupBuying groupBuying;
 
     // 중고거래 조인
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "secondhandId")
+    private GroupBuying secondhand;
 }

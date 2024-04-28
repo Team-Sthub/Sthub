@@ -1,6 +1,7 @@
 package com.ssd.sthub.domain;
 
 import com.fasterxml.jackson.databind.ser.Serializers;
+import com.ssd.sthub.domain.enumerate.Bank;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -65,10 +66,4 @@ public class Member extends BaseTime {
     @Column(name = "complaintCount", nullable = false)
     @ColumnDefault("0")
     private int complaintCount;
-
-    @Column(name = "createdAt", nullable = false)
-    private Timestamp createdAt;
-
-    @Column(name = "updatedAt", nullable = false)
-    private Timestamp updatedAt;
 }

@@ -1,4 +1,4 @@
-package com.ssd.sthub.domain;
+package com.ssd.sthub.domain.enumerate;
 
 public enum Bank {
     SHINHAN("shinhan"), HANA("hana"), KOOKMIN("KB"), WOORI("woori"), NONGHYUP("NH");

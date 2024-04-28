@@ -17,7 +17,7 @@ public class Review {
     @Id
     @Column(name="reviewId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reviewId;
+    private Long id;
 
     // 별점
     @Column(nullable = false)
@@ -47,6 +47,12 @@ public class Review {
     private LocalDateTime createdAt;
 
     // 공동구매 조인
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "groupBuyingId")
+    private GroupBuying groupBuying;
 
     // 중고거래 조인
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "secondhandId")
+    private GroupBuying secondhand;
 }
