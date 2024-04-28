@@ -65,10 +65,4 @@ public class Member extends BaseTime {
     @Column(name = "complaintCount", nullable = false)
     @ColumnDefault("0")
     private int complaintCount;
-
-    @Column(name = "createdAt", nullable = false)
-    private Timestamp createdAt;
-
-    @Column(name = "updatedAt", nullable = false)
-    private Timestamp updatedAt;
 }
