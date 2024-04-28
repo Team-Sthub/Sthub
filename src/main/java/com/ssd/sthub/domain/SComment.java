@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "scomment")
+@Table(name = "sComment")
 public class SComment extends BaseTime{
 
     @Id
@@ -22,4 +22,8 @@ public class SComment extends BaseTime{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="secondhandId")
     private SecondHand secondHand;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "memberId")
+    private Member member;
 }
