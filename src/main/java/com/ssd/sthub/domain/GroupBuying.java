@@ -1,5 +1,6 @@
 package com.ssd.sthub.domain;
 
+import com.ssd.sthub.domain.enumerate.Category;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
