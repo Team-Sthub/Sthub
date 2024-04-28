@@ -1,0 +1,29 @@
+spring:
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+  datasource:
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        default_batch_fetch_size: 1000
+    show-sql: true
+
+  #  redis:
+  #    host: localhost
+  #    port: 6379
+
+  config:
+    activate:
+      on-profile: local
+#    import:
+#      application-secret.yml

@@ -12,7 +12,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Builder
 @Entity
 @Table(name = "secondhand")
-public class SecondHand extends BaseTime{
+public class Secondhand extends BaseTime{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

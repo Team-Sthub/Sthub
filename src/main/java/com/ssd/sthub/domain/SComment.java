@@ -21,7 +21,7 @@ public class SComment extends BaseTime{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="secondhandId")
-    private SecondHand secondHand;
+    private Secondhand secondHand;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "memberId")
