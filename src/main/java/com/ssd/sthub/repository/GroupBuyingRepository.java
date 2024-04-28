@@ -7,5 +7,4 @@ import java.util.Optional;
 
 public interface GroupBuyingRepository extends JpaRepository<GroupBuying, Long> {
 
-    Optional<GroupBuying> findByGroupBuyingId(String groupBuyingId);
 }
