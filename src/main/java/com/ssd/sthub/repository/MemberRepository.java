@@ -1,4 +1,9 @@
 package com.ssd.sthub.repository;
 
-public interface MemberRepository {
+import com.ssd.sthub.domain.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MemberRepository extends JpaRepository<Member, Long> {
+
+
 }
