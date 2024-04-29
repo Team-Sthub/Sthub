@@ -14,6 +14,6 @@ public interface ParticipationRepository extends JpaRepository<Participation, Lo
 
     Participation save(Participation participation);
     Optional<Participation> findById(Long participationId);
-    Page<Participation> findAllByGroupBuying(GroupBuying groupBuying, PageRequest pageRequest);
+    Page<Participation> findAllByGroupBuyingId(Long groupBuyingId, PageRequest pageRequest);
     Page<Participation> findAllByMemberId(Long memberId, PageRequest pageRequest);
 }

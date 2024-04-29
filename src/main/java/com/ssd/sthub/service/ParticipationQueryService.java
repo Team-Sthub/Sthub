@@ -31,22 +31,31 @@ public class ParticipationQueryService {
     }
 
     // 참여자 리스트 조회
-    public ParticipationResponseDto getParticipationList(int pageNum, GroupBuying groupBuying) {
-        PageRequest pageRequest = PageRequest.of(pageNum, 6);
-        Page<Participation> participations = participationRepository.findAllByGroupBuying(groupBuying, pageRequest);
-        List<ParticipationResponseDto.ParticipationDto> participationListDto = participations.stream()
-                .map(participation -> new ParticipationResponseDto.ParticipationDto(participation.getId(),
-                        participation.getMember().getNickname(), participation.getMember().getPhone(),
-                        participation.getContent(), participation.getAccept()))
-                .collect(Collectors.toList());
+//    public ParticipationResponseDto getParticipationList(int pageNum, Long groupBuyingId) {
+//        PageRequest pageRequest = PageRequest.of(pageNum, 6);
+//        Page<Participation> participations = participationRepository.findAllByGroupBuyingId(groupBuyingId, pageRequest);
+//        List<ParticipationResponseDto.ParticipationDto> participationListDto = participations.stream()
+//                .map(participation -> new ParticipationResponseDto.ParticipationDto(participation.getId(),
+//                        participation.getMember().getNickname(), participation.getMember().getPhone(),
+//                        participation.getContent(), participation.getAccept()))
+//                .collect(Collectors.toList());
+//
+//        return new ParticipationResponseDto(participationListDto, participations.getTotalPages());
+//    }
 
-        return new ParticipationResponseDto(participationListDto, participations.getTotalPages());
+    public Page<Participation> getParticipationList(Long groupBuyingId, int pageNum) {
+        PageRequest pageRequest = PageRequest.of(pageNum, 6);
+        Page<Participation> participations = participationRepository.findAllByGroupBuyingId(groupBuyingId, pageRequest);
+
+        if(participations == null || participations.isEmpty())
+            throw new EntityNotFoundException("해당 중고거래 게시글을 찾을 수 없습니다.");
+
+        return participations;
     }
 
     // 내가 참여한 공동구매 리스트
     public ParticipationResponseDto getMyParticipationList(int pageNum, Long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
-
         PageRequest pageRequest = PageRequest.of(pageNum, 8);
         Page<Participation> participations = participationRepository.findAllByMemberId(memberId, pageRequest);
         List<ParticipationResponseDto.ParticipationDto> participationListDto = participations.stream()
