@@ -2,6 +2,7 @@ package com.ssd.sthub.domain;
 
 import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.domain.enumerate.Transaction;
+import com.ssd.sthub.dto.secondhand.SecondhandDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -53,4 +54,17 @@ public class Secondhand extends BaseTime{
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "memberId")
     private Member member;
+
+    @Builder
+    public Secondhand(Member member, SecondhandDTO.Request request) {
+        this.member = member;
+        this.title = request.getTitle();
+        this.category = request.getCategory();
+        this.product = request.getProduct();
+        this.price = request.getPrice();
+        this.type = request.getType();
+        this.place = request.getPlace();
+        this.content = request.getContent();
+        this.imageUrl = request.getImageUrl() != null ? request.getImageUrl() : "";
+    }
 }
