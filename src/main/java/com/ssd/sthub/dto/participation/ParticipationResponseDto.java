@@ -1,4 +1,4 @@
-package com.ssd.sthub.dto.gComment;
+package com.ssd.sthub.dto.participation;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,15 +10,18 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class GCommentListDto {
-    private List<GCommentListDto.GCommentDto> gCommentListDto;
+public class ParticipationResponseDto {
+    private List<ParticipationResponseDto.ParticipationDto> participationListDto;
+    private int totalPages;
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
-    public static class GCommentDto {
+    public static class ParticipationDto {
         private Long id;
-        private String content;
         private String nickname;
+        private String phone;
+        private String content;
+        private int accept;
     }
 }

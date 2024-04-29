@@ -1,7 +1,9 @@
 package com.ssd.sthub.domain;
 
+import com.ssd.sthub.dto.participation.ParticipationRequestDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -33,4 +35,11 @@ public class Participation extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "memberId")
     private Member member;
+
+    @Builder
+    public Participation(Member member, GroupBuying groupBuying, ParticipationRequestDto.request request) {
+        this.member = member;
+        this.groupBuying = groupBuying;
+        this.content = request.getContent();
+    }
 }
