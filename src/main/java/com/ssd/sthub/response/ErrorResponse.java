@@ -1,4 +1,4 @@
-package com.ssd.sthub.exception.response;
+package com.ssd.sthub.response;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +13,7 @@ public class ErrorResponse<T> {
     private String errorCode;
     private String message;
 
+    /* 요청에 실패한 경우 */
     public ErrorResponse(String errorCode, String message) {
         this.isSuccess=false;
         this.timeStamp = LocalDateTime.now().withNano(0);
@@ -20,12 +21,15 @@ public class ErrorResponse<T> {
         this.message = message;
     }
 
+    /* 요청에 실패한 경우 */
     public ErrorResponse(ErrorCode errorCode, String message) {
         this.isSuccess=false;
         this.timeStamp = LocalDateTime.now().withNano(0);
         this.errorCode=errorCode.getErrorCode();
         this.message=message;
     }
+
+    /* 요청에 실패한 경우 */
     public ErrorResponse(ErrorCode errorCode) {
         this.isSuccess=false;
         this.timeStamp = LocalDateTime.now().withNano(0);

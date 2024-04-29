@@ -1,7 +1,7 @@
-package com.ssd.sthub.exception;
+package com.ssd.sthub.response.exception;
 
-import com.ssd.sthub.exception.response.ErrorCode;
-import com.ssd.sthub.exception.response.ErrorResponse;
+import com.ssd.sthub.response.ErrorCode;
+import com.ssd.sthub.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
