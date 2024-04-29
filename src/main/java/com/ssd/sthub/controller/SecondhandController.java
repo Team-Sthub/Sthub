@@ -1,7 +1,5 @@
 package com.ssd.sthub.controller;
 
-import com.ssd.sthub.domain.Purchase;
-import com.ssd.sthub.domain.SComment;
 import com.ssd.sthub.domain.Secondhand;
 import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.dto.secondhand.SCommentDTO;
@@ -24,7 +22,6 @@ public class SecondhandController {
     private final SecondhandQueryService secondhandQService;
     private final SCommentService sCommentService;
     private final SCommentQueryService sCommentQService;
-    private final PurchaseService purchaseService;
 
     // 중고거래 게시글 생성
     @PostMapping("/create")
@@ -44,7 +41,7 @@ public class SecondhandController {
         return ResponseEntity.ok(SuccessResponse.create(secondhandService.deleteSecondhand(memberId, secondhandId)));
     }
 
-    // 중고거래 게시글 상세 조회
+    // 중고거래 게시글 상세 조회 + 판매 내역 상세 조회 + 구매 내역 상세 조회
     @GetMapping("/detail")
     public ResponseEntity<SuccessResponse<Secondhand>> getSecondhand(@RequestParam Long secondhandId) {
         return ResponseEntity.ok(SuccessResponse.create(secondhandQService.getSecondhand(secondhandId)));
@@ -68,9 +65,9 @@ public class SecondhandController {
         return ResponseEntity.ok(SuccessResponse.create(sCommentQService.getComments(secondhandId)));
     }
 
-    // 결제 (구매)
-    @PostMapping("/detail/purchase")
-    public ResponseEntity<SuccessResponse<Boolean>> createPurchase(@RequestHeader Long memberId, @RequestParam Long secondhandId) {
-        return ResponseEntity.ok(SuccessResponse.create(purchaseService.createPurchase(memberId, secondhandId)));
+    // 판매내역 전체 조회
+    @GetMapping("/selling/list")
+    public ResponseEntity<SuccessResponse<Page<Secondhand>>> getSellingSecondhands(@RequestHeader Long memberId, @RequestParam int pageNum) throws BadRequestException {
+        return ResponseEntity.ok(SuccessResponse.create(secondhandQService.getSellingSecondhands(memberId, pageNum)));
     }
 }

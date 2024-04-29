@@ -1,6 +1,7 @@
 package com.ssd.sthub.service;
 
 import com.ssd.sthub.domain.Purchase;
+import com.ssd.sthub.domain.Secondhand;
 import com.ssd.sthub.repository.PurchaseRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +21,8 @@ public class PurchaseQueryService {
     }
 
     // 구매 내역 전체 조회
-    public Page<Purchase> getPurchases(Long memberId, int pageNum) {
+    public Page<Secondhand> getPurchaseSecondhands(Long memberId, int pageNum) {
         PageRequest pageRequest = PageRequest.of(pageNum, 10);
-        return purchaseRepository.findAllByMemberId(memberId, pageRequest);
+        return purchaseRepository.findAllSecondhandByMemberId(memberId, pageRequest);
     }
 }
