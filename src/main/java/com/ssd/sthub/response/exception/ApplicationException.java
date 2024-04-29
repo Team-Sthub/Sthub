@@ -1,6 +1,6 @@
-package com.ssd.sthub.exception;
+package com.ssd.sthub.response.exception;
 
-import com.ssd.sthub.exception.response.ErrorCode;
+import com.ssd.sthub.response.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 public abstract class ApplicationException extends RuntimeException {
