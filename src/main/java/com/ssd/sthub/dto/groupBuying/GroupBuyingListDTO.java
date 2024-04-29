@@ -11,15 +11,15 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class GroupBuyingListDto {
+public class GroupBuyingListDTO {
 
-    private List<GroupBuyingDto> groupBuyingListDto;
+    private List<GroupBuyingDTO> groupBuyingListDto;
     private int totalPages;
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
-    public static class GroupBuyingDto {
+    public static class GroupBuyingDTO {
         private Long id;
         private String title;
         private Long price;

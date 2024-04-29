@@ -12,13 +12,33 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MemberDTO {
 
-    private Long id;
     private String nickname;
     private String password;
     private String phone;
     private Bank bank;
     private String account;
     private String address;
+    private Double latitude;
+    private Double longitude;
     private String email;
     private String profile;
+    private Double mannerGrade;
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
+    static public class MemberResDTO {
+        private Long id;
+        private String nickname;
+        private String password;
+        private String phone;
+        private Bank bank;
+        private String account;
+        private String address;
+        private Double latitude;
+        private Double longitude;
+        private String email;
+        private String profile;
+        private Double mannerGrade;
+    }
 }
