@@ -18,9 +18,15 @@ public class Purchase extends BaseTime{
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="secondhandId")
-    private Secondhand secondHand;
+    private Secondhand secondhand;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "memberId")
     private Member member;
+
+    @Builder
+    public Purchase(Secondhand secondhand, Member member) {
+        this.secondhand = secondhand;
+        this.member = member;
+    }
 }

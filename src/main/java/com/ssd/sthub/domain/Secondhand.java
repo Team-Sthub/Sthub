@@ -56,7 +56,7 @@ public class Secondhand extends BaseTime{
     private Member member;
 
     @Builder
-    public Secondhand(Member member, SecondhandDTO.Request request) {
+    public Secondhand(Member member, SecondhandDTO.PostRequest request) {
         this.member = member;
         this.title = request.getTitle();
         this.category = request.getCategory();
@@ -64,6 +64,18 @@ public class Secondhand extends BaseTime{
         this.price = request.getPrice();
         this.type = request.getType();
         this.place = request.getPlace();
+        this.content = request.getContent();
+        this.imageUrl = request.getImageUrl() != null ? request.getImageUrl() : "";
+    }
+
+    public void update(SecondhandDTO.PatchRequest request) {
+        this.title = request.getTitle();
+        this.category = request.getCategory();
+        this.product = request.getProduct();
+        this.price = request.getPrice();
+        this.type = request.getType();
+        this.place = request.getPlace();
+        this.trackingNum = request.getTrackingNum();
         this.content = request.getContent();
         this.imageUrl = request.getImageUrl() != null ? request.getImageUrl() : "";
     }
