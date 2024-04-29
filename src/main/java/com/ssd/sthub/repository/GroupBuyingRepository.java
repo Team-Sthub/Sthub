@@ -13,6 +13,7 @@ public interface GroupBuyingRepository extends JpaRepository<GroupBuying, Long> 
 
     GroupBuying save(GroupBuying groupBuying);
     Optional<GroupBuying> findById(Long groupBuyingId);
+    Page<GroupBuying> findAll(PageRequest pageRequest);
     Page<GroupBuying> findAllByMemberId(Long memberId, PageRequest pageRequest);
     void deleteById(Long groupById);
 }
