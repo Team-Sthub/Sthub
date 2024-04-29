@@ -20,7 +20,6 @@ public class ParticipationService {
     private final MemberRepository memberRepository;
     private final GroupBuyingRepository groupBuyingRepository;
 
-
     // 공동구매 신청서 작성
     public Participation createParticipation(Long memberId, Long groupBuyingId, ParticipationRequestDto.request request) throws NullPointerException{
         Member member = memberRepository.findById(memberId)

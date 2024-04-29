@@ -5,6 +5,7 @@ import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.dto.gComment.GCommentRequestDto;
 import com.ssd.sthub.repository.GCommentRepository;
+import com.ssd.sthub.repository.GroupBuyingRepository;
 import com.ssd.sthub.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +19,14 @@ public class GCommentService {
 
     private final GCommentRepository gCommentRepository;
     private final MemberRepository memberRepository;
+    private final GroupBuyingRepository groupBuyingRepository;
 
     // 공동구매 댓글 작성
-    public GComment createGComment(Long memberId, GroupBuying groupBuying, GCommentRequestDto.request request) throws NullPointerException {
+    public GComment createGComment(Long memberId, Long groupBuyingId, GCommentRequestDto.request request) throws NullPointerException {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
+        GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingId)
+                .orElseThrow(() -> new EntityNotFoundException("공동구매 게시글 조회에 실패했습니다."));
 
         GComment gComment = GComment.builder()
                 .member(member)

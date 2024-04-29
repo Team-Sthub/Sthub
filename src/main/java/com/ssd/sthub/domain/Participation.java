@@ -24,7 +24,7 @@ public class Participation extends BaseTime {
 
     private String content; // 추가사항
 
-    @Column(nullable = false, columnDefinition = "default 0")
+    @Column(nullable = false)
     @ColumnDefault("0")
     private int accept; // 수락 여부 0(대기) 1(수락) 2(거절)
 
