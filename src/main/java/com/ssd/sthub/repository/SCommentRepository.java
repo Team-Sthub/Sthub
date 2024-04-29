@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface SCommentRepository extends JpaRepository<SComment, Long> {
-    List<SComment> findAllBySecondHandId(Long secondhandId);
+    List<SComment> findAllBySecondhandId(Long secondhandId);
     SComment save(SComment sComment);
 }

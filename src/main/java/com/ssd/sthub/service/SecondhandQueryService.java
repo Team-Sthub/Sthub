@@ -22,7 +22,7 @@ public class SecondhandQueryService {
     }
 
     // 중고거래 게시글 전체 조회
-    public Page<Secondhand> getSecondhands(int pageNum, Category category) throws BadRequestException {
+    public Page<Secondhand> getSecondhands(Category category, int pageNum) throws BadRequestException {
         PageRequest pageRequest = PageRequest.of(pageNum, 10);
         Page<Secondhand> secondhands;
 

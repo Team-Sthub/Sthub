@@ -19,7 +19,7 @@ public class SecondhandService {
     private final MemberRepository memberRepository;
 
     // 중고거래 게시글 작성
-    public Secondhand createSecondhand(Long memberId, SecondhandDTO.Request request) {
+    public Secondhand createSecondhand(Long memberId, SecondhandDTO.PostRequest request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
 
@@ -35,6 +35,21 @@ public class SecondhandService {
                 .imageUrl(request.getImageUrl())
                 .build();
 
+        return secondhandRepository.save(secondhand);
+    }
+
+    // 중고거래 게시글 수정
+    public Secondhand updateSecondhand(Long memberId, SecondhandDTO.PatchRequest request) throws BadRequestException {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
+
+        Secondhand secondhand = secondhandRepository.findById(request.getSecondhandId())
+                .orElseThrow(() -> new EntityNotFoundException("중고거래 게시글 조회에 실패했습니다."));
+
+        if(!secondhand.getMember().getId().equals(memberId))
+            throw new BadRequestException("작성자만 삭제할 수 있습니다.");
+
+        secondhand.update(request);
         return secondhandRepository.save(secondhand);
     }
 
