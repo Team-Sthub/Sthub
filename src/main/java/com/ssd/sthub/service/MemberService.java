@@ -1,6 +1,8 @@
 package com.ssd.sthub.service;
 
 import com.ssd.sthub.domain.Member;
+import com.ssd.sthub.dto.member.MemberDTO;
+import com.ssd.sthub.dto.member.RegisterDTO;
 import com.ssd.sthub.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,12 +18,14 @@ public class MemberService {
     public final MemberRepository memberRepository;
 
     // 회원가입
-    public Member register(Member member) {
-        Optional<Member> isMember = memberRepository.findById(member.getId());
+    public Member register(RegisterDTO registerDTO) {
+        Optional<Member> isMember = memberRepository.findByNickname(registerDTO.getNickname());
         if(isMember != null) {
             // exception 반환
         }
-        return memberRepository.save(member);
+
+        Member newMember = new Member(registerDTO);
+        return memberRepository.save(newMember);
     }
 
     // 로그인
@@ -37,11 +41,12 @@ public class MemberService {
     }
 
     // 마이페이지 사용자 정보 수정
-    public Member updateMember(Member member) {
-        Optional<Member> isMember = memberRepository.findById(member.getId());
-        if(isMember == null) {
-            // exception 반환
-        }
+    public Member updateMember(Long memberId, MemberDTO memberDTO) {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new NullPointerException()
+        );
+
+        member.updateInfo(memberDTO);
         return memberRepository.save(member);
     }
 }

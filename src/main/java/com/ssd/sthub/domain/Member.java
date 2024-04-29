@@ -2,8 +2,11 @@ package com.ssd.sthub.domain;
 
 import com.fasterxml.jackson.databind.ser.Serializers;
 import com.ssd.sthub.domain.enumerate.Bank;
+import com.ssd.sthub.dto.member.MemberDTO;
+import com.ssd.sthub.dto.member.RegisterDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -17,6 +20,7 @@ import java.sql.Timestamp;
 @DynamicInsert
 @DynamicUpdate
 @Entity
+@AllArgsConstructor
 @Table(name = "member")
 public class Member extends BaseTime {
     @Id
@@ -66,4 +70,28 @@ public class Member extends BaseTime {
     @Column(name = "complaintCount", nullable = false)
     @ColumnDefault("0")
     private int complaintCount;
+
+    public Member(RegisterDTO registerDTO) {
+        this.nickname = registerDTO.getNickname();
+        this.password = registerDTO.getPassword();
+        this.phone = registerDTO.getPhone();
+        this.bank = registerDTO.getBank();
+        this.account = registerDTO.getAccount();
+        this.address = registerDTO.getAddress();
+        this.email = registerDTO.getEmail();
+        this.profile = registerDTO.getProfile();
+    }
+
+    public void updateInfo(MemberDTO memberDTO) {
+        this.nickname = memberDTO.getNickname();
+        this.password = memberDTO.getPassword();
+        this.phone = memberDTO.getPhone();
+        this.bank = memberDTO.getBank();
+        this.account = memberDTO.getAccount();
+        this.address = memberDTO.getAddress();
+        this.longitude = memberDTO.getLongitude();
+        this.latitude = memberDTO.getLatitude();
+        this.email = memberDTO.getEmail();
+        this.profile = memberDTO.getProfile();
+    }
 }

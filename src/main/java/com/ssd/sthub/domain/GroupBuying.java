@@ -1,6 +1,7 @@
 package com.ssd.sthub.domain;
 
 import com.ssd.sthub.domain.enumerate.Category;
+import com.ssd.sthub.dto.groupBuying.GroupBuyingDetailDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -58,4 +59,29 @@ public class GroupBuying extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "memberId")
     private Member member;
+
+    public GroupBuying(GroupBuyingDetailDTO groupBuyingDetailDTO, Member member) {
+        this.title = groupBuyingDetailDTO.getTitle();
+        this.category = groupBuyingDetailDTO.getCategory();
+        this.product = groupBuyingDetailDTO.getProduct();
+        this.deadline = groupBuyingDetailDTO.getDeadline();
+        this.chatLink = groupBuyingDetailDTO.getChatLink();
+        this.meetingPlace = groupBuyingDetailDTO.getMeetingPlace();
+        this.content = groupBuyingDetailDTO.getContent();
+        this.imageUrl = groupBuyingDetailDTO.getImageUrl();
+        this.status = groupBuyingDetailDTO.getStatus();
+        this.member = member;
+    }
+
+    public void updateGroupBuying(GroupBuyingDetailDTO groupBuyingDetailDTO) {
+        this.title = groupBuyingDetailDTO.getTitle();
+        this.category = groupBuyingDetailDTO.getCategory();
+        this.product = groupBuyingDetailDTO.getProduct();
+        this.deadline = groupBuyingDetailDTO.getDeadline();
+        this.chatLink = groupBuyingDetailDTO.getChatLink();
+        this.meetingPlace = groupBuyingDetailDTO.getMeetingPlace();
+        this.content = groupBuyingDetailDTO.getContent();
+        this.imageUrl = groupBuyingDetailDTO.getImageUrl();
+        this.status = groupBuyingDetailDTO.getStatus();
+    }
 }
