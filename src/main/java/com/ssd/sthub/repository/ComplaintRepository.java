@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ComplaintRepository extends JpaRepository<Complaint, Long> {
     Complaint save(Complaint complaint);
-    Long countByComplaint(long id);
+    Long countByComplaint(Long id);
     //memberId 찾기?
 
 }

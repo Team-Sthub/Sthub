@@ -15,7 +15,7 @@ public class ComplaintQueryService {
     
 
     // 신고 내역 카운트
-    public long countComplaints (long id) {
+    public Long countComplaints (Long id) {
         return complaintRepository.countByComplaint(id);
     }
 }

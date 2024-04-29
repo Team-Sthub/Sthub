@@ -17,13 +17,13 @@ public class MessageQueryService {
     private final MessageRepositoriy messageRepositoriy;
 
     // 모든 유저와의 쪽지 내역 불러오기
-    public Page<Message> getAllMessage(int pageNum, long memberId) {
+    public Page<Message> getAllMessage(int pageNum, Long memberId) {
         PageRequest pageRequest = PageRequest.of(pageNum, 8);
         return messageRepositoriy.findAllByMemberId(memberId, pageRequest);
     }
 
     // 특정 유저와의 쪽지 내역 불러오기
     public List<Message> getPersonalMessage(Long memberId, Long otherId) {
-        return messageRepositoriy.findAllByMemberIdAndOtherId(memberId, otherId);
+        return messageRepositoriy.findAllBySenderIdAndReceiverId(memberId, otherId);
     }
 }
