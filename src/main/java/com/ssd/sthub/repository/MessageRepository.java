@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MessageRepositoriy extends JpaRepository<Message, Long> {
-    Page<Message> findAllByMemberId(Long memberId, PageRequest pageRequest);
-    List<Message> findAllBySenderIdAndReceiverId(Long memberId, Long otherId);
+public interface MessageRepository extends JpaRepository<Message, Long> {
+    Page<Message> findAllBySenderId(Long senderId, PageRequest pageRequest);
+    List<Message> findAllBySenderIdAndReceiverId(Long senderId, Long receiverId);
     Message save(Message msg);
 }

@@ -1,5 +1,6 @@
 package com.ssd.sthub.domain;
 
+import com.ssd.sthub.dto.message.MessageDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,4 +31,10 @@ public class Message extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "receiverId")
     private Member receiver;
+
+    public Message(MessageDTO.Request request, Member sender, Member receiver) {
+        this.content = request.getContent();
+        this.sender = sender;
+        this.receiver = receiver;
+    }
 }

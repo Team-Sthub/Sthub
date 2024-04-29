@@ -1,7 +1,11 @@
 package com.ssd.sthub.service;
 
 import com.ssd.sthub.domain.Review;
+import com.ssd.sthub.domain.Secondhand;
+import com.ssd.sthub.dto.review.ReviewDTO;
 import com.ssd.sthub.repository.ReviewRepository;
+import com.ssd.sthub.repository.SecondhandRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,12 +15,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReviewRepository reviewRepository;
+    private final SecondhandRepository secondhandRepository;
 
     // 후기 작성
-    public Review createReview(Review review) throws NullPointerException {
-        if (review == null) {
-            throw new NullPointerException("리뷰가 존재하지 않습니다.");
-        }
+    public Review createReview(Long secondhandId, ReviewDTO request) throws NullPointerException {
+        Secondhand secondhand = secondhandRepository.findById(secondhandId).orElseThrow(() -> new EntityNotFoundException("해당 중고거래 게시글을 찾을 수 없습니다."));
+        Review review = new Review(request, secondhand);
         return reviewRepository.save(review);
     }
 
