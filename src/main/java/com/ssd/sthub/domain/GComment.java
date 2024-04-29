@@ -1,7 +1,9 @@
 package com.ssd.sthub.domain;
 
+import com.ssd.sthub.dto.gComment.GCommentRequestDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -29,4 +31,11 @@ public class GComment extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "groupBuyingId")
     private GroupBuying groupBuying;
+
+    @Builder
+    public GComment(Member member,GroupBuying groupBuying, GCommentRequestDto.request request) {
+        this.member = member;
+        this.groupBuying = groupBuying;
+        this.content = request.getContent();
+    }
 }
