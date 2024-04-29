@@ -1,6 +1,7 @@
 package com.ssd.sthub.repository;
 
 import com.ssd.sthub.domain.Purchase;
+import com.ssd.sthub.domain.Secondhand;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +15,5 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
 
     Purchase save(Purchase purchase);
 
-    Page<Purchase> findAllByMemberId(Long memberId, PageRequest pageRequest);
+    Page<Secondhand> findAllSecondhandByMemberId(Long memberId, PageRequest pageRequest);
 }
