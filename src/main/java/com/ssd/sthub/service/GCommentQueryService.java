@@ -3,7 +3,7 @@ package com.ssd.sthub.service;
 import com.ssd.sthub.domain.GComment;
 import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.dto.gComment.GCommentListDto;
-import com.ssd.sthub.dto.groupBuying.GroupBuyingListDto;
+import com.ssd.sthub.dto.gComment.GCommentResponseDto;
 import com.ssd.sthub.repository.GCommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
