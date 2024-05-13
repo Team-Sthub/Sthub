@@ -31,18 +31,6 @@ public class ParticipationQueryService {
     }
 
     // 참여자 리스트 조회
-//    public ParticipationResponseDto getParticipationList(int pageNum, Long groupBuyingId) {
-//        PageRequest pageRequest = PageRequest.of(pageNum, 6);
-//        Page<Participation> participations = participationRepository.findAllByGroupBuyingId(groupBuyingId, pageRequest);
-//        List<ParticipationResponseDto.ParticipationDto> participationListDto = participations.stream()
-//                .map(participation -> new ParticipationResponseDto.ParticipationDto(participation.getId(),
-//                        participation.getMember().getNickname(), participation.getMember().getPhone(),
-//                        participation.getContent(), participation.getAccept()))
-//                .collect(Collectors.toList());
-//
-//        return new ParticipationResponseDto(participationListDto, participations.getTotalPages());
-//    }
-
     public Page<Participation> getParticipationList(Long groupBuyingId, int pageNum) {
         PageRequest pageRequest = PageRequest.of(pageNum, 6);
         Page<Participation> participations = participationRepository.findAllByGroupBuyingId(groupBuyingId, pageRequest);
