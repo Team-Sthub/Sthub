@@ -1,6 +1,7 @@
 package com.ssd.sthub.repository;
 
 import com.ssd.sthub.domain.GroupBuying;
+import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.Participation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,5 +16,5 @@ public interface ParticipationRepository extends JpaRepository<Participation, Lo
     Participation save(Participation participation);
     Optional<Participation> findById(Long participationId);
     Page<Participation> findAllByGroupBuyingId(Long groupBuyingId, PageRequest pageRequest);
-    Page<Participation> findAllByMemberId(Long memberId, PageRequest pageRequest);
+    Page<Participation> findAllByMember(Member member, PageRequest pageRequest);
 }

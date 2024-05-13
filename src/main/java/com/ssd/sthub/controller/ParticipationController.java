@@ -19,6 +19,8 @@ public class ParticipationController {
     private final ParticipationService participationService;
     private final ParticipationQueryService participationQueryService;
 
+    // 참여 신청폼으로 이동
+
     // 참여 신청폼 작성
     @PostMapping("/create")
     public ResponseEntity<SuccessResponse<Participation>> createParticipation(@RequestHeader Long memberId, Long groupBuyingId, @RequestBody ParticipationRequestDto.request request) {
@@ -41,5 +43,11 @@ public class ParticipationController {
     @PatchMapping("/list")
     public ResponseEntity<SuccessResponse<Participation>> patchParticipations(@RequestHeader Long memberId, @RequestParam Long participationId, @RequestBody ParticipationRequestDto.PatchRequest request) throws BadRequestException {
         return ResponseEntity.ok(SuccessResponse.create(participationService.accpetMember(memberId,participationId, request)));
+    }
+
+    //공구 참여 전체 조회
+    @GetMapping("/mylist")
+    public ResponseEntity<SuccessResponse<Page<Participation>>> getParticipationGroupBuyings(@RequestHeader Long memberId, @RequestParam int pageNum) throws BadRequestException {
+        return ResponseEntity.ok(SuccessResponse.create(participationQueryService.getMyParticipationList(pageNum, memberId)));
     }
 }
