@@ -1,0 +1,30 @@
+spring:
+  datasource:  # Oracle dataSource
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@dblab.dongduk.ac.kr:1521/orclpdb
+    username: ss240103
+    password: 15123
+  mvc:
+    view:     # JSP views
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  thymeleaf: # Thymeleaf views
+    cache: false
+    view-names: thyme/*
+  jpa:
+    database: oracle
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+    show-sql: true
+    generate-ddl: false
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        # do not changes camel case to snake case, which is the default spring.jpa.hibernate.naming.implicit-strategy
+      ddl-auto: update
+
+  devtools:
+    livereload:
+      enabled: true
+  config:
+    activate:
+      on-profile: prod
