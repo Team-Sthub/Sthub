@@ -18,12 +18,6 @@ spring:
         default_batch_fetch_size: 1000
     show-sql: true
 
-  #  redis:
-  #    host: localhost
-  #    port: 6379
-
   config:
     activate:
       on-profile: local
-#    import:
-#      application-secret.yml
