@@ -6,7 +6,6 @@ import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingDetailDTO;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingListDTO;
 import com.ssd.sthub.response.SuccessResponse;
-import com.ssd.sthub.service.GroupBuyingQueryService;
 import com.ssd.sthub.service.GroupBuyingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,18 +17,17 @@ import org.springframework.web.bind.annotation.*;
 public class GroupBuyingController {
 
     private final GroupBuyingService groupBuyingService;
-    private final GroupBuyingQueryService groupBuyingQueryService;
 
     // 공동구매 전체 조회
     @GetMapping("/groupBuying/list/{category}")
     public ResponseEntity<SuccessResponse<GroupBuyingListDTO>> getAllGroupBuying(@PathVariable Category category, @RequestParam int pageNum) {
-        return ResponseEntity.ok(SuccessResponse.create(groupBuyingQueryService.getAllGroupBuying(category, pageNum)));
+        return ResponseEntity.ok(SuccessResponse.create(groupBuyingService.getAllGroupBuying(category, pageNum)));
     }
 
     // 공동구매 게시글(상세) 조회 (작성자 확인은 controller에서 하고 뷰 설정)
     @GetMapping("/groupBuying/detail")
     public ResponseEntity<SuccessResponse<GroupBuying>> getGroupBuying(@RequestHeader Long memberId, Long groupBuyingId) {
-        return ResponseEntity.ok(SuccessResponse.create(groupBuyingQueryService.getGroupBuying(memberId, groupBuyingId)));
+        return ResponseEntity.ok(SuccessResponse.create(groupBuyingService.getGroupBuying(memberId, groupBuyingId)));
     }
 
     // 공동구매 게시글 작성
@@ -53,7 +51,7 @@ public class GroupBuyingController {
     // 마이페이지 - 공구 모집 조회
     @GetMapping("/groupbuying/mylist")
     public ResponseEntity<SuccessResponse<GroupBuyingListDTO>> getAllGroupBuyingByMemberId(@RequestHeader Long memberId, @RequestParam int pageNuM) {
-        return ResponseEntity.ok(SuccessResponse.create(groupBuyingQueryService.getAllGroupBuyingByMemberId(memberId, pageNuM)));
+        return ResponseEntity.ok(SuccessResponse.create(groupBuyingService.getAllGroupBuyingByMemberId(memberId, pageNuM)));
     }
 
 }

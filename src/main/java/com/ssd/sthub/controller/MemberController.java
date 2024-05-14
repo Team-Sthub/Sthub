@@ -6,7 +6,6 @@ import com.ssd.sthub.dto.member.MemberDTO;
 import com.ssd.sthub.dto.member.RegisterDTO;
 import com.ssd.sthub.dto.member.UserViewDTO;
 import com.ssd.sthub.response.SuccessResponse;
-import com.ssd.sthub.service.MemberQueryService;
 import com.ssd.sthub.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +19,11 @@ import java.util.Optional;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MemberQueryService memberQueryService;
 
     // 아이디 중복 확인
     @GetMapping("/register/check")
     public ResponseEntity<SuccessResponse<String>> checkNickname(@RequestBody String nickname) {
-        return ResponseEntity.ok(SuccessResponse.create(memberQueryService.checkNickname(nickname)));
+        return ResponseEntity.ok(SuccessResponse.create(memberService.checkNickname(nickname)));
     }
 
     // 회원가입
@@ -43,13 +41,13 @@ public class MemberController {
     // 프로필 조회
     @GetMapping("/myPage")
     public ResponseEntity<SuccessResponse<UserViewDTO>> getMember(@RequestHeader Long memberId) {
-        return ResponseEntity.ok(SuccessResponse.create(memberQueryService.getMember(memberId)));
+        return ResponseEntity.ok(SuccessResponse.create(memberService.getMember(memberId)));
     }
 
     // 프로필 상세 조회
     @GetMapping("/myPage/detail")
     public ResponseEntity<SuccessResponse<MemberDTO.MemberResDTO>> getMemberDetail(@RequestHeader Long memberId) {
-        return ResponseEntity.ok(SuccessResponse.create(memberQueryService.getMemberDetail(memberId)));
+        return ResponseEntity.ok(SuccessResponse.create(memberService.getMemberDetail(memberId)));
     }
 
     // 마이페이지 정보 수정

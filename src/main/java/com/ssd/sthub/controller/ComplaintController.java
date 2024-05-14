@@ -3,7 +3,6 @@ package com.ssd.sthub.controller;
 import com.ssd.sthub.domain.Complaint;
 import com.ssd.sthub.dto.complaint.ComplaintDTO;
 import com.ssd.sthub.response.SuccessResponse;
-import com.ssd.sthub.service.ComplaintQueryService;
 import com.ssd.sthub.service.ComplaintService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/complaint")
 public class ComplaintController {
     private final ComplaintService complaintService;
-    private final ComplaintQueryService complaintQueryService;
 
     // 중고거래 신고 처리
     @PostMapping("/{secondhandId}")

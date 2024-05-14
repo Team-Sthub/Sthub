@@ -19,9 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecondhandController {
     private final SecondhandService secondhandService;
-    private final SecondhandQueryService secondhandQService;
     private final SCommentService sCommentService;
-    private final SCommentQueryService sCommentQService;
 
     // 중고거래 게시글 생성
     @PostMapping("/create")
@@ -44,13 +42,13 @@ public class SecondhandController {
     // 중고거래 게시글 상세 조회 + 판매 내역 상세 조회 + 구매 내역 상세 조회
     @GetMapping("/detail")
     public ResponseEntity<SuccessResponse<Secondhand>> getSecondhand(@RequestParam Long secondhandId) {
-        return ResponseEntity.ok(SuccessResponse.create(secondhandQService.getSecondhand(secondhandId)));
+        return ResponseEntity.ok(SuccessResponse.create(secondhandService.getSecondhand(secondhandId)));
     }
 
     // 중고거래 게시글 전체 조회
     @GetMapping("/list/{category}")
     public ResponseEntity<SuccessResponse<Page<Secondhand>>> getSecondhands(@PathVariable Category category, @RequestParam int pageNum) throws BadRequestException {
-        return ResponseEntity.ok(SuccessResponse.create(secondhandQService.getSecondhands(category, pageNum)));
+        return ResponseEntity.ok(SuccessResponse.create(secondhandService.getSecondhands(category, pageNum)));
     }
 
     // 중고거래 게시글 댓글 작성
@@ -62,12 +60,12 @@ public class SecondhandController {
     // 중고거래 게시글 댓글 전체 조회
     @GetMapping("/detail/comment")
     public ResponseEntity<SuccessResponse<List<SCommentDTO.Response>>> getComments(@RequestParam Long secondhandId) {
-        return ResponseEntity.ok(SuccessResponse.create(sCommentQService.getComments(secondhandId)));
+        return ResponseEntity.ok(SuccessResponse.create(sCommentService.getComments(secondhandId)));
     }
 
     // 판매내역 전체 조회
     @GetMapping("/selling/list")
     public ResponseEntity<SuccessResponse<Page<Secondhand>>> getSellingSecondhands(@RequestHeader Long memberId, @RequestParam int pageNum) throws BadRequestException {
-        return ResponseEntity.ok(SuccessResponse.create(secondhandQService.getSellingSecondhands(memberId, pageNum)));
+        return ResponseEntity.ok(SuccessResponse.create(secondhandService.getSellingSecondhands(memberId, pageNum)));
     }
 }

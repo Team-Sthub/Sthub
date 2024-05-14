@@ -29,4 +29,8 @@ public class ReviewService {
     // 매너 농도 계산
 
 
+    // 후기 조회
+
+    // 매너 농도 조회
+
 }
