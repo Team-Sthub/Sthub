@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,32 +23,10 @@ public class Complaint {
     private Long id;
 
     // 조건 (각 항목은 노션에 정리되어 있음)
-    @Column(nullable = false)
-    private Boolean tag1;
-
-    @Column(nullable = false)
-    private Boolean tag2;
-
-    @Column(nullable = false)
-    private Boolean tag3;
-
-    @Column(nullable = false)
-    private Boolean tag4;
-
-    @Column(nullable = false)
-    private Boolean tag5;
-
-    @Column(nullable = false)
-    private Boolean tag6;
-
-    @Column(nullable = false)
-    private Boolean tag7;
-
-    @Column(nullable = false)
-    private Boolean tag8;
-
-    @Column(nullable = false)
-    private Boolean tag9;
+    @ElementCollection
+    @CollectionTable(name = "complaint_tags", joinColumns = @JoinColumn(name = "complaintId"))
+    @Column(name = "tag")
+    private List<Boolean> tags;
 
     @CreatedDate
     @Column(name = "createdAt", updatable = false, nullable = false)
@@ -64,28 +43,32 @@ public class Complaint {
     private Secondhand secondhand;
 
     public Complaint(ComplaintDTO request, Secondhand secondhand) {
-        this.tag1 = request.isTag1();
-        this.tag2 = request.isTag2();
-        this.tag3 = request.isTag3();
-        this.tag4 = request.isTag4();
-        this.tag5 = request.isTag5();
-        this.tag6 = request.isTag6();
-        this.tag7 = request.isTag7();
-        this.tag8 = request.isTag8();
-        this.tag9 = request.isTag9();
+        this.tags = List.of(
+                request.isTag1(),
+                request.isTag2(),
+                request.isTag3(),
+                request.isTag4(),
+                request.isTag5(),
+                request.isTag6(),
+                request.isTag7(),
+                request.isTag8(),
+                request.isTag9()
+        );
         this.secondhand = secondhand;
     }
 
     public Complaint(ComplaintDTO request, GroupBuying groupBuying) {
-        this.tag1 = request.isTag1();
-        this.tag2 = request.isTag2();
-        this.tag3 = request.isTag3();
-        this.tag4 = request.isTag4();
-        this.tag5 = request.isTag5();
-        this.tag6 = request.isTag6();
-        this.tag7 = request.isTag7();
-        this.tag8 = request.isTag8();
-        this.tag9 = request.isTag9();
+        this.tags = List.of(
+                request.isTag1(),
+                request.isTag2(),
+                request.isTag3(),
+                request.isTag4(),
+                request.isTag5(),
+                request.isTag6(),
+                request.isTag7(),
+                request.isTag8(),
+                request.isTag9()
+        );
         this.groupBuying = groupBuying;
     }
 }
