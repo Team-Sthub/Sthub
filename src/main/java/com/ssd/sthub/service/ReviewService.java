@@ -19,7 +19,9 @@ public class ReviewService {
 
     // 후기 작성
     public Review createReview(Long secondhandId, ReviewDTO request) throws NullPointerException {
-        Secondhand secondhand = secondhandRepository.findById(secondhandId).orElseThrow(() -> new EntityNotFoundException("해당 중고거래 게시글을 찾을 수 없습니다."));
+        Secondhand secondhand = secondhandRepository.findById(secondhandId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 중고거래 게시글을 찾을 수 없습니다."));
+
         Review review = new Review(request, secondhand);
         return reviewRepository.save(review);
     }

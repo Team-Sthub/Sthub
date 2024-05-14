@@ -27,7 +27,7 @@ public class SCommentDTO {
         public Response(SComment comment) {
             this.memberId = comment.getMember().getId();
             this.nickname = comment.getMember().getNickname();
-            this.content = comment.getContent();;
+            this.content = comment.getContent();
             this.updatedAt = comment.getUpdatedAt();
         }
     }
