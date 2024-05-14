@@ -24,7 +24,7 @@ public class Complaint {
 
     // 조건 (각 항목은 노션에 정리되어 있음)
     @ElementCollection
-    @CollectionTable(name = "complaint_tags", joinColumns = @JoinColumn(name = "complaintId"))
+    @CollectionTable(name = "complaintTags", joinColumns = @JoinColumn(name = "complaintId"))
     @Column(name = "tag")
     private List<Boolean> tags;
 
