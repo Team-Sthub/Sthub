@@ -18,10 +18,19 @@ public class MessageService {
     private final MemberRepository memberRepository;
 
     // 쪽지 전송
-    public Message sendMsg(Long senderId, MessageDTO.Request request) throws NullPointerException {
-        Member sender = memberRepository.findById(senderId).orElseThrow(() -> new EntityNotFoundException("해당 사용자를 찾을 수 없습니다."));
-        Member reciever = memberRepository.findById(request.getReceiverId()).orElseThrow(() -> new EntityNotFoundException("해당 사용자를 찾을 수 없습니다."));
-        Message msg = new Message(request, sender, reciever);
-        return messageRepository.save(msg);
+    public MessageDTO.Response sendMsg(Long senderId, MessageDTO.Request request) throws NullPointerException {
+        Member sender = memberRepository.findById(senderId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 사용자를 찾을 수 없습니다."));
+
+        Member reciever = memberRepository.findById(request.getReceiverId())
+                .orElseThrow(() -> new EntityNotFoundException("해당 사용자를 찾을 수 없습니다."));
+
+        Message msg = Message.builder()
+                .sender(sender)
+                .receiver(reciever)
+                .content(request.getContent())
+                .build();
+
+        return new MessageDTO.Response(messageRepository.save(msg));
     }
 }
