@@ -35,4 +35,14 @@ public class ComplaintService {
         return complaintRepository.save(complaint);
     }
 
+    // 신고 내역 조회
+
+
+    // 신고 내역 카운트
+    /*
+    public Long countComplaints (Long id) {
+        return complaintRepository.countByComplaint(id);
+    }
+    */
+
 }
