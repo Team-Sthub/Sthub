@@ -1,20 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Header</title>
+    <link rel="stylesheet" href="../../static/style/header.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
 </head>
 <body>
-    <div th:fragment="header">
+<div th:fragment="header">
+    <div class="frame1">
         <div class="logo">
-            <img th:src="@{/images/logo.png}" alt="로고">
-            <img src="../../static/images/logo.png" height="50" width="120"/>
+            <!-- <img th:src="@{/images/logo.png}" alt="로고"> -->
+            <a href="#"><img src="../../static/images/logo.png"/></a>
         </div>
-        <div>
-            <a> 아 왜 안돼?</a>
+        <div class="menu">
+            <nav>
+                <ul>
+                    <li><a href="#"><b>중고거래</b></a></li>
+                    <li><a href="#"><b>공동구매</b></a></li>
+                    <li><a href="#"><b>내근처</b></a></li>
+                    <li><a href="#"><b>마이페이지</b></a></li>
+                    <li><a href="#"><i class="fa-regular fa-message"></i></a></li>
+                    <li><a href="#"><i class="fa-regular fa-user"></i></a></li>
+                </ul>
+            </nav>
         </div>
     </div>
+    <div class="frame2">
+        <form id="search" th:action="@{}" method="GET">
+            <!-- input type 추후 변경 -->
+            <input type="search" name="searchValue" placeholder="상품명을 검색하세요"/>
+            <button type="submit">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </form>
+    </div>
+</div>
 </body>
 </html>
