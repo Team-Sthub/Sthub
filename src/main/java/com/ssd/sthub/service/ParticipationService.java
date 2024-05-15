@@ -75,7 +75,7 @@ public class ParticipationService {
     }
 
     // 신청폼 수정
-    public Participation 정updateParticipation(Long memberId, ParticipationRequestDto.PatchRequest request) throws BadRequestException{
+    public Participation updateParticipation(Long memberId, ParticipationRequestDto.PatchRequest request) throws BadRequestException{
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
 
