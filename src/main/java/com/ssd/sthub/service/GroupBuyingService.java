@@ -7,6 +7,7 @@ import com.ssd.sthub.dto.groupBuying.GroupBuyingDetailDTO;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingListDTO;
 import com.ssd.sthub.repository.GroupBuyingRepository;
 import com.ssd.sthub.repository.MemberRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,7 +29,7 @@ public class GroupBuyingService {
     // 공동구매 게시글 작성
     public GroupBuying postGroupBuying(Long memberId, GroupBuyingDetailDTO groupBuyingDetailDTO) {
         Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new NullPointerException()
+                () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
         );
         GroupBuying groupBuying = new GroupBuying(groupBuyingDetailDTO, member);
         return groupBuyingRepository.save(groupBuying);
@@ -37,10 +38,10 @@ public class GroupBuyingService {
     // 공동구매 게시글 수정
     public GroupBuying updateGroupBuying(Long memberId, GroupBuyingDetailDTO groupBuyingDetailDTO) {
         Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new NullPointerException()
+                () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
         );
         GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingDetailDTO.getId()).orElseThrow(
-                () -> new NullPointerException()
+                () -> new EntityNotFoundException("해당 공동구매 게시글 조회에 실패했습니다.")
         );
 
         groupBuying.updateGroupBuying(groupBuyingDetailDTO);
@@ -51,10 +52,10 @@ public class GroupBuyingService {
     public String deleteGroupBuying(Long memberId, Long groupBuyingId) {
         Optional<GroupBuying> findGroupBuying = groupBuyingRepository.findById(groupBuyingId);
         if (findGroupBuying == null) {
-            // exception 반환
+            new EntityNotFoundException("해당 공동구매 게시글 조회에 실패했습니다.");
         }
         if(findGroupBuying.get().getMember().getId() != memberId) {
-            // exception 반환
+            new EntityNotFoundException("해당 공동구매 게시글 작성자와 현재 유저가 다릅니다.");
         }
         groupBuyingRepository.deleteById(groupBuyingId);
         return "삭제 완료되었습니다.";
@@ -81,10 +82,10 @@ public class GroupBuyingService {
     // 공동구매 게시글(상세) 조회 (작성자 확인은 controller에서 하고 뷰 설정)
     public GroupBuying getGroupBuying(Long memberId, Long groupBuyingId) throws NullPointerException {
         Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new NullPointerException()
+                () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
         );
         GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingId).orElseThrow(
-                () -> new NullPointerException()
+                () -> new EntityNotFoundException("해당 공동구매 게시글 조회에 실패했습니다.")
         );
         return groupBuying;
     }
@@ -92,11 +93,8 @@ public class GroupBuyingService {
     // 마이페이지 - 공구 모집 조회 (페이징 포함)
     public GroupBuyingListDTO getAllGroupBuyingByMemberId(Long memberId, int pageNum) {
         Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new NullPointerException()
+                () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
         );
-        if(member == null) {
-            // exception 반환
-        }
 
         PageRequest pageRequest = PageRequest.of(pageNum, 8);
         Page<GroupBuying> groupBuyings = groupBuyingRepository.findAllByMemberId(memberId, pageRequest);
