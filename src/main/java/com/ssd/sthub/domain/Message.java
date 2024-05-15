@@ -19,7 +19,7 @@ public class Message extends BaseTime {
     private Long id;
 
     // 내용
-    @Column(nullable = false, columnDefinition = "text")
+    @Column(nullable = false, columnDefinition = "CLOB")
     private String content;
 
     // 보낸 사람

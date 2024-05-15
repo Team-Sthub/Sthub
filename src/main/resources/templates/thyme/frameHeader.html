@@ -4,35 +4,35 @@
     <meta charset="UTF-8">
     <title>Header</title>
     <!-- href만 th:href로 변경 -->
-    <link rel="stylesheet" href="../../static/style/header.css">
+    <link rel="stylesheet" th:href="@{/style/header.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
 </head>
 <body>
 <div th:fragment="header">
     <div class="frame1">
         <div class="logo">
-            <!-- 이미지를 불러오는 경로가 살짝 다름
-            <a th:href="@{}">
-                <img th:src="@{/images/logo.png}" alt="로고"
-<           </a>
-            -->
-            <a href="#"><img src="../../static/images/logo.png"/></a>
+            <!-- 이미지를 불러오는 경로가 살짝 다름 -->
+            <a th:href="@{/secondhand/list/ALL(pageNum=0)}">
+                <img th:src="@{/images/logo.png}" alt="로고"/>
+            </a>
+
+<!--            <a href="#"><img src="../../static/images/logo.png"/></a>-->
         </div>
         <div class="menu">
             <nav>
                 <ul>
-                    <li><a th:href="@{}"><b>중고거래</b></a></li>
-                    <li><a th:href="@{}"><b>공동구매</b></a></li>
-                    <li><a th:href="@{}"><b>내근처</b></a></li>
-                    <li><a th:href="@{}"><b>마이페이지</b></a></li>
-                    <li><a th:href="@{}"><i class="fa-regular fa-message"></i></a></li>
-                    <li><a th:href="@{}"><i class="fa-regular fa-user"></i></a></li>
+                    <li><a th:href="@{/secondhand/list/ALL(pageNum=1)}"><b>중고거래</b></a></li>
+                    <li><a th:href="@{/groupBuying/list/ALL(pageNum=1)}"><b>공동구매</b></a></li>
+                    <li><a th:href="@{/gruopBuying/}"><b>내근처</b></a></li>
+                    <li><a th:href="@{/user/myPage}"><b>마이페이지</b></a></li>
+                    <li><a th:href="@{/message/list(pageNum=1)}"><i class="fa-regular fa-message"></i></a></li>
+                    <li><a th:href="@{/user/login}"><i class="fa-regular fa-user"></i></a></li>
                 </ul>
             </nav>
         </div>
     </div>
     <div class="frame2">
-        <form id="search" th:action="@{}" method="GET">
+        <form id="search" th:action="@{/test}" method="GET">
             <!-- input type 추후 변경 -->
             <input type="search" name="searchValue" placeholder="상품명을 검색하세요"/>
             <button type="submit">

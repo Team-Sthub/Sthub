@@ -10,21 +10,32 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/secondhand")
 @RequiredArgsConstructor
 public class SecondhandController {
     private final SecondhandService secondhandService;
     private final SCommentService sCommentService;
 
+    // 중고거래 게시글 작성 클릭
+    @GetMapping("/moveToForm")
+    public String showCreateForm() {
+        return "thyme/secondhand/create";
+    }
+
     // 중고거래 게시글 생성
     @PostMapping("/create")
-    public ResponseEntity<SuccessResponse<Secondhand>> createSecondhand(@RequestHeader Long memberId, @RequestBody SecondhandDTO.PostRequest request) {
-        return ResponseEntity.ok(SuccessResponse.create(secondhandService.createSecondhand(memberId, request)));
+    public ModelAndView createSecondhand(@RequestHeader Long memberId, @RequestBody SecondhandDTO.PostRequest request) {
+        Secondhand secondhand = secondhandService.createSecondhand(memberId, request);
+        ModelAndView modelAndView = new ModelAndView("redirect:thyme/secondhand/detail");
+        modelAndView.addObject("secondhand", secondhand);
+        return modelAndView;
     }
 
     // 중고거래 게시글 수정 + 거래 최종 방식 선택
@@ -47,8 +58,11 @@ public class SecondhandController {
 
     // 중고거래 게시글 전체 조회
     @GetMapping("/list/{category}")
-    public ResponseEntity<SuccessResponse<Page<Secondhand>>> getSecondhands(@PathVariable Category category, @RequestParam int pageNum) throws BadRequestException {
-        return ResponseEntity.ok(SuccessResponse.create(secondhandService.getSecondhands(category, pageNum)));
+    public ModelAndView getSecondhands(@PathVariable Category category, @RequestParam int pageNum) throws BadRequestException {
+        Page<Secondhand> secondhandList = secondhandService.getSecondhands(category, pageNum);
+        ModelAndView modelAndView = new ModelAndView("redirect:thyme/secondhand/list");
+        modelAndView.addObject("secondhandList", secondhandList);
+        return modelAndView;
     }
 
     // 중고거래 게시글 댓글 작성
