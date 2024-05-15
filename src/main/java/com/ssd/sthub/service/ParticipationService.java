@@ -3,6 +3,7 @@ package com.ssd.sthub.service;
 import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.Participation;
+import com.ssd.sthub.domain.Secondhand;
 import com.ssd.sthub.dto.participation.ParticipationRequestDto;
 import com.ssd.sthub.repository.GroupBuyingRepository;
 import com.ssd.sthub.repository.MemberRepository;
@@ -44,7 +45,7 @@ public class ParticipationService {
     }
 
     // 공동구매 신청자 수락/거절
-    public Participation accpetMember(Long memberId, Long participationId, ParticipationRequestDto.PatchRequest request) throws BadRequestException {
+    public Participation accpetMember(Long memberId, Long participationId, ParticipationRequestDto.AcceptRequest request) throws BadRequestException {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
 
@@ -58,9 +59,9 @@ public class ParticipationService {
             throw new BadRequestException("작성자만 수락/거절 할 수 있습니다.");
 
         if(request.getAccept() == 1) {
-            participation.update(request);
+            participation.accept(request);
         } else if (request.getAccept() == 2) {
-            participation.update(request);
+            participation.accept(request);
         } else {
             throw new BadRequestException("잘못된 값입니다.");
         }
@@ -71,6 +72,21 @@ public class ParticipationService {
     public Participation getParticipation(Long participationId) {
         return participationRepository.findById(participationId)
                 .orElseThrow(() -> new EntityNotFoundException("구매 내역 조회에 실패했습니다."));
+    }
+
+    // 신청폼 수정
+    public Participation updateParticipation(Long memberId, ParticipationRequestDto.PatchRequest request) throws BadRequestException{
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
+
+        Participation participation = participationRepository.findById(request.getParticipationId())
+                .orElseThrow(() -> new EntityNotFoundException("신청서 조회에 실패했습니다."));
+
+        if(!participation.getMember().getId().equals(memberId))
+            throw new BadRequestException("작성자만 삭제할 수 있습니다.");
+
+        participation.update(request);
+        return participationRepository.save(participation);
     }
 
     // 참여자 리스트 조회
