@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Header</title>
+    <!-- href만 th:href로 변경 -->
     <link rel="stylesheet" href="../../static/style/header.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
 </head>
@@ -10,18 +11,22 @@
 <div th:fragment="header">
     <div class="frame1">
         <div class="logo">
-            <!-- <img th:src="@{/images/logo.png}" alt="로고"> -->
+            <!-- 이미지를 불러오는 경로가 살짝 다름
+            <a th:href="@{}">
+                <img th:src="@{/images/logo.png}" alt="로고"
+<           </a>
+            -->
             <a href="#"><img src="../../static/images/logo.png"/></a>
         </div>
         <div class="menu">
             <nav>
                 <ul>
-                    <li><a href="#"><b>중고거래</b></a></li>
-                    <li><a href="#"><b>공동구매</b></a></li>
-                    <li><a href="#"><b>내근처</b></a></li>
-                    <li><a href="#"><b>마이페이지</b></a></li>
-                    <li><a href="#"><i class="fa-regular fa-message"></i></a></li>
-                    <li><a href="#"><i class="fa-regular fa-user"></i></a></li>
+                    <li><a th:href="@{}"><b>중고거래</b></a></li>
+                    <li><a th:href="@{}"><b>공동구매</b></a></li>
+                    <li><a th:href="@{}"><b>내근처</b></a></li>
+                    <li><a th:href="@{}"><b>마이페이지</b></a></li>
+                    <li><a th:href="@{}"><i class="fa-regular fa-message"></i></a></li>
+                    <li><a th:href="@{}"><i class="fa-regular fa-user"></i></a></li>
                 </ul>
             </nav>
         </div>
