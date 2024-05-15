@@ -5,6 +5,7 @@ import com.ssd.sthub.dto.member.MemberDTO;
 import com.ssd.sthub.dto.member.RegisterDTO;
 import com.ssd.sthub.dto.member.UserViewDTO;
 import com.ssd.sthub.repository.MemberRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public class MemberService {
     public Member register(RegisterDTO registerDTO) {
         Optional<Member> isMember = memberRepository.findByNickname(registerDTO.getNickname());
         if(isMember != null) {
-            // exception 반환
+            new EntityNotFoundException("이미 있는 사용자입니다.");
         }
 
         Member newMember = new Member(registerDTO);
@@ -33,10 +34,10 @@ public class MemberService {
     public Optional<Member> login(String nickname, String password) {
         Optional<Member> member = memberRepository.findByNickname(nickname);
         if(member == null) {
-            // exception 반환
+            new EntityNotFoundException("회원 조회에 실패했습니다.");
         }
         if(!member.get().getPassword().equals(password)) {
-            // exception 반환
+            new EntityNotFoundException("비밀번호가 일치하지 않습니다.");
         }
         return member;
     }
@@ -55,7 +56,7 @@ public class MemberService {
     public UserViewDTO getMember(Long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
         if (member == null) {
-            // exception 반환
+            new EntityNotFoundException("회원 조회에 실패했습니다.");
         }
         return new UserViewDTO(memberId, member.get().getNickname(), member.get().getProfile(), member.get().getMannerGrade(), member.get().getAddress());
     }
@@ -64,7 +65,7 @@ public class MemberService {
     public MemberDTO.MemberResDTO getMemberDetail(Long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
         if (member == null) {
-            // exception 반환
+            new EntityNotFoundException("회원 조회에 실패했습니다.");
         }
         return new MemberDTO.MemberResDTO(memberId, member.get().getNickname(), member.get().getPassword(), member.get().getPhone(), member.get().getBank(), member.get().getAccount(),
                 member.get().getAddress(), member.get().getLatitude(), member.get().getLongitude(), member.get().getEmail(), member.get().getProfile(), member.get().getMannerGrade());
@@ -72,9 +73,8 @@ public class MemberService {
 
     // 마이페이지 사용자 정보 수정
     public Member updateMember(Long memberId, MemberDTO memberDTO) {
-        Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new NullPointerException()
-        );
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
 
         member.updateInfo(memberDTO);
         return memberRepository.save(member);
