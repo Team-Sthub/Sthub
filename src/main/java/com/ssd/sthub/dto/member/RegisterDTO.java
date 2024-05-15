@@ -19,4 +19,6 @@ public class RegisterDTO {
     private String address;
     private String email;
     private String profile;
+    private Double latitude;
+    private Double longitude;
 }

@@ -28,7 +28,7 @@ public class Member extends BaseTime {
     @Column(name = "memberId")
     private Long id;
 
-    @Column(name = "nickname", nullable = false)
+    @Column(name = "nickname", nullable = false, unique = true)
     private String nickname;
 
     @Column(name = "password", nullable = false)
@@ -80,6 +80,8 @@ public class Member extends BaseTime {
         this.address = registerDTO.getAddress();
         this.email = registerDTO.getEmail();
         this.profile = registerDTO.getProfile();
+        this.latitude = registerDTO.getLatitude();
+        this.longitude = registerDTO.getLongitude();
     }
 
     public void updateInfo(MemberDTO memberDTO) {
