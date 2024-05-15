@@ -24,7 +24,7 @@ public class Complaint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 조건 (각 항목은 노션에 정리되어 있음)
+    // 조건 (각 항목은 노션에 정리되어 있음) 0,1로 구분 0-> 선택 안된 tag, 1-> 선택된 tag
     @NotEmpty
     @Convert(converter = StringListConverter.class)
     @Column(name = "tag")
@@ -45,32 +45,32 @@ public class Complaint {
     private Secondhand secondhand;
 
     public Complaint(ComplaintDTO request, Secondhand secondhand) {
-//        this.tags = List.of(
-//                request.isTag1(),
-//                request.isTag2(),
-//                request.isTag3(),
-//                request.isTag4(),
-//                request.isTag5(),
-//                request.isTag6(),
-//                request.isTag7(),
-//                request.isTag8(),
-//                request.isTag9()
-//        );
-//        this.secondhand = secondhand;
+        this.tags = List.of(
+                request.getTag1(),
+                request.getTag2(),
+                request.getTag3(),
+                request.getTag4(),
+                request.getTag5(),
+                request.getTag6(),
+                request.getTag7(),
+                request.getTag8(),
+                request.getTag9()
+        );
+        this.secondhand = secondhand;
     }
 
     public Complaint(ComplaintDTO request, GroupBuying groupBuying) {
-//        this.tags = List.of(
-//                request.isTag1(),
-//                request.isTag2(),
-//                request.isTag3(),
-//                request.isTag4(),
-//                request.isTag5(),
-//                request.isTag6(),
-//                request.isTag7(),
-//                request.isTag8(),
-//                request.isTag9()
-//        );
-//        this.groupBuying = groupBuying;
+        this.tags = List.of(
+                request.getTag1(),
+                request.getTag2(),
+                request.getTag3(),
+                request.getTag4(),
+                request.getTag5(),
+                request.getTag6(),
+                request.getTag7(),
+                request.getTag8(),
+                request.getTag9()
+        );
+        this.groupBuying = groupBuying;
     }
 }
