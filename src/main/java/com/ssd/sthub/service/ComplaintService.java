@@ -4,6 +4,7 @@ import com.ssd.sthub.domain.Complaint;
 import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.domain.Secondhand;
 import com.ssd.sthub.dto.complaint.ComplaintDTO;
+import com.ssd.sthub.dto.complaint.ComplaintRepoDTO;
 import com.ssd.sthub.repository.ComplaintRepository;
 import com.ssd.sthub.repository.GroupBuyingRepository;
 import com.ssd.sthub.repository.SecondhandRepository;
@@ -12,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +40,10 @@ public class ComplaintService {
     }
 
     // 신고 내역 조회
+    public List<Integer> getTags(Long memberId) {
+        List<Integer> trueIndexes = complaintRepository.findComplaintRepoDTOByMemberId(memberId);
+        return trueIndexes;
+    }
 
 
     // 신고 내역 카운트

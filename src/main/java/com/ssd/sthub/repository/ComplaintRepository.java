@@ -20,5 +20,5 @@ public interface ComplaintRepository extends JpaRepository<Complaint, Long> {
     //memberId 찾기?
 
     // 신고 내역 조회 (키워드 조회)
-    List<ComplaintRepoDTO> findComplaintRepoDTOByMemberId(Long memberId);
+    List<Integer>  findComplaintRepoDTOByMemberId(Long memberId);
 }

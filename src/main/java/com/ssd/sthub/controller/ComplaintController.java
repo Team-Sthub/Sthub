@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/complaint")
@@ -27,6 +29,10 @@ public class ComplaintController {
     }
 
     // 신고 조회
+    @GetMapping("/mypage")
+    public ResponseEntity<SuccessResponse<List<Integer>>> getMyComplaint(@RequestHeader Long memberId) {
+        return ResponseEntity.ok(SuccessResponse.create(complaintService.getTags(memberId)));
+    }
 
 
     // 신고 카운트
