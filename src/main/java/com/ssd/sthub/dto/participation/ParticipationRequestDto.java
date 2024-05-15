@@ -19,6 +19,12 @@ public class ParticipationRequestDto {
 
     @Getter
     public static class PatchRequest {
+        private Long participationId;
+        private String content;
+    }
+
+    @Getter
+    public static class AcceptRequest {
         @NotNull
         private Long groupBuyingId;
         private int accept; // 수락/거절 여부

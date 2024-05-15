@@ -44,6 +44,10 @@ public class Participation extends BaseTime {
     }
 
     public void update(ParticipationRequestDto.PatchRequest request) {
+        this.content = request.getContent();
+    }
+
+    public void accept(ParticipationRequestDto.AcceptRequest request) {
         this.accept = request.getAccept();
     }
 }
