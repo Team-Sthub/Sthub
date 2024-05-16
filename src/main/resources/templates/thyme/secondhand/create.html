@@ -3,9 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <title>Create.html</title>
+    <link rel="stylesheet" th:href="@{/style/header.css}">
+    <link rel="stylesheet" th:href="@{/style/secondhand/create.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
 </head>
 <body>
+    <!-- 외부 js  -->
+    <script th:src="@{/js/secondhand/create.js}"></script>
+
     <!-- header 삽입 -->
     <div th:replace="thyme/frameHeader :: header"></div>
+
+    <p id="main-title">중고거래 글 작성하기</p>
+    <hr/>
+
+    <form id="create" th:action="@{/secondhand/create}" method="POST">
+        <div class="title">
+            <input type="text" id="sub-title" placeholder="제목을 입력하세요."/>
+        </div>
+        <div class="info">
+            <p id="info-title">판매정보</p>
+            <div id="info1">
+                <div id="writeCategory">
+                    <label id="name1" for="category">카테고리</label>
+                    <select id="category" name="category">
+                        <option value="BOOK">교재</option>
+                        <option value="ELECTRONIC">전자기기</option>
+                        <option value="STATIONERY">문구</option>
+                        <option value="TRANSFER">양도</option>
+                    </select>
+                </div>
+                <div id="writeProduct">
+                    <label id="name2" for="product">상품명</label>
+                    <input type="text" id="product" placeholder="작성해주세요"/>
+                </div>
+                <div id="writePrice">
+                    <label id="name3" for="price">가격</label>
+                    <input type="text" id="price" placeholder="작성해주세요"/>
+                </div>
+            </div>
+            <div id="info2">
+                <div id="writeTransaction">
+                    <label id="name4">희망 거래 방식</label>
+                    <p id="delivery" onclick="toggleColor('delivery')">택배거래 </p><p id="direct" onclick="toggleColor('direct')"> 직거래</p>
+                </div>
+                <div id="writePlace">
+                    <label id="name5" for="place">장소</label>
+                    <input type="text" id="place" placeholder="작성해주세요"/>
+                </div>
+            </div>
+        </div>
+        <div class="editor-toolbar">
+            <label for="file-upload">
+                <i class="fas fa-image" title="Insert image" id="image-icon"></i>
+            </label>
+            <i class="fas fa-bold" title="Bold"></i>
+            <i class="fas fa-italic" title="Italic"></i>
+        </div>
+
+        <div class="content-area">
+            <textarea placeholder="내용을 입력하세요"></textarea>
+        </div>
+        <input id="createBtn" type="submit" value="글 등록하기" />
+    </form>
 </body>
 </html>
