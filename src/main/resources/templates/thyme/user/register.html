@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+    <!-- 구글맵 API -->
+    <script th:src=" 'https://maps.googleapis.com/maps/api/js?key=' + AIzaSyBG0mcLkUd6Oz5Q4uCD_cXE-dGNaoAi-fg + '&callback=initMap' " async defer></script>
+    <link rel="stylesheet" th:href="@{/style/user/register.css}" href="../../../static/style/user/register.css">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
+    <script th:src="@{/js/user/register.js}"></script>
+    <!-- 현재 내 위치 불러오기 -->
+    <script>
+        function displayAddress(address) {
+            var displayDiv = document.getElementById('address-display');
+            displayDiv.innerText = address;
+        }
+    </script>
+</head>
+<body>
+<div>
+    <div class="frame1">
+        <div class="logo">
+            <a th:href="@{/secondhand/list/ALL(pageNum=0)}">
+                <img th:src="@{/images/logo.png}" alt="로고"/>
+            </a>
+            <!-- <a><img src="../../../static/images/logo.png"/></a> -->
+        </div>
+        <div class="register">
+            <form method="post" th:action="@{/user/register}" id="register-form">
+                <div class="header">
+                    <div class="id">
+                        <input type="text" id="nickname" name="nickname" placeholder="아이디">
+                        <button type="button" id="checkId"><b>중복 확인</b></button>
+                    </div>
+                    <!-- 서버 응답 출력 -->
+                    <div id="response"></div>
+                    <div class ="email">
+                        <input type="email" id="email" name="email" placeholder="이메일">
+                    </div>
+                    <div class="pw">
+                        <input type="password" id="password" name="password" placeholder="비밀번호">
+                        <input type="password" id="checkPassword" name="checkPassword" placeholder="비밀번호 확인">
+                    </div>
+                    <div class="phoneNum">
+                        <input type="text" id="phone" name="phone" placeholder="전화번호">
+                    </div>
+                    <div class="bankAccount">
+                        <select id="bank" name="bank">
+                            <option value="SHINHAN">신한은행</option>
+                            <option value="HANA">하나은행</option>
+                            <option value="KOOKMIN">국민은행</option>
+                            <option value="WOORI">우리은행</option>
+                            <option value="NONGHYUP">농협</option>
+                        </select>
+                        <input type="text" id="account" name="account" placeholder="계좌번호">
+                    </div>
+                    <div class="location">
+                        <label id="name1"><b>동네 인증</b></label>
+                        <div id="gooleMap">
+                            <div id="map"></div>
+                        </div>
+                    </div>
+                    <div class="search">
+                        <input type="text" id="address" placeholder="주소를 입력하세요">
+                        <button id="search-button"><b>검색</b></button>
+                    </div>
+                    <br>
+                    <div id="nowAddress">
+                        <a>현 위치는&nbsp;</a>
+                        <div id="address-display"></div>
+                        <a>&nbsp;입니다. </a>
+                    </div>
+                </div>
+                    <button type="submit" id="register" value="register"><b>회원가입</b></button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
