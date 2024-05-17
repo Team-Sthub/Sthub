@@ -1,0 +1,64 @@
+.frame1 {
+    position: relative; /* .menu의 위치를 상대적으로 설정하기 위해 필요 */
+    display: flex;
+    margin: 0 auto;
+    flex-direction: column; /* 세로로 정렬되도록 설정 */
+    align-items: center; /* 수직 가운데 정렬 */
+    justify-content: center; /* 수평 가운데 정렬 */
+    width: 80%; /* 헤더의 너비의 80%로 설정 */
+    margin-top: 3%;
+}
+
+.menu {
+    display: flex;
+    margin-top: 5%;
+    justify-content: center; /* 아이템들을 수평 중앙에 정렬 */
+    align-items: center; /* 아이템들을 수직 중앙에 정렬 */
+    flex-direction: column; /* 세로로 정렬되도록 설정 */
+    align-items: center; /* 아이템들을 중앙에 정렬 (선택 사항) */
+}
+
+#login-form {
+    display: flex;
+    flex-direction: column; /* 세로로 정렬되도록 설정 */
+    align-items: center; /* 아이템들을 중앙에 정렬 (선택 사항) */
+}
+
+#login-form input {
+    margin-top: 10%;
+    width: 140%;
+    height: 40px;
+    position: relative;
+    background: #EBEBEB;
+    box-shadow: inset 0px 2px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    border: none;
+}
+
+button, .menu a{
+    width: 50%;
+    height: 30px;
+    border-radius: 30px;
+    border: none;
+    flex: none;
+    flex-grow: 0;
+}
+
+#login-form button#login {
+    margin-top: 25%;
+    background: #4CAF50;
+    color: #FFFFFF;
+    order: 0;
+}
+
+.menu a{
+    align-content: center;
+    display: inline-block;
+    text-align: center;
+    margin-top: 7%;
+    background: #FFFFFF;
+    border: 2px solid #4CAF50;
+    color: #4CAF50;
+    order: 1;
+    font-size: 14px;
+}

@@ -9,16 +9,25 @@ import com.ssd.sthub.response.SuccessResponse;
 import com.ssd.sthub.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@RestController
+@Controller
 @RequestMapping("/user")
 public class MemberController {
 
     private final MemberService memberService;
+
+    // 로그인 아이콘 클릭
+    @GetMapping("/login")
+    public String showLoginForm() { return "thyme/user/login";  }
+
+    // 회원가입 버튼 클릭
+    @GetMapping("/register")
+    public String showRegisterForm() { return "thyme/user/register";  }
 
     // 아이디 중복 확인
     @GetMapping("/register/check")
