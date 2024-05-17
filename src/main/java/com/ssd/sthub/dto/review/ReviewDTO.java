@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReviewDTO {
     private double rating;
-    private boolean tag1;
-    private boolean tag2;
-    private boolean tag3;
-    private boolean tag4;
-    private boolean tag5;
-    private boolean tag6;
+    private int tag1;
+    private int tag2;
+    private int tag3;
+    private int tag4;
+    private int tag5;
+    private int tag6;
 }

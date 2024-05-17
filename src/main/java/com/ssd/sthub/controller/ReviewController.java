@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/review")
@@ -21,6 +23,10 @@ public class ReviewController {
     }
 
     // 리뷰 조회
+    @GetMapping("/mypage")
+    public ResponseEntity<SuccessResponse<List<Integer>>> getMyReview(@RequestHeader Long memberId) {
+        return ResponseEntity.ok(SuccessResponse.create(reviewService.getTags(memberId)));
+    }
 
     // 농도 계산
 }
