@@ -47,7 +47,6 @@ function initMap() {
         handleLocationError(false, infoWindow, map.getCenter());
     }
 }
-initMap();
 
 // 주소 검색 추후.....
 /*function geocodeAddress(address) {
@@ -78,6 +77,35 @@ document.getElementById('search-button').addEventListener('click', function () {
     var address = document.getElementById('address').value;
     geocodeAddress(address);
 });*/
+
+// 이미지 업로드
+document.addEventListener('DOMContentLoaded', function() {
+    const imageIcon = document.getElementById('image-icon');
+    const fileInput = document.getElementById('file-input');
+
+    if (imageIcon && fileInput) {
+        imageIcon.addEventListener('click', function() {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imageIcon.style.backgroundImage = `url(${e.target.result})`;
+                    imageIcon.style.backgroundSize = 'cover';
+                    imageIcon.style.backgroundPosition = 'center';
+                    imageIcon.style.color = 'transparent'; // 아이콘 텍스트를 숨김
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    } else {
+        console.error("Image icon or file input element not found");
+    }
+});
+
 
 
 // 중복 확인 버튼을 누를 때의 동작 설정
