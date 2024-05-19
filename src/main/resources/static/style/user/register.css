@@ -34,9 +34,35 @@
 
 .header {
     width: 120%;
+    margin-left: 10%;
 }
 
-.id, .bankAccount, .search{
+td#img {
+    text-align: center; /* 수평 왼쪽 정렬 */
+    vertical-align: top; /* 수직 상단 정렬 */
+    width: 30%;
+}
+
+.imgCircle {
+    margin-top: 10% !important; /* 수직 여백 */
+    background: rgba(76, 175, 80, 0.15);
+    border-radius: 50%;
+    margin-right: 50%;
+    height: 100px;
+    width: 100px;
+}
+
+#image-icon {
+    margin-top: 20%;
+    font-size: 3.7em; /* 아이콘 크기 증가 */
+    cursor: pointer;
+}
+
+#file-input {
+    display: none; /* 파일 입력 요소 숨김 */
+}
+
+.id, .bankAccount {
     display: flex; /* 가로로 배치하기 위해 Flexbox 사용 */
     align-items: center; /* 수직 가운데 정렬 */
 }
@@ -121,6 +147,10 @@ select {
     flex-shrink: 0; /* 자식 요소가 축소되지 않도록 설정 */
 }
 
+#name2 {
+    font-size: 13px;
+}
+
 #nowAddress {
     display: flex;
     align-content: center;
@@ -134,16 +164,19 @@ select {
     font-weight: bold;
 }
 
-#search {
-    display: flex;
+.search {
+    margin-top: 0%;
+    display: flex; /* 가로로 배치하기 위해 Flexbox 사용 */
+    align-items: center; /* 수직 가운데 정렬 */
 }
 
-#address {
+input#address {
+    margin-top: 1%;
     width: 70%;
 }
 
 #search-button {
-    margin-top: 6%;
+    margin-top: 1%;
     margin-left: 5%;
     width: 25%;
     height: 35px;
