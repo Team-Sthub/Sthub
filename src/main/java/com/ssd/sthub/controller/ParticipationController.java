@@ -8,15 +8,19 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/participation")
 public class ParticipationController {
     private final ParticipationService participationService;
 
     // 참여 신청폼으로 이동
+    @GetMapping("/moveToForm")
+    public String showCreateForm() {return "thyme/participation/create";}
 
     // 참여 신청폼 작성
     @PostMapping("/create")
@@ -32,8 +36,11 @@ public class ParticipationController {
 
     // 참여 신청폼 리스트 조회
     @GetMapping("/list")
-    public ResponseEntity<SuccessResponse<Page<Participation>>> getParticipations(@RequestParam int pageNum, Long groupBuyingId) {
-        return ResponseEntity.ok(SuccessResponse.create(participationService.getParticipationList(groupBuyingId, pageNum)));
+    public ModelAndView getParticipations(@RequestParam int pageNum, Long groupBuyingId) {
+        Page<Participation> participationList = participationService.getParticipationList(groupBuyingId, pageNum);
+        ModelAndView modelAndView = new ModelAndView("redirect:thyme/participation/list");
+        modelAndView.addObject("participationList", participationList);
+        return modelAndView;
     }
 
     // 참여 신청폼 수정
