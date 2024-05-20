@@ -25,38 +25,38 @@
     height: auto;
 }
 
-.menu {
+.headerMenu {
     flex-grow: 7; /* .menu가 차지할 공간을 설정 (70%의 10배) */
     max-width: 70%; /* 최대 너비를 70%로 설정 */
 }
 
-.menu nav {
+.headerMenu nav {
     display: flex; /* 내부 요소를 가운데 정렬하기 위해 flexbox를 사용 */
     flex-grow: 1; /* 너비를 최대한 차지하도록 설정 */
 }
 
-.menu nav ul {
+.headerMenu nav ul {
     display: flex; /* 내부 요소를 가로로 나열하기 위해 flexbox를 사용 */
     list-style: none;
 }
 
-.menu nav ul li{
+.headerMenu nav ul li{
     font-size: 1em;
 }
 
-.menu nav ul li a {
+.headerMenu nav ul li a {
     text-decoration: none; /* 링크의 밑줄 제거 */
     color: #333333;
     font-size: 16px;
     margin-right: 5.1em;
 }
 
-.menu nav ul li a i {
+.headerMenu nav ul li a i {
     margin-left: 1.5em; /* <i> 태그의 왼쪽 마진을 1em으로 유지 */
     margin-right: 0; /* <i> 태그의 오른쪽 마진을 0으로 설정 */
 }
 
-.menu nav ul li:last-child a i {
+.headerMenu nav ul li:last-child a i {
     margin-left: -3em; /* 마지막 <a> 안의 <i> 태그의 왼쪽 마진을 1em으로 유지 */
     margin-right: 0; /* 마지막 <a> 안의 <i> 태그의 오른쪽 마진을 0으로 설정 */
 }

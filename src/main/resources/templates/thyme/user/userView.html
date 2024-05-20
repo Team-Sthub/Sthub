@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <link rel="stylesheet" th:href="@{/style/header.css}">
+    <link rel="stylesheet" th:href="@{/style/user/userView.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
+</head>
+<body>
+    <div th:replace="thyme/frameHeader :: header"></div><br>
+
+    <!-- 로그인한 유저 -->
+    <!-- <sec:authorize access="isAuthenticated()"> -->
+    <div class="userView">
+        <div class="userInfo">
+            <div class="userProfileBox">
+                <div class="userProfile">
+                    <i class="fa-solid fa-user" title="Insert image" id="image-icon"></i>
+                    <input type="file" id="file-input" name="profile" style="display: none;" />
+                    <br>
+                </div>
+                <span>사용자 닉네임</span>
+                <!-- <span th:text="${user.nickname}"></span> -->
+            </div>
+            <div class="vertical-line"></div>
+            <div class="userBox">
+                <div class="editBtn">
+                    <a th:href="@{/user/userInfo}" class="edit-button">정보수정</a>
+                </div>
+                <div class="manner">
+                    <div class="rectangle">닉네임의 매너 등급</div>
+                    <!-- <div class="rectangle" th:text="${user.nickname} + '의 매너 등급'"></div> -->
+                    <!-- 별점 표시.. -->
+
+                </div>
+                <br>
+                <div class="location">
+                    <div class="rectangle">닉네임의 동네</div>
+                    <!-- <div class="rectangle" th:text="${user.nickname} + '의 동네'"></div> -->
+                    <!-- 동네 표시.. -->
+
+                </div>
+            </div>
+        </div>
+        <br><br>
+        <div class="categoryMenu">
+            <a href="#" class="menu" th:attr="data-href=@{/user/selling}">판매 상품</a>
+            <a href="#" class="menu" th:attr="data-href=@{/user/purchase}">구매 상품</a>
+            <a href="#" class="menu" th:attr="data-href=@{/user/groupbuying}">공구 모집</a>
+            <a href="#" class="menu" th:attr="data-href=@{/user/participation}">공구 참여</a>
+            <a href="#" class="menu" th:attr="data-href=@{/user/review}">후기 내역</a>
+            <a href="#" class="menu" th:attr="data-href=@{/user/}">신고 내역</a>
+        </div>
+        <div class="category">
+
+        </div>
+    </div>
+
+    <!-- 로그인 하지 않은 유저 -->
+    <!-- <sec:authorize access="!isAuthenticated()"> -->
+    <script th:src="@{/js/user/userView.js}"></script>
+</body>
+</html>
