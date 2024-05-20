@@ -28,3 +28,16 @@ spring:
   config:
     activate:
       on-profile: prod
+
+cloud:
+  aws:
+    s3:
+      bucket: sthub-bucket
+    credentials:
+      access-key: AKIAU6GDY3X7V37AJ374
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
