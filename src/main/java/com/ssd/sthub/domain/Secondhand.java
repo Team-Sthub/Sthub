@@ -6,15 +6,16 @@ import com.ssd.sthub.dto.secondhand.SecondhandDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "secondhand")
-public class Secondhand extends BaseTime{
-
+public class Secondhand extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "secondhandId")
@@ -44,12 +45,9 @@ public class Secondhand extends BaseTime{
 
     private String trackingNum; // 운송장 번호
 
-    @ColumnDefault("'거래가능'")
     @Column(nullable = false)
+    @ColumnDefault("'거래가능'")
     private String status; // 거래가능, 예약중, 거래완료
-
-    @Lob
-    private String imageUrl; // 최대 3개
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "memberId")
@@ -65,7 +63,6 @@ public class Secondhand extends BaseTime{
         this.type = request.getType();
         this.place = request.getPlace();
         this.content = request.getContent();
-        this.imageUrl = request.getImageUrl() != null ? request.getImageUrl() : "";
     }
 
     public void update(SecondhandDTO.PatchRequest request) {
@@ -77,6 +74,5 @@ public class Secondhand extends BaseTime{
         this.place = request.getPlace();
         this.trackingNum = request.getTrackingNum();
         this.content = request.getContent();
-        this.imageUrl = request.getImageUrl() != null ? request.getImageUrl() : "";
     }
 }

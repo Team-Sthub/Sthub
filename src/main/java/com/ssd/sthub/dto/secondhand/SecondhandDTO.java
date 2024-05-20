@@ -1,5 +1,7 @@
 package com.ssd.sthub.dto.secondhand;
 
+import com.ssd.sthub.domain.SImage;
+import com.ssd.sthub.domain.Secondhand;
 import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.domain.enumerate.Transaction;
 import jakarta.validation.constraints.NotEmpty;
@@ -9,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -17,18 +21,17 @@ public class SecondhandDTO {
     public static class PostRequest {
         @NotEmpty
         private String title; // 제목
-        @NotEmpty
+        @NotNull
         private Category category; // 카테고리
         @NotEmpty
         private String product; // 상품명
-        @NotEmpty
+        @NotNull
         private Long price; // 가격
-        @NotEmpty
+        @NotNull
         private Transaction type; // 거래 방식
         private String place; // 장소
         @NotEmpty
         private String content; // 내용
-        private String imageUrl; // 최대 3개
     }
 
     @Getter
@@ -37,18 +40,24 @@ public class SecondhandDTO {
         private Long secondhandId;
         @NotEmpty
         private String title; // 제목
-        @NotEmpty
+        @NotNull
         private Category category; // 카테고리
         @NotEmpty
         private String product; // 상품명
-        @NotEmpty
+        @NotNull
         private Long price; // 가격
-        @NotEmpty
+        @NotNull
         private Transaction type; // 거래 방식
         private String place; // 장소
         private String trackingNum; // 운송장 번호
         @NotEmpty
         private String content; // 내용
-        private String imageUrl; // 최대 3개
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class Response {
+        private Secondhand secondhand;
+        private List<SImage> sImages;
     }
 }

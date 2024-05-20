@@ -49,6 +49,13 @@ dependencies {
 
     // model-mapper
     implementation 'org.modelmapper:modelmapper:3.1.0'
+
+    // AWS S3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+    implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.7.5'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.15.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
 }
 
 tasks.named('test') {
