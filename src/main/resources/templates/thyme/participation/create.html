@@ -2,14 +2,66 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Create.html</title>
-    <link rel="stylesheet" th:href="@{/style/header.css}">
-    <link rel="stylesheet" th:href="@{/style/participation/create.css}">
+    <title>공동구매 신청 리스트</title>
+    <link rel="stylesheet" th:href="@{/style/header.css}" href="../../../static/style/header.css"/>
+    <link rel="stylesheet" th:href="@{/style/participation/list.css}"
+          href="../../../static/style/participation/create.css">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
 </head>
-<body>
-<!-- header 삽입 -->
-<div th:replace="thyme/frameHeader :: header"></div>
+<script>
+    function is_checked() {
+        const checkbox = document.getElementById('my_checkbox');
+        const is_checked = checkbox.checked;
+        document.getElementById('result').innerText = is_checked ? '체크됨' : '체크되지 않음';
+    }
 
+    function is_closed() {
+        window.close();
+    }
+</script>
+<body>
+<div th:replace="thyme/frameHeader :: header"></div>
+<div class="back">
+    <form method="post" class="participation-form" th:action="@{/participation/create}" th:object="${participationRequest}">
+        <div class="header-container">
+            <p class="title">공동구매참여 신청폼</p>
+            <p class="description2">*신청폼 수정은 모집 마감 하루 전까지 가능합니다</p>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>이름</th>
+                <th>전화번호</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="box1"><input class="form-input" id="name" th:field="{name}" value="이르르음"></td>
+                <td class="box1"><input class="form-input" id="phone" th:field="{phone}" value="010-1111-2222"></td>
+            </tr>
+            </tbody>
+            <tr>
+                <th>추가사항</th>
+            </tr>
+            <tr>
+                <td class="description" colspan="2">게시자가 요구한 추가사항을 작성하지 않으면 참여 신청이 거절될 수 있습니다.</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="box2"><input class="content-input" id="content" th:field="{content}" type="text" value="content들어가는곳"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="description2">
+                    <label>
+                        <input type="checkbox" id="my_checkbox" onclick="is_checked()"> 참여가 확정되면 글에 게시된 오픈채팅방에 들어와주세요.
+                    </label>
+                </td>
+            </tr>
+        </table>
+        <div class="btn-container">
+            <input class="btn1" type="submit" value="참여하기">
+            <input class="btn1" type="button" value="취소하기" onclick="is_closed()">
+        </div>
+    </form>
+</div>
 </body>
 </html>

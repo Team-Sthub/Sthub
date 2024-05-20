@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,8 +25,11 @@ public class ParticipationController {
 
     // 참여 신청폼 작성
     @PostMapping("/create")
-    public ResponseEntity<SuccessResponse<Participation>> createParticipation(@RequestHeader Long memberId, Long groupBuyingId, @RequestBody ParticipationRequestDto.request request) {
-        return ResponseEntity.ok(SuccessResponse.create(participationService.createParticipation(memberId, groupBuyingId, request)));
+    public ModelAndView createParticipation(@RequestHeader Long memberId, @RequestParam Long groupBuyingId, @ModelAttribute ParticipationRequestDto.request request) {
+        Participation participation = participationService.createParticipation(memberId, groupBuyingId, request);
+        ModelAndView modelAndView = new ModelAndView("redirect:thyme/participation/list");
+        modelAndView.addObject("participation", participation);
+        return modelAndView;
     }
 
     // 참여 신청폼 상세 조회
@@ -51,8 +55,14 @@ public class ParticipationController {
 
     // 참여 신청폼 수락/거절
     @PatchMapping("/list")
-    public ResponseEntity<SuccessResponse<Participation>> patchParticipations(@RequestHeader Long memberId, @RequestParam Long participationId, @RequestBody ParticipationRequestDto.AcceptRequest request) throws BadRequestException {
-        return ResponseEntity.ok(SuccessResponse.create(participationService.accpetMember(memberId,participationId, request)));
+    public ModelAndView patchParticipations(@RequestHeader Long memberId, @RequestParam Long participationId, @RequestBody ParticipationRequestDto.AcceptRequest request) throws BadRequestException {
+        Long groupBuyingId = request.getGroupBuyingId();
+        participationService.accpetMember(memberId, participationId, request);
+
+        Page<Participation> participationList = participationService.getParticipationList(groupBuyingId, 1);
+        ModelAndView modelAndView = new ModelAndView("thyme/participation/list");
+        modelAndView.addObject("participationList", participationList);
+        return modelAndView;
     }
 
     //마이페이지 - 공구 참여 전체 조회

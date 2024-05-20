@@ -37,7 +37,7 @@ public class ParticipationService {
                 .request(request)
                 .build();
 
-        if (participation == null) {
+        if (request == null) {
             throw new NullPointerException("신청폼 작성에 실패했습니다.");
         }
 

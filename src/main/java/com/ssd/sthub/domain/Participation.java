@@ -41,6 +41,7 @@ public class Participation extends BaseTime {
         this.member = member;
         this.groupBuying = groupBuying;
         this.content = request.getContent();
+        this.accept = 0;
     }
 
     public void update(ParticipationRequestDto.PatchRequest request) {
