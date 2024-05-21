@@ -1,5 +1,6 @@
 package com.ssd.sthub.controller;
 
+import com.ssd.sthub.domain.SImage;
 import com.ssd.sthub.domain.Secondhand;
 import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.dto.secondhand.SCommentDTO;
@@ -11,10 +12,13 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/secondhand")
@@ -22,6 +26,7 @@ import java.util.List;
 public class SecondhandController {
     private final SecondhandService secondhandService;
     private final SCommentService sCommentService;
+    private final AWSS3SService awss3SService;
 
     // 중고거래 게시글 작성 클릭
     @GetMapping("/moveToForm")
@@ -31,8 +36,9 @@ public class SecondhandController {
 
     // 중고거래 게시글 생성
     @PostMapping("/create")
-    public ModelAndView createSecondhand(@RequestHeader Long memberId, @RequestBody SecondhandDTO.PostRequest request) {
-        Secondhand secondhand = secondhandService.createSecondhand(memberId, request);
+    public ModelAndView createSecondhand(@RequestHeader Long memberId, @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @RequestPart @Validated SecondhandDTO.PostRequest request) {
+        List<String> imgUrls = awss3SService.uploadFiles(multipartFiles); // s3 이미지 등록
+        SecondhandDTO.Response secondhand = secondhandService.createSecondhand(memberId, imgUrls, request);
         ModelAndView modelAndView = new ModelAndView("redirect:thyme/secondhand/detail");
         modelAndView.addObject("secondhand", secondhand);
         return modelAndView;
@@ -40,8 +46,13 @@ public class SecondhandController {
 
     // 중고거래 게시글 수정 + 거래 최종 방식 선택
     @PatchMapping("/update")
-    public ResponseEntity<SuccessResponse<Secondhand>> updateSecondhand(@RequestHeader Long memberId, @RequestBody SecondhandDTO.PatchRequest request) throws BadRequestException {
-        return ResponseEntity.ok(SuccessResponse.create(secondhandService.updateSecondhand(memberId, request)));
+    public ModelAndView updateSecondhand(@RequestHeader Long memberId, @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @RequestPart @Validated SecondhandDTO.PatchRequest request) throws BadRequestException {
+        awss3SService.deleteImages(secondhandService.getImageUrls(request.getSecondhandId())); // 기존 이미지 삭제
+        List<String> imgUrls = awss3SService.uploadFiles(multipartFiles); // s3 이미지 등록
+        SecondhandDTO.Response secondhand = secondhandService.updateSecondhand(memberId, imgUrls, request);
+        ModelAndView modelAndView = new ModelAndView("redirect:thyme/secondhand/detail");
+        modelAndView.addObject("secondhand", secondhand);
+        return modelAndView;
     }
 
     // 중고거래 게시글 삭제
@@ -52,8 +63,11 @@ public class SecondhandController {
 
     // 중고거래 게시글 상세 조회 + 판매 내역 상세 조회 + 구매 내역 상세 조회
     @GetMapping("/detail")
-    public ResponseEntity<SuccessResponse<Secondhand>> getSecondhand(@RequestParam Long secondhandId) {
-        return ResponseEntity.ok(SuccessResponse.create(secondhandService.getSecondhand(secondhandId)));
+    public ModelAndView getSecondhand(@RequestParam Long secondhandId) {
+        SecondhandDTO.Response secondhand = secondhandService.getSecondhand(secondhandId);
+        ModelAndView modelAndView = new ModelAndView("redirect:thyme/secondhand/detail");
+        modelAndView.addObject("secondhand", secondhand);
+        return modelAndView;
     }
 
     // 중고거래 게시글 전체 조회
