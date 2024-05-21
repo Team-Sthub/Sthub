@@ -56,5 +56,43 @@
             </div>
         </div>
     </div>
+
+    <!-- 이미지 출력 -->
+    <div>
+
+    </div>
+
+    <!-- 내용 출력 -->
+    <div>
+        <pre id="content">
+            공대생의 영원한 단짝 공학용 계산기 같이 사실 분 구합니다!!!!
+            4월 7일까지 신청해주세요.
+            신청시 옾챗 들어오시고 이름/전화번호/계산기 색상 작성 바랍니다</pre>
+    </div>
+
+    <div id="btn_list">
+        <div id="btn_message">
+            <a th:href="@{/groupBuying/list}" class="message">1:1 쪽지하기</a>
+        </div>
+        <div id="btn_application">
+            <a th:href="@{/groupBuying/list}" class="application">공동구매 신청하기</a>
+        </div>
+        <div id="btn_appList">
+            <a th:href="@{/groupBuying/list}" class="appList">신청자 목록 보기</a>
+        </div>
+        <div id="btn_complaint">
+            <a th:href="@{/groupBuying/list}" class="complaint">신고하기</a>
+        </div>
+    </div>
+    <hr/>
+
+    <!-- 댓글 -->
+    <div id="comment">
+        <div class="content-area">
+            <p id="comment-nickname">블러드234</p>
+            <textarea placeholder="내용을 입력하세요"></textarea>
+        </div>
+        <input id="createBtn" type="submit" value="등록" />
+    </div>
 </body>
 </html>

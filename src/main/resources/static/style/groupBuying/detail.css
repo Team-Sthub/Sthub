@@ -17,7 +17,7 @@
 #detail-title {
     position: relative;
     text-align: center;
-    margin-top: 5px;
+    margin-top: 2px;
     margin-right: 42%;
     color: #000000;
 }
@@ -182,4 +182,172 @@ hr {
 #place {
     border: none;
     margin-left: 10px;
+}
+
+#content {
+    width: 67.5%;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+#btn_list {
+    width: 47%;
+    margin: 0 auto;
+    margin-top: 15px;
+    padding-top: 2px;
+    margin-bottom: 15px;
+    display: flex;
+}
+
+#btn_message {
+    background-color : white;
+    width: 30%;
+    height: 40px;
+    margin-left: 15px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+}
+
+.message {
+    position: relative;
+    text-align: center;
+    display: inline-block;
+    padding: 9px 12px;
+    border: 1px solid #00000033;
+    text-align: center;
+    text-decoration-line: none;
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    width: 80%;
+    border-radius: 5px;
+}
+
+#btn_application {
+    background-color : white;
+    width: 30%;
+    height: 40px;
+    margin-left: 15px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+}
+
+.application {
+    position: relative;
+    text-align: center;
+    display: inline-block;
+    padding: 9px 12px;
+    border: 1px solid #00000033;
+    text-align: center;
+    text-decoration-line: none;
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    width:80%;
+    border-radius: 5px;
+}
+
+#btn_appList {
+    background-color : white;
+    width: 30%;
+    height: 40px;
+    margin-left: 15px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+}
+
+.appList {
+    position: relative;
+    text-align: center;
+    display: inline-block;
+    padding: 9px 12px;
+    border: 1px solid #00000033;
+    text-align: center;
+    text-decoration-line: none;
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    width:80%;
+    border-radius: 5px;
+}
+
+#btn_complaint {
+    background-color : white;
+    width: 30%;
+    height: 40px;
+    margin-left: 15px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+}
+
+.complaint {
+    position: relative;
+    text-align: center;
+    display: inline-block;
+    padding: 9px 12px;
+    border: 1px solid #00000033;
+    text-align: center;
+    text-decoration-line: none;
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    width:80%;
+    border-radius: 5px;
+}
+
+#comment {
+    padding-top: 2px;
+    display: flex;
+    width: 55%;
+    height: 100px;
+    margin: 0 auto;
+    margin-top: 5px;
+}
+
+.content-area {
+    width: 100%;
+    height: 95px;
+    margin-top: 5px;
+    border: 1px solid #00000033;
+    padding-bottom: 3px;
+}
+
+#comment-nickname {
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-left: 11px;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+textarea {
+    margin-left: 10px;
+    width: 95%;
+    height: 65%;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: none;
+    font-weight: normal;
+}
+
+#createBtn {
+    position: relative;
+    text-align: center;
+    margin: 5% auto;
+    margin-left: 10px;
+    padding: 10px 12px;
+    border: 1px solid #00000033;
+    width: 10%;
+    height: 35px;
+    text-align: center;
+    text-decoration-line: none;
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 5px;
+    flex: none;
+    flex-grow: 0;
+    background-color: white;
 }
