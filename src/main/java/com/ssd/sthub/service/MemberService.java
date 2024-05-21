@@ -1,6 +1,7 @@
 package com.ssd.sthub.service;
 
 import com.ssd.sthub.domain.Member;
+import com.ssd.sthub.dto.member.LoginDTO;
 import com.ssd.sthub.dto.member.MemberDTO;
 import com.ssd.sthub.dto.member.RegisterDTO;
 import com.ssd.sthub.dto.member.UserViewDTO;
@@ -31,15 +32,15 @@ public class MemberService {
     }
 
     // 로그인
-    public Optional<Member> login(String nickname, String password) {
-        Optional<Member> member = memberRepository.findByNickname(nickname);
-        if(member == null) {
-            new EntityNotFoundException("회원 조회에 실패했습니다.");
+    public Member login(LoginDTO loginDTO) {
+        Optional<Member> member = memberRepository.findByNickname(loginDTO.getNickname());
+        if(member.isEmpty()) {
+            throw new EntityNotFoundException("회원 조회에 실패했습니다.");
         }
-        if(!member.get().getPassword().equals(password)) {
-            new EntityNotFoundException("비밀번호가 일치하지 않습니다.");
+        if(!member.get().getPassword().equals(loginDTO.getPassword())) {
+            throw new EntityNotFoundException("비밀번호가 일치하지 않습니다.");
         }
-        return member;
+        return member.get();
     }
 
     // 아이디 중복 확인
