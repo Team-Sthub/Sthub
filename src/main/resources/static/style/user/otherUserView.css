@@ -58,11 +58,6 @@ div.userInfo {
     margin-bottom: 2%;
 }
 
-.editBtn {
-    display: flex;
-    justify-content: flex-end;
-}
-
 .manner, .location {
     display: flex; /* 부모 요소를 Flexbox 컨테이너로 설정 */
     align-items: center;
@@ -73,19 +68,6 @@ div.userInfo {
     border-radius: 10px;
     padding: 5px;
     margin-right: 0;
-}
-
-.edit-button {
-    display: flex;
-    align-items: center; /* 수직 가운데 정렬 */
-    background: rgba(0, 81, 0, 0.2);
-    border-radius: 15px;
-    cursor: pointer;
-    color: #005100;
-    font-size: 11px;
-    padding: 5px;
-    height: 18px;
-    text-decoration: none; /* 링크의 밑줄 제거 */
 }
 
 .categoryMenu {

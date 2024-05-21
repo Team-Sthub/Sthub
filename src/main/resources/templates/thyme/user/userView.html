@@ -38,21 +38,20 @@
                 <div class="location">
                     <div class="rectangle">닉네임의 동네</div>
                     <!-- <div class="rectangle" th:text="${user.nickname} + '의 동네'"></div> -->
-                    <!-- 동네 표시.. -->
-
+                    <!-- <span th:text="${user.address}"></span> -->
                 </div>
             </div>
         </div>
         <br><br>
         <div class="categoryMenu">
-            <a href="#" class="menu" th:attr="data-href=@{/user/selling}">판매 상품</a>
-            <a href="#" class="menu" th:attr="data-href=@{/user/purchase}">구매 상품</a>
-            <a href="#" class="menu" th:attr="data-href=@{/user/groupbuying}">공구 모집</a>
-            <a href="#" class="menu" th:attr="data-href=@{/user/participation}">공구 참여</a>
-            <a href="#" class="menu" th:attr="data-href=@{/user/review}">후기 내역</a>
-            <a href="#" class="menu" th:attr="data-href=@{/user/}">신고 내역</a>
+            <div class="menu" th:attr="data-target='selling'">판매 상품</div>
+            <div class="menu" th:attr="data-target='purchase'">구매 상품</div>
+            <div class="menu" th:attr="data-target='groupbuying'">공구 모집</div>
+            <div class="menu" th:attr="data-target='participation'">공구 참여</div>
+            <div class="menu" th:attr="data-target='review'">후기 내역</div>
+            <div class="menu" th:attr="data-target='report'">신고 내역</div>
         </div>
-        <div class="category">
+        <div class="categoryContent">
 
         </div>
     </div>
