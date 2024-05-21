@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,11 +24,11 @@ public class ParticipationController {
 
     // 참여 신청폼 작성
     @PostMapping("/create")
-    public ModelAndView createParticipation(@RequestHeader Long memberId, @RequestParam Long groupBuyingId, @ModelAttribute ParticipationRequestDto.request request) {
+    public ModelAndView createParticipation(@RequestParam Long memberId, @RequestParam Long groupBuyingId, @ModelAttribute ParticipationRequestDto.request request) {
         Participation participation = participationService.createParticipation(memberId, groupBuyingId, request);
-        ModelAndView modelAndView = new ModelAndView("redirect:thyme/participation/list");
+        ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("participation", participation);
-        return modelAndView;
+        return new ModelAndView("redirect:/participation/list?pageNum=0&groupBuyingId="+groupBuyingId);
     }
 
     // 참여 신청폼 상세 조회
@@ -40,9 +39,9 @@ public class ParticipationController {
 
     // 참여 신청폼 리스트 조회
     @GetMapping("/list")
-    public ModelAndView getParticipations(@RequestParam int pageNum, Long groupBuyingId) {
+    public ModelAndView getParticipations(@RequestParam int pageNum, @RequestParam Long groupBuyingId) {
         Page<Participation> participationList = participationService.getParticipationList(groupBuyingId, pageNum);
-        ModelAndView modelAndView = new ModelAndView("redirect:thyme/participation/list");
+        ModelAndView modelAndView = new ModelAndView("thyme/participation/list");
         modelAndView.addObject("participationList", participationList);
         return modelAndView;
     }

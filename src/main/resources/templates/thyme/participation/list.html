@@ -9,8 +9,10 @@
 </head>
 <body>
 <!-- header 삽입 -->
-<div th:replace="thyme/frameHeader :: header"></div>
+<div th:insert="~{thyme/frameHeader :: header}"></div>
 <p id="title">공동구매 참여자 목록</p>
+<input type="hidden" name="memberId" value="6"> <!-- 이 값을 서버에서 동적으로 설정 -->
+<input type="hidden" name="groupBuyingId" value="6">
 <hr>
 <div class="back">
     <table>
@@ -27,15 +29,15 @@
         <tbody>
         <tr th:each="participation, iterStat : ${participationList}">
             <td th:text="${iterStat.index + 1}" class="left-rounded">1</td>
-            <td th:text="${participation.member.name}">홍길동</td>
+            <td th:text="${participation.member.nickname}">홍길동</td>
             <td th:text="${participation.member.phone}">010-1234-5678</td>
             <td th:text="${participation.content}">S사이즈</td>
-            <td th:text="${#dates.format(participation.createdDate, 'yyyy-MM-dd')}">2024-05-19</td>
+            <td th:text="${#temporals.format(participation.createdAt, 'yyyy-MM-dd')}">2024-05-19</td>
             <td class="right-rounded"
                 th:classappend="${participation.accept == 1 ? 'status-accept' : (participation.accept == 2 ? 'status-reject' : 'status-pending')}">
                 <div th:class="${participation.accept == 1 ? '' : (participation.accept == 2 ? 'status-reject' : 'status-pending')}"
                      class="status-accept">
-                    수락
+                    대기
                 </div>
             </td>
 

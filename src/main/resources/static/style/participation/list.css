@@ -15,7 +15,7 @@ hr {
     justify-content: center;
     background: rgba(76, 175, 80, 0.1);
     width: 60%;
-    height: 650px;
+    height: 620px;
     margin: 20%;
     margin-top: 1%;
 }
@@ -86,7 +86,7 @@ td {
     background-color: #3D39FE;
     text-align: center;
     color: white;
-    padding: 10px 20px;
+    padding: 5px 0px;
     border-radius: 20px;
     display: inline-block;
 }
