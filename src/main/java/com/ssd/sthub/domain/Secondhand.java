@@ -2,6 +2,7 @@ package com.ssd.sthub.domain;
 
 import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.domain.enumerate.Transaction;
+import com.ssd.sthub.dto.secondhand.PostSecondhandDTO;
 import com.ssd.sthub.dto.secondhand.SecondhandDTO;
 import jakarta.persistence.*;
 import lombok.*;
@@ -54,7 +55,7 @@ public class Secondhand extends BaseTime {
     private Member member;
 
     @Builder
-    public Secondhand(Member member, SecondhandDTO.PostRequest request) {
+    public Secondhand(Member member,  PostSecondhandDTO request) {
         this.member = member;
         this.title = request.getTitle();
         this.category = request.getCategory();
