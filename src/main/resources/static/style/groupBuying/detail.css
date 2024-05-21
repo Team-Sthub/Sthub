@@ -1,0 +1,353 @@
+.btn_wrap {
+    position: relative;
+    text-align: center;
+    margin-top: 20px;
+    margin-left: 73.5%;
+    display: inline-block;
+    padding: 6px 12px;
+    border: 1px solid #00000033;
+    width: 2%;
+    height: 12px;
+    text-align: center;
+    text-decoration-line: none;
+    color: #000000;
+    font-size: 10px;
+}
+
+#detail-title {
+    position: relative;
+    text-align: center;
+    margin-top: 2px;
+    margin-right: 42%;
+    color: #000000;
+}
+
+#user-nickname {
+    position: relative;
+    text-align: center;
+    margin-top: -12px;
+    margin-right: 53%;
+    color: #00000080;
+    font-size: 10px;
+}
+
+hr {
+    width: 55%;
+    background: #0000001A;
+    border: 0;
+    height: 0.5px;
+    margin-top: -6px;
+}
+
+.info {
+    background-color: #EDF7ED;
+    width: 55%;
+    height: 150px;
+    margin: 0 auto;
+    margin-top: 15px;
+    padding-bottom: 7px;
+}
+
+#info1, #info2 {
+    margin-top: 4px;
+    margin-left: 2%;
+    display: flex;
+}
+
+#head {
+    margin-top: 12px;
+    padding-top: 2px;
+    display: flex;
+}
+
+#info-title {
+    padding-left: 16px;
+    font-size: 12px;
+    padding-top: 5px;
+}
+
+#status {
+    width: 7%;
+    height: 20px;
+    border-radius: 15px;
+    border: none;
+    flex: none;
+    flex-grow: 0;
+    background: #4CAF5080;
+    font-size: 10px;
+    font-weight: bold;
+    text-align : center;
+    margin-left: 20px;
+    margin-top: 13px;
+    line-height: 20px;
+}
+
+#readCategory {
+    background-color : white;
+    border-radius: 30px;
+    width: 21%;
+    height: 40px;
+    margin-left: 2px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+}
+
+#name1, #name2, #name3, #name4, #name5, #name6 {
+    margin-left: 20px;
+    justify-content: center; /* 수평 가운데 정렬 */
+    font-size: 10px;
+    font-weight: bold;
+}
+
+#category {
+    margin-left: 15px;
+}
+
+#readProduct {
+    background-color : white;
+    border-radius: 30px;
+    width: 22%;
+    height: 40px;
+    margin-left: 15px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+    font-size: 12px;
+}
+
+#product {
+    border: none;
+    margin-left: 15px;
+}
+
+#readPrice {
+    background-color : white;
+    border-radius: 30px;
+    width: 21%;
+    height: 40px;
+    margin-left: 15px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+    font-size: 12px;
+}
+
+#price {
+    border: none;
+    margin-left: 18px;
+}
+
+#readDead {
+    background-color : white;
+    border-radius: 30px;
+    width: 23%;
+    height: 40px;
+    margin-left: 15px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+    font-size: 12px;
+}
+
+#deadline {
+    border: none;
+    margin-left: 15px;
+}
+
+#readChatURL {
+    background-color : white;
+    border-radius: 30px;
+    width: 50%;
+    height: 40px;
+    margin-top: 1%;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+    font-size: 12px;
+}
+
+#chatURL {
+    border: none;
+    margin-left: 10px;
+}
+
+#readPlace {
+    background-color : white;
+    border-radius: 30px;
+    width: 47%;
+    height: 40px;
+    margin-top: 1%;
+    margin-left: 10px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+    font-size: 12px;
+}
+
+#place {
+    border: none;
+    margin-left: 10px;
+}
+
+#content {
+    width: 67.5%;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+#btn_list {
+    width: 47%;
+    margin: 0 auto;
+    margin-top: 15px;
+    padding-top: 2px;
+    margin-bottom: 15px;
+    display: flex;
+}
+
+#btn_message {
+    background-color : white;
+    width: 30%;
+    height: 40px;
+    margin-left: 15px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+}
+
+.message {
+    position: relative;
+    text-align: center;
+    display: inline-block;
+    padding: 9px 12px;
+    border: 1px solid #00000033;
+    text-align: center;
+    text-decoration-line: none;
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    width: 80%;
+    border-radius: 5px;
+}
+
+#btn_application {
+    background-color : white;
+    width: 30%;
+    height: 40px;
+    margin-left: 15px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+}
+
+.application {
+    position: relative;
+    text-align: center;
+    display: inline-block;
+    padding: 9px 12px;
+    border: 1px solid #00000033;
+    text-align: center;
+    text-decoration-line: none;
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    width:80%;
+    border-radius: 5px;
+}
+
+#btn_appList {
+    background-color : white;
+    width: 30%;
+    height: 40px;
+    margin-left: 15px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+}
+
+.appList {
+    position: relative;
+    text-align: center;
+    display: inline-block;
+    padding: 9px 12px;
+    border: 1px solid #00000033;
+    text-align: center;
+    text-decoration-line: none;
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    width:80%;
+    border-radius: 5px;
+}
+
+#btn_complaint {
+    background-color : white;
+    width: 30%;
+    height: 40px;
+    margin-left: 15px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+}
+
+.complaint {
+    position: relative;
+    text-align: center;
+    display: inline-block;
+    padding: 9px 12px;
+    border: 1px solid #00000033;
+    text-align: center;
+    text-decoration-line: none;
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    width:80%;
+    border-radius: 5px;
+}
+
+#comment {
+    padding-top: 2px;
+    display: flex;
+    width: 55%;
+    height: 100px;
+    margin: 0 auto;
+    margin-top: 5px;
+}
+
+.content-area {
+    width: 100%;
+    height: 95px;
+    margin-top: 5px;
+    border: 1px solid #00000033;
+    padding-bottom: 3px;
+}
+
+#comment-nickname {
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-left: 11px;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+textarea {
+    margin-left: 10px;
+    width: 95%;
+    height: 65%;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: none;
+    font-weight: normal;
+}
+
+#createBtn {
+    position: relative;
+    text-align: center;
+    margin: 5% auto;
+    margin-left: 10px;
+    padding: 10px 12px;
+    border: 1px solid #00000033;
+    width: 10%;
+    height: 35px;
+    text-align: center;
+    text-decoration-line: none;
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 5px;
+    flex: none;
+    flex-grow: 0;
+    background-color: white;
+}

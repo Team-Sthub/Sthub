@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail.html</title>
+    <link rel="stylesheet" th:href="@{/style/header.css}">
+    <link rel="stylesheet" th:href="@{/style/groupBuying/detail.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
+</head>
+<body>
+    <!-- header 삽입 -->
+    <div th:replace="thyme/frameHeader :: header"></div>
+
+    <div><a th:href="@{/groupBuying/list}" class="btn_wrap">목록</a></div>
+
+    <p id="detail-title">공학용 계산기 공동구매 하실 분</p>
+    <p id="user-nickname">zzimnii</p>
+    <hr/>
+
+    <div class="info">
+        <div id="head">
+            <p id="info-title">공동구매 정보</p>
+            <div id="status">모집중</div>
+        </div>
+        <div id="info1">
+            <div id="readCategory">
+                <label id="name1" for="category">카테고리</label>
+                <select id="category" name="category">
+                    <option value="BOOK">교재</option>
+                    <option value="ELECTRONIC">전자기기</option>
+                    <option value="STATIONERY">문구</option>
+                    <option value="TRANSFER">양도</option>
+                </select>
+            </div>
+            <div id="readProduct">
+                <label id="name2" for="product">상품명</label>
+                <p id="product">공학용 계산기</p>
+            </div>
+            <div id="readPrice">
+                <label id="name3" for="price">가격</label>
+                <p id="price">5000원</p>
+            </div>
+            <div id="readDead">
+                <label id="name4" for="deadline">기한</label>
+                <p id="deadline">2024-05-21</p>
+            </div>
+        </div>
+        <div id="info2">
+            <div id="readChatURL">
+                <label id="name5">오픈채팅 링크</label>
+                <p id="chatURL">게시자가 참여 수락시 오픈채팅 링크가 공개됩니다.</p>
+            </div>
+            <div id="readPlace">
+                <label id="name6" for="place">나눔 장소</label>
+                <p id="place">서울시 마포구  공덕역 2번 출구</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 이미지 출력 -->
+    <div>
+
+    </div>
+
+    <!-- 내용 출력 -->
+    <div>
+        <pre id="content">
+            공대생의 영원한 단짝 공학용 계산기 같이 사실 분 구합니다!!!!
+            4월 7일까지 신청해주세요.
+            신청시 옾챗 들어오시고 이름/전화번호/계산기 색상 작성 바랍니다</pre>
+    </div>
+
+    <div id="btn_list">
+        <div id="btn_message">
+            <a th:href="@{/groupBuying/list}" class="message">1:1 쪽지하기</a>
+        </div>
+        <div id="btn_application">
+            <a th:href="@{/groupBuying/list}" class="application">공동구매 신청하기</a>
+        </div>
+        <div id="btn_appList">
+            <a th:href="@{/groupBuying/list}" class="appList">신청자 목록 보기</a>
+        </div>
+        <div id="btn_complaint">
+            <a th:href="@{/groupBuying/list}" class="complaint">신고하기</a>
+        </div>
+    </div>
+    <hr/>
+
+    <!-- 댓글 -->
+    <div id="comment">
+        <div class="content-area">
+            <p id="comment-nickname">블러드234</p>
+            <textarea placeholder="내용을 입력하세요"></textarea>
+        </div>
+        <input id="createBtn" type="submit" value="등록" />
+    </div>
+</body>
+</html>

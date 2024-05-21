@@ -79,7 +79,7 @@ public class GroupBuyingService {
         return new GroupBuyingListDTO(groupBuyingListDto, groupBuyings.getTotalPages());
     }
 
-    // 공동구매 게시글(상세) 조회 (작성자 확인은 controller에서 하고 뷰 설정)
+    // 공동구매 게시글(상세) 조회 (작성자 확인은 controller에서 하고 뷰 설정) 작성자 수락 여부 확인 후 링크 공개 및 미공개 해야함.
     public GroupBuying getGroupBuying(Long memberId, Long groupBuyingId) throws NullPointerException {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
