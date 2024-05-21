@@ -2,18 +2,24 @@ package com.ssd.sthub.controller;
 
 
 import com.ssd.sthub.domain.Member;
+import com.ssd.sthub.dto.member.LoginDTO;
 import com.ssd.sthub.dto.member.MemberDTO;
 import com.ssd.sthub.dto.member.RegisterDTO;
 import com.ssd.sthub.dto.member.UserViewDTO;
 import com.ssd.sthub.response.SuccessResponse;
 import com.ssd.sthub.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/user")
@@ -43,8 +49,15 @@ public class MemberController {
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<SuccessResponse<Optional<Member>>> login(@RequestBody String nickname, String password) {
-        return ResponseEntity.ok(SuccessResponse.create(memberService.login(nickname, password)));
+    public ResponseEntity<SuccessResponse<Member>> login(HttpServletRequest httpServletRequest, @RequestBody LoginDTO loginDTO) {
+        Member member = memberService.login(loginDTO);
+        httpServletRequest.getSession().invalidate(); // 세션 생성 전 기존 세션 파기
+        HttpSession session = httpServletRequest.getSession();
+        session.setAttribute("memberId", member.getId()); // 세션에 로그인 한 사용자의 memberId 등록
+        session.setMaxInactiveInterval(1800); // session이 30분동안 유지
+        log.info("세션에 등록된 memberId " + session.getAttribute("memberId"));
+        log.info("로그인 세션 Id : " + session.getId());
+        return ResponseEntity.ok(SuccessResponse.create(member));
     }
 
     // 프로필 조회

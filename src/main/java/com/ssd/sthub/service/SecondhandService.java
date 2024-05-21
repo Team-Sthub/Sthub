@@ -4,6 +4,7 @@ import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.SImage;
 import com.ssd.sthub.domain.Secondhand;
 import com.ssd.sthub.domain.enumerate.Category;
+import com.ssd.sthub.dto.secondhand.PostSecondhandDTO;
 import com.ssd.sthub.dto.secondhand.SecondhandDTO;
 import com.ssd.sthub.repository.MemberRepository;
 import com.ssd.sthub.repository.SImageRepository;
@@ -31,7 +32,7 @@ public class SecondhandService {
     private final AWSS3SService awss3SService;
 
     // 중고거래 게시글 작성
-    public SecondhandDTO.Response createSecondhand(Long memberId, List<String> imgUrls, SecondhandDTO.PostRequest request) {
+    public SecondhandDTO.Response createSecondhand(Long memberId, List<String> imgUrls, PostSecondhandDTO request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
 
@@ -41,12 +42,14 @@ public class SecondhandService {
                 .build();
         Secondhand newSecondhand = secondhandRepository.save(secondhand);
 
-        for(String imgUrl : imgUrls) {
-            SImage sImage = SImage.builder()
-                    .path(imgUrl)
-                    .secondhand(secondhand)
-                    .build();
-            sImageRepository.save(sImage);
+        if(imgUrls != null && !imgUrls.isEmpty()) {
+            for (String imgUrl : imgUrls) {
+                SImage sImage = SImage.builder()
+                        .path(imgUrl)
+                        .secondhand(secondhand)
+                        .build();
+                sImageRepository.save(sImage);
+            }
         }
 
         return new SecondhandDTO.Response(newSecondhand, sImageRepository.findAllBySecondhand(secondhand));
