@@ -37,7 +37,7 @@ public class SecondhandController {
     // 중고거래 게시글 생성
     @PostMapping("/create")
     public ModelAndView createSecondhand(@RequestHeader Long memberId, @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @RequestPart @Validated SecondhandDTO.PostRequest request) {
-        List<String> imgUrls = awss3SService.uploadFile(multipartFiles); // s3 이미지 등록
+        List<String> imgUrls = awss3SService.uploadFiles(multipartFiles); // s3 이미지 등록
         SecondhandDTO.Response secondhand = secondhandService.createSecondhand(memberId, imgUrls, request);
         ModelAndView modelAndView = new ModelAndView("redirect:thyme/secondhand/detail");
         modelAndView.addObject("secondhand", secondhand);
@@ -48,7 +48,7 @@ public class SecondhandController {
     @PatchMapping("/update")
     public ModelAndView updateSecondhand(@RequestHeader Long memberId, @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @RequestPart @Validated SecondhandDTO.PatchRequest request) throws BadRequestException {
         awss3SService.deleteImages(secondhandService.getImageUrls(request.getSecondhandId())); // 기존 이미지 삭제
-        List<String> imgUrls = awss3SService.uploadFile(multipartFiles); // s3 이미지 등록
+        List<String> imgUrls = awss3SService.uploadFiles(multipartFiles); // s3 이미지 등록
         SecondhandDTO.Response secondhand = secondhandService.updateSecondhand(memberId, imgUrls, request);
         ModelAndView modelAndView = new ModelAndView("redirect:thyme/secondhand/detail");
         modelAndView.addObject("secondhand", secondhand);
