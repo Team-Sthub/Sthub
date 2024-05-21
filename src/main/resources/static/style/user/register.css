@@ -91,6 +91,7 @@ td#img {
     background: #4CAF50;
     border-radius: 15px;
     border: none;
+    cursor: pointer;
 }
 
 select {
@@ -170,7 +171,7 @@ select {
     align-items: center; /* 수직 가운데 정렬 */
 }
 
-input#address {
+input#address-input {
     margin-top: 1%;
     width: 70%;
 }
