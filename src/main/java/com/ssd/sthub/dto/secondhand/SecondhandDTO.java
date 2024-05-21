@@ -19,18 +19,18 @@ import java.util.List;
 public class SecondhandDTO {
     @Getter
     public static class PostRequest {
-        @NotEmpty
+        @NotEmpty(message = "제목을 넣어주세요.")
         private String title; // 제목
-        @NotNull
+        @NotNull(message = "카테고리를 넣어주세요.")
         private Category category; // 카테고리
-        @NotEmpty
+        @NotEmpty(message = "상품명을 넣어주세요.")
         private String product; // 상품명
-        @NotNull
+        @NotNull(message = "가격을 넣어주세요.")
         private Long price; // 가격
-        @NotNull
+        @NotNull(message = "거래 방식을 넣어주세요.")
         private Transaction type; // 거래 방식
         private String place; // 장소
-        @NotEmpty
+        @NotEmpty(message = "내용을 넣어주세요.")
         private String content; // 내용
     }
 
