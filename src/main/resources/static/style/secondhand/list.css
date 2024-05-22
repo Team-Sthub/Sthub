@@ -1,0 +1,60 @@
+.menu1 a {
+    text-decoration: none;
+    color: black; /* 기본 텍스트 색상 */
+}
+
+.menu1 a:active {
+    color: #005100;
+}
+
+
+.menu1 {
+    display: flex; /* Flexbox 컨테이너로 설정 */
+    align-items: center; /* 요소들을 수직으로 가운데 정렬 */
+    width: 100%; /* 전체 너비 사용 */
+    padding: 10px 0; /* 상하 패딩 추가 */
+}
+
+.menu1 nav {
+    flex-grow: 1; /* nav가 가능한 공간을 최대한 차지하도록 설정 */
+    margin: 2% auto;
+}
+
+.menu1 nav ul {
+    display: flex; /* 내부 요소를 가로로 나열 */
+    list-style: none; /* 기본 리스트 스타일 제거 */
+    padding: 0; /* 기본 패딩 제거 */
+    margin: 0; /* 기본 마진 제거 */
+    justify-content: center; /* 내부 요소를 가운데 정렬 */
+}
+
+.menu1 nav ul li {
+    font-size: 1em; /* 글자 크기 설정 */
+    margin-right: 5em; /* 각 li 요소의 오른쪽 마진 */
+}
+
+.menu1 nav ul li:last-child {
+    margin-right: 0; /* 마지막 li 요소의 오른쪽 마진 제거 */
+}
+
+hr {
+    width: 60%; /* 가로선의 길이를 50%로 설정합니다. */
+    margin: 0 auto; /* 중앙 정렬 및 위아래 간격을 조정합니다. */
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 한 줄에 5개의 네모 박스가 나타나도록 설정 */
+    gap: 20px; /* 네모 박스 사이의 간격 */
+}
+
+.product-box {
+    border: 1px solid #ccc;
+    padding: 20px;
+    text-align: center;
+}
+
+.product-box img {
+    max-width: 100%;
+    height: auto;
+}

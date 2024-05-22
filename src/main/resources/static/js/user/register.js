@@ -48,37 +48,67 @@ function initMap() {
     }
 }
 
-// 주소 검색 추후.....
-/*function geocodeAddress(address) {
-    geocoder.geocode({ 'address': address }, function (results, status) {
-        results += "대한민국";
+// 주소로 위치 찾기
+function searchAddress() {
+    const address = document.getElementById('address-input').value;
+    geocoder.geocode({'address': address}, function(results, status) {
         if (status === 'OK') {
-            map.setCenter(results[0].geometry.location);
-            new google.maps.Marker({
+            const pos = results[0].geometry.location;
+            map.setCenter(pos);
+
+            if (marker) {
+                marker.setMap(null);
+            }
+            marker = new google.maps.Marker({
+                position: pos,
                 map: map,
-                position: results[0].geometry.location
+                title: address
             });
+
+            document.getElementById('address-display').textContent = results[0].formatted_address;
+            document.getElementById('latitude').value = pos.lat();
+            document.getElementById('longitude').value = pos.lng();
         } else {
-            displayAddress('Geocode was not successful for the following reason: ' + status);
+            console.error('Geocode was not successful for the following reason: ' + status);
         }
     });
 }
 
-function displayAddress(address) {
-    document.getElementById('address-display').innerText = address;
+// 위치 정보를 가져와 폼 필드에 설정한 후 폼을 제출
+function getLocationAndSubmit() {
+    const addressInput = document.getElementById('address-input');
+    const addressDisplay = document.getElementById('address-display');
+    const addressField = document.getElementById('address');
+
+    if (addressInput.value) {
+        addressField.value = addressInput.value;
+    } else {
+        addressField.value = addressDisplay.textContent;
+    }
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            document.getElementById('latitude').value = position.coords.latitude;
+            document.getElementById('longitude').value = position.coords.longitude;
+            document.getElementById('register-form').submit();
+        }, function(error) {
+            alert("Geolocation is not supported by this browser or an error occurred.");
+            document.getElementById('register-form').submit();
+        });
+    } else {
+        alert("Geolocation is not supported by this browser.");
+        document.getElementById('register-form').submit();
+    }
 }
 
+// 위치 정보를 가져오는데 실패한 경우 오류를 처리
 function handleLocationError(browserHasGeolocation, pos) {
-    var errorMsg = browserHasGeolocation ? 'Error: The Geolocation service failed.' : 'Error: Your browser doesn\'t support geolocation.';
-    alert(errorMsg);
+    alert(browserHasGeolocation ?
+        'Error: The Geolocation service failed.' :
+        'Error: Your browser doesn\'t support geolocation.');
 }
 
-document.getElementById('search-button').addEventListener('click', function () {
-    var address = document.getElementById('address').value;
-    geocodeAddress(address);
-});*/
-
-// 이미지 업로드
+// 이미지 미리보기
 document.addEventListener('DOMContentLoaded', function() {
     const imageIcon = document.getElementById('image-icon');
     const fileInput = document.getElementById('file-input');
@@ -105,8 +135,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error("Image icon or file input element not found");
     }
 });
-
-
 
 // 중복 확인 버튼을 누를 때의 동작 설정
 document.getElementById("checkId").addEventListener("click", function() {

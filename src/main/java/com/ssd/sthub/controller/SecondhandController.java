@@ -44,19 +44,17 @@ public class SecondhandController {
     }
 
     // 중고거래 게시글 생성
-    // Param : @SessionAttribute(name = "memberId") Long memberId
     @PostMapping("/create")
-    public ModelAndView createSecondhand(@RequestPart("imgUrl") List<MultipartFile> multipartFiles, @ModelAttribute @Validated PostSecondhandDTO request) {
-//        Long memberId = (Long) httpServletRequest.getSession().getAttribute("memberId"); // 세션에서 로그인 한 사용자의 memberId 추출
-//        log.info("memberId  : " + memberId);
-//        log.info("게시글 생성 세션 Id : " + httpServletRequest.getSession().getId());
+    public ModelAndView createSecondhand(@SessionAttribute(name = "memberId") Long memberId, @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @ModelAttribute @Validated PostSecondhandDTO request) {
+        log.info("memberId  : " + memberId);
+        log.info("게시글 생성 세션 Id : " + httpServletRequest.getSession().getId());
 
         List<String> imgUrls = null;
         if (!multipartFiles.get(0).isEmpty()) {
             imgUrls = awss3SService.uploadFiles(multipartFiles); // s3 이미지 등록
         }
 
-        SecondhandDTO.Response secondhand = secondhandService.createSecondhand(1L, imgUrls, request);
+        SecondhandDTO.Response secondhand = secondhandService.createSecondhand(memberId, imgUrls, request);
         Long secondhandId = secondhand.getSecondhand().getId();
         log.info("secondhandId =" + secondhandId);
         return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + secondhandId);
@@ -91,7 +89,7 @@ public class SecondhandController {
     // 중고거래 게시글 전체 조회
     @GetMapping("/list/{category}")
     public ModelAndView getSecondhands(@PathVariable Category category, @RequestParam int pageNum) throws BadRequestException {
-        Page<Secondhand> secondhandList = secondhandService.getSecondhands(category, pageNum);
+        List<SecondhandDTO.Response> secondhandList = secondhandService.getSecondhands(category, pageNum);
         ModelAndView modelAndView = new ModelAndView("thyme/secondhand/list");
         modelAndView.addObject("secondhandList", secondhandList);
         return modelAndView;
@@ -113,5 +111,10 @@ public class SecondhandController {
     @GetMapping("/selling/list")
     public ResponseEntity<SuccessResponse<Page<Secondhand>>> getSellingSecondhands(@RequestHeader Long memberId, @RequestParam int pageNum) throws BadRequestException {
         return ResponseEntity.ok(SuccessResponse.create(secondhandService.getSellingSecondhands(memberId, pageNum)));
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "thyme/secondhand/list";
     }
 }

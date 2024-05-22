@@ -1,0 +1,134 @@
+div.userView {
+    margin-top: 1%;
+    display: flex;
+    flex-direction: column; /* 자식 요소의 자식들을 세로로 정렬 */
+    justify-content: center; /* 수평 정렬 */
+    align-items: center; /* 수직 정렬 */
+}
+
+div.userInfo {
+    border: 2px solid #005100;
+    border-radius: 10px;
+    width: 60%;
+    height: 180px;
+    display: flex;
+    align-items: center; /* 수직 정렬 */
+}
+
+.userProfileBox {
+    display: flex; /* 자식 요소를 Flexbox 컨테이너로 설정 */
+    flex-direction: column; /* 자식 요소의 자식들을 세로로 정렬 */
+    align-items: center; /* 자식 요소의 자식들을 수평으로 가운데 정렬 */
+    width: 25%;
+}
+
+.userProfile {
+    text-align: center;
+    margin-top: 3%; /* 수직 여백 */
+    margin-bottom: 5%;
+    background: rgba(76, 175, 80, 0.15);
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+}
+
+#image-icon {
+    margin-left: 3%;
+    margin-top: 20%;
+    font-size: 3.7em; /* 아이콘 크기 증가 */
+    cursor: pointer;
+}
+
+#file-input {
+    display: none; /* 파일 입력 요소 숨김 */
+}
+
+.vertical-line {
+    width: 1.5px; /* 선의 두께 */
+    background-color: #005100; /* 선의 색상 */
+    height: 80%;
+}
+
+.userBox {
+    display: flex; /* 부모 요소를 Flexbox 컨테이너로 설정 */
+    flex-direction: column; /* 자식 요소의 자식들을 세로로 정렬 */
+    margin-left: 5%;
+    width: 70%;
+    margin-right: 2%;
+    margin-bottom: 2%;
+}
+
+.editBtn {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.manner, .location {
+    display: flex; /* 부모 요소를 Flexbox 컨테이너로 설정 */
+    align-items: center;
+}
+
+.rectangle {
+    border: 2px solid rgba(76, 175, 80, 0.5);
+    border-radius: 10px;
+    padding: 5px;
+    margin-right: 0;
+}
+
+.edit-button {
+    display: flex;
+    align-items: center; /* 수직 가운데 정렬 */
+    background: rgba(0, 81, 0, 0.2);
+    border-radius: 15px;
+    cursor: pointer;
+    color: #005100;
+    font-size: 11px;
+    padding: 5px;
+    height: 18px;
+    text-decoration: none; /* 링크의 밑줄 제거 */
+}
+
+.categoryMenu {
+    position: relative; /* 상대적 위치 설정 */
+    z-index: 1; /* 다른 요소들보다 위에 위치하도록 함 */
+    width: 60%;
+    display: flex; /* Flexbox 레이아웃 사용 */
+    justify-content: space-between; /* 요소 사이에 균등한 간격을 추가 */
+}
+
+.categoryMenu .menu {
+    flex: 1; /* 각 메뉴가 동일한 비율로 확장 */
+    text-align: left;
+    padding: 10px; /* 메뉴의 내부 패딩 */
+    box-sizing: border-box; /* 패딩과 테두리를 포함한 크기 계산 */
+    background: rgba(76, 175, 80, 0);
+    border-width: 2.5px 2.5px 0px 0px;
+    border-style: solid;
+    border-color: #005100;
+    border-radius: 10px;
+    color: #005100;
+    font-weight: bold;
+    text-decoration: none; /* 링크의 밑줄 제거 */
+    cursor: pointer;
+}
+
+.categoryMenu .menu:first-child {
+    border-width: 2.5px 2.5px 0px 2.5px;
+}
+
+div.categoryContent {
+    position: absolute; /* 절대적 위치 설정 */
+    top: -5px; /* 상단으로 20px만큼 이동하여 겹치도록 함 */
+    z-index: 2; /* .menu보다 위에 위치하도록 함 */
+    background: #FFFFFF;
+    border: 2px solid #005100;
+    border-radius: 10px;
+    width: 60%;
+    height: 220px;
+    position: relative; /* 부모 요소에 상대적으로 위치 설정 */
+    display: flex;
+    align-items: center; /* 수직 정렬 */
+    justify-content: center; /* 수평 중앙 */
+
+}
+

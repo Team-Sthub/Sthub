@@ -1,15 +1,13 @@
 package com.ssd.sthub.dto.participation;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ParticipationRequestDto {
 
+    @Data
     @Getter
     public static class request {
         private String nickname;

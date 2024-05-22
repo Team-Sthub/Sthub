@@ -1,13 +1,8 @@
 package com.ssd.sthub.dto.member;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@Data
 public class LoginDTO {
     private String nickname;
     private String password;

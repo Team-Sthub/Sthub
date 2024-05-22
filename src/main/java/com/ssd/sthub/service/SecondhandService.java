@@ -12,6 +12,7 @@ import com.ssd.sthub.repository.SecondhandRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -109,12 +111,11 @@ public class SecondhandService {
     public SecondhandDTO.Response getSecondhand(Long secondhandId) {
         Secondhand secondhand = secondhandRepository.findById(secondhandId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 중고거래 게시글을 찾을 수 없습니다."));
-        List<SImage> sImages = sImageRepository.findAllBySecondhand(secondhand);
-        return new SecondhandDTO.Response(secondhand, sImages);
+        return new SecondhandDTO.Response(secondhand, secondhand.getImageList());
     }
 
-    // 중고거래 게시글 전체 조회 (이미지도 가져오도록 수정 필요)
-    public Page<Secondhand> getSecondhands(Category category, int pageNum) throws BadRequestException {
+    // 중고거래 게시글 전체 조회
+    public List<SecondhandDTO.Response> getSecondhands(Category category, int pageNum) throws BadRequestException {
         PageRequest pageRequest = PageRequest.of(pageNum, 10);
         Page<Secondhand> secondhands;
 
@@ -126,7 +127,10 @@ public class SecondhandService {
 
         if(secondhands == null || secondhands.isEmpty())
             throw new BadRequestException("작성된 게시글이 없습니다.");
-        return secondhands;
+
+        return secondhands.stream()
+                .map(s -> new SecondhandDTO.Response(s, s.getImageList()))
+                .collect(Collectors.toList());
     }
 
     // 중고거래 판매내역 조회

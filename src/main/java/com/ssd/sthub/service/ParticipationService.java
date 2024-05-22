@@ -36,12 +36,8 @@ public class ParticipationService {
                 .groupBuying(groupBuying)
                 .request(request)
                 .build();
-
-        if (participation == null) {
-            throw new NullPointerException("신청폼 작성에 실패했습니다.");
-        }
-
-        return participationRepository.save(participation);
+        participationRepository.save(participation);
+        return participation;
     }
 
     // 공동구매 신청자 수락/거절
@@ -94,8 +90,8 @@ public class ParticipationService {
         PageRequest pageRequest = PageRequest.of(pageNum, 6);
         Page<Participation> participations = participationRepository.findAllByGroupBuyingId(groupBuyingId, pageRequest);
 
-        if (participations == null || participations.isEmpty())
-            throw new EntityNotFoundException("해당 중고거래 게시글을 찾을 수 없습니다.");
+        GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingId)
+                .orElseThrow(() -> new EntityNotFoundException("공동구매 게시글 조회에 실패했습니다."));
 
         return participations;
     }

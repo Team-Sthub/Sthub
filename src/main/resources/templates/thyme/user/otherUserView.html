@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <link rel="stylesheet" th:href="@{/style/header.css}">
+    <link rel="stylesheet" th:href="@{/style/user/otherUserView.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
+</head>
+<body>
+<div th:replace="thyme/frameHeader :: header"></div><br>
+
+<div class="userView">
+    <div class="userInfo">
+        <div class="userProfileBox">
+            <div class="userProfile">
+                <i class="fa-solid fa-user" title="Insert image" id="image-icon"></i>
+                <input type="file" id="file-input" name="profile" style="display: none;" />
+                <br>
+            </div>
+            <span>사용자 닉네임</span>
+            <!-- <span th:text="${user.nickname}"></span> -->
+        </div>
+        <div class="vertical-line"></div>
+        <div class="userBox">
+            <div class="manner">
+                <div class="rectangle">닉네임의 매너 등급</div>
+                <!-- <div class="rectangle" th:text="${user.nickname} + '의 매너 등급'"></div> -->
+                <!-- 별점 표시.. -->
+
+            </div>
+            <br>
+            <div class="location">
+                <div class="rectangle">닉네임의 동네</div>
+                <!-- <div class="rectangle" th:text="${user.nickname} + '의 동네'"></div> -->
+                <!-- <span th:text="${user.address}"></span> -->
+            </div>
+        </div>
+    </div>
+    <br><br>
+    <div class="categoryMenu">
+        <div class="menu" th:attr="data-target='selling'">판매 상품</div>
+        <div class="menu" th:attr="data-target='groupbuying'">공구 모집</div>
+        <div class="menu" th:attr="data-target='review'">후기 내역</div>
+        <div class="menu" th:attr="data-target='report'">신고 내역</div>
+    </div>
+    <div class="categoryContent">
+
+    </div>
+</div>
+
+<script th:src="@{/js/user/otherUserView.js}"></script>
+</body>
+</html>

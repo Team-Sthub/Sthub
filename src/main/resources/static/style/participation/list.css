@@ -1,0 +1,92 @@
+#title {
+    position: relative;
+    text-align: center;
+    margin-top: 30px;
+    margin-right: 50%;
+}
+
+hr {
+    width: 60%;
+}
+
+.back {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    background: rgba(76, 175, 80, 0.1);
+    width: 60%;
+    height: 620px;
+    margin: 20%;
+    margin-top: 1%;
+}
+
+table {
+    width: 90%;
+    border-collapse: separate;
+    border-spacing: 0px 10px; /* 열 간 간격은 0, 행 간 간격은 10px */
+    table-layout: fixed;
+    margin-top: 2%;
+    margin-bottom: 3%;
+}
+
+thead {
+    display: table;
+    width: 100%;
+}
+
+tbody {
+    display: block;
+    max-height: 550px; /* tbody의 최대 높이를 설정 */
+    margin-top: 3%;
+}
+
+th {
+    text-align: center;
+    padding: 17px;
+    background-color: #FFFFFF;
+}
+
+td {
+    text-align: center;
+    padding: 11px;
+    background-color: #FFFFFF;
+    word-wrap: break-word; /* 긴 내용이 있을 때 줄 바꿈을 허용 */
+    height: 35px; /* 각 셀의 높이 고정 */
+    width: 130px;
+}
+
+.left-rounded {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.right-rounded {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.status-accept {
+    background-color: #FF4343;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.status-reject {
+    background-color: black;
+    text-align: center;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.status-pending {
+    background-color: #3D39FE;
+    text-align: center;
+    color: white;
+    padding: 5px 0px;
+    border-radius: 20px;
+    display: inline-block;
+}
