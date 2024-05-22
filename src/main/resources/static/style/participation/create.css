@@ -1,0 +1,97 @@
+.title {
+    position: relative;
+    margin-top: 40px;
+    margin-right: 2%;
+}
+
+.back {
+    display: flex;
+    position: relative;
+    background: rgba(207, 231, 208);
+    width: 40%;
+    height: 670px;
+    margin: 30%;
+    margin-top: 5%;
+    border-radius: 5%;
+    align-items: center;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    white-space: nowrap; /* 줄바꿈 방지 */
+}
+
+.participation-form {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 15px 12px; /* 열 간 간격은 0, 행 간 간격은 10px */
+}
+
+th {
+    text-align: left;
+}
+
+td {
+    background-color: #FFFFFF;
+}
+
+.box1 {
+    padding: 8px;
+    width: 380px;
+    height: 40px;
+    text-align: left;
+    border-radius: 10px;
+}
+
+.form-input {
+    border: none;
+}
+
+.content-input {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.description {
+    background: rgba(207, 231, 208);
+    color: rgba(12, 11, 44, 0.4);
+}
+
+.box2 {
+    padding: 8px;
+    width: 500px;
+    height: 300px;
+    text-align: left;
+    border-radius: 10px;
+    margin: 20%;
+}
+
+.description2 {
+    background: rgba(207, 231, 208);
+    color: red;
+    margin-top: 40px;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.btn1 {
+    background: #FFFFFF;
+    width: 200px;
+    height: 30px;
+    border-radius: 5px;
+    border: none;
+}

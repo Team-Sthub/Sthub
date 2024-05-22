@@ -8,32 +8,45 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/participation")
 public class ParticipationController {
     private final ParticipationService participationService;
 
     // 참여 신청폼으로 이동
+    @GetMapping("/moveToForm")
+    public String showCreateForm() {return "thyme/participation/create";}
 
     // 참여 신청폼 작성
     @PostMapping("/create")
-    public ResponseEntity<SuccessResponse<Participation>> createParticipation(@RequestHeader Long memberId, Long groupBuyingId, @RequestBody ParticipationRequestDto.request request) {
-        return ResponseEntity.ok(SuccessResponse.create(participationService.createParticipation(memberId, groupBuyingId, request)));
+    public ModelAndView createParticipation(@RequestParam Long memberId, @RequestParam Long groupBuyingId, @ModelAttribute ParticipationRequestDto.request request) {
+        Participation participation = participationService.createParticipation(memberId, groupBuyingId, request);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("participation", participation);
+        return new ModelAndView("redirect:/participation/detail?participationId="+participation.getId());
     }
 
     // 참여 신청폼 상세 조회
     @GetMapping("/detail")
-    public ResponseEntity<SuccessResponse<Participation>> getParticipation(@RequestParam Long participationId) {
-        return ResponseEntity.ok(SuccessResponse.create(participationService.getParticipation(participationId)));
+    public ModelAndView getParticipation(@RequestParam Long participationId) {
+        Participation participation = participationService.getParticipation(participationId);
+        ModelAndView modelAndView = new ModelAndView("thyme/participation/detail");
+        modelAndView.addObject("participation", participation);
+        return modelAndView;
     }
 
     // 참여 신청폼 리스트 조회
     @GetMapping("/list")
-    public ResponseEntity<SuccessResponse<Page<Participation>>> getParticipations(@RequestParam int pageNum, Long groupBuyingId) {
-        return ResponseEntity.ok(SuccessResponse.create(participationService.getParticipationList(groupBuyingId, pageNum)));
+    public ModelAndView getParticipations(@RequestParam int pageNum, @RequestParam Long groupBuyingId) {
+        Page<Participation> participationList = participationService.getParticipationList(groupBuyingId, pageNum);
+        ModelAndView modelAndView = new ModelAndView("thyme/participation/list");
+        modelAndView.addObject("participationList", participationList);
+        return modelAndView;
     }
 
     // 참여 신청폼 수정
@@ -44,8 +57,14 @@ public class ParticipationController {
 
     // 참여 신청폼 수락/거절
     @PatchMapping("/list")
-    public ResponseEntity<SuccessResponse<Participation>> patchParticipations(@RequestHeader Long memberId, @RequestParam Long participationId, @RequestBody ParticipationRequestDto.AcceptRequest request) throws BadRequestException {
-        return ResponseEntity.ok(SuccessResponse.create(participationService.accpetMember(memberId,participationId, request)));
+    public ModelAndView patchParticipations(@RequestHeader Long memberId, @RequestParam Long participationId, @RequestBody ParticipationRequestDto.AcceptRequest request) throws BadRequestException {
+        Long groupBuyingId = request.getGroupBuyingId();
+        participationService.accpetMember(memberId, participationId, request);
+
+        Page<Participation> participationList = participationService.getParticipationList(groupBuyingId, 1);
+        ModelAndView modelAndView = new ModelAndView("thyme/participation/list");
+        modelAndView.addObject("participationList", participationList);
+        return modelAndView;
     }
 
     //마이페이지 - 공구 참여 전체 조회

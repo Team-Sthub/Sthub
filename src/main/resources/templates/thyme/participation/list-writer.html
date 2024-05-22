@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>공동구매 신청 리스트 - 작성자</title>
+    <link rel="stylesheet" th:href="@{/style/header.css}" href="../../../static/style/header.css">>
+    <link rel="stylesheet" th:href="@{/style/participation/list.css}" href="../../../static/style/participation/list.css">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
+</head>
+<style>
+    .header {
+        display: flex;
+        justify-content: center; /* 수평 가운데 정렬 */
+        width: 100%;
+        max-width: 100%; /* 너비가 부모 요소를 초과하지 않도록 설정 */
+    }
+
+    .frame1 {
+        position: relative; /* .menu의 위치를 상대적으로 설정하기 위해 필요 */
+        display: flex;
+        margin: 0 auto;
+        align-items: center; /* 수직 가운데 정렬 */
+        justify-content: center; /* 수평 가운데 정렬 */
+        width: 80%; /* 헤더의 너비의 80%로 설정 */
+    }
+
+    .logo {
+        flex-grow: 3; /* .logo가 차지할 공간을 설정 (30%의 10배) */
+        max-width: 30%; /* 최대 너비를 30%로 설정 */
+        justify-content: center; /* 가로 방향 가운데 정렬 */
+    }
+
+    .logo img {
+        max-width: 75%;
+        height: auto;
+    }
+
+    .menu {
+        flex-grow: 7; /* .menu가 차지할 공간을 설정 (70%의 10배) */
+        max-width: 70%; /* 최대 너비를 70%로 설정 */
+    }
+
+    .menu nav {
+        display: flex; /* 내부 요소를 가운데 정렬하기 위해 flexbox를 사용 */
+        flex-grow: 1; /* 너비를 최대한 차지하도록 설정 */
+    }
+
+    .menu nav ul {
+        display: flex; /* 내부 요소를 가로로 나열하기 위해 flexbox를 사용 */
+        list-style: none;
+    }
+
+    .menu nav ul li {
+        font-size: 1em;
+    }
+
+    .menu nav ul li a {
+        text-decoration: none; /* 링크의 밑줄 제거 */
+        color: #333333;
+        font-size: 16px;
+        margin-right: 5.1em;
+    }
+
+    .menu nav ul li a i {
+        margin-left: 1.5em; /* <i> 태그의 왼쪽 마진을 1em으로 유지 */
+        margin-right: 0; /* <i> 태그의 오른쪽 마진을 0으로 설정 */
+    }
+
+    .menu nav ul li:last-child a i {
+        margin-left: -3em; /* 마지막 <a> 안의 <i> 태그의 왼쪽 마진을 1em으로 유지 */
+        margin-right: 0; /* 마지막 <a> 안의 <i> 태그의 오른쪽 마진을 0으로 설정 */
+    }
+
+    .frame2 {
+        position: relative; /* 위치를 상대적으로 설정 */
+        display: flex;
+        margin: 0 auto;
+        align-items: center; /* 수직 가운데 정렬 */
+        justify-content: center; /* 수평 가운데 정렬 */
+        width: 60%;
+    }
+
+    .frame2 form {
+        display: flex;
+        justify-content: center; /* 수평 가운데 정렬 */
+        background: rgba(223, 255, 224, 0.35);
+        border: 1px solid #4CAF50;
+        border-radius: 28em;
+        width: 95%;
+    }
+
+    .frame2 input[type="search"] {
+        width: 90%;
+        background: transparent;
+        border-radius: 5em;
+        border: none;
+        outline: none;
+    }
+
+    .frame2 button {
+        border: none;
+        background: none;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    #title {
+        position: relative;
+        text-align: center;
+        margin-top: 30px;
+        margin-right: 50%;
+    }
+
+    hr {
+        width: 60%;
+    }
+
+    .back {
+        display: flex;
+        position: relative;
+        justify-content: center;
+        background: rgba(76, 175, 80, 0.1);
+        width: 60%;
+        height: 650px;
+        margin: 20%;
+        margin-top: 1%;
+    }
+
+    table {
+        width: 90%;
+        border-collapse: separate;
+        border-spacing: 0px 10px; /* 열 간 간격은 0, 행 간 간격은 10px */
+        table-layout: fixed;
+        margin-top: 2%;
+        margin-bottom: 3%;
+    }
+
+    thead {
+        display: table;
+        width: 100%;
+    }
+
+    tbody {
+        display: block;
+        max-height: 550px; /* tbody의 최대 높이를 설정 */
+        margin-top: 3%;
+    }
+
+    th {
+        text-align: center;
+        padding: 17px;
+        background-color: #FFFFFF;
+    }
+
+    td {
+        text-align: center;
+        padding: 11px;
+        background-color: #FFFFFF;
+        word-wrap: break-word; /* 긴 내용이 있을 때 줄 바꿈을 허용 */
+        height: 35px; /* 각 셀의 높이 고정 */
+        width: 130px;
+    }
+
+    .left-rounded {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+
+    .right-rounded {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .status-accept {
+        background-color: #FF4343;
+        color: white;
+        padding: 10px 14px;
+        border-radius: 20px;
+        display: inline-block;
+    }
+
+    .status-reject {
+        background-color: black;
+        text-align: center;
+        color: white;
+        padding: 10px 14px;
+        border-radius: 20px;
+        display: inline-block;
+    }
+
+</style>
+<script>
+    function handleAcceptance(acceptValue, participationId, memberId) {
+        fetch('/list?memberId=${memberId}&participationId=${participationId}', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'memberId': memberId
+            },
+            body: JSON.stringify({
+                participationId: participationId,
+                accept: acceptValue
+            })
+        });
+    }
+</script>
+<body>
+<div th:fragment="header">
+    <div class="frame1">
+        <div class="logo">
+            <!-- 이미지를 불러오는 경로가 살짝 다름 -->
+            <a th:href="@{/secondhand/list/ALL(pageNum=0)}">
+                <img th:src="@{/images/logo.png}" alt="로고"/>
+            </a>
+
+            <!--            <a href="#"><img src="../../static/images/logo.png"/></a>-->
+        </div>
+        <div class="menu">
+            <nav>
+                <ul>
+                    <li><a th:href="@{/secondhand/list/ALL(pageNum=1)}"><b>중고거래</b></a></li>
+                    <li><a th:href="@{/groupBuying/list/ALL(pageNum=1)}"><b>공동구매</b></a></li>
+                    <li><a th:href="@{/gruopBuying/}"><b>내근처</b></a></li>
+                    <li><a th:href="@{/user/myPage}"><b>마이페이지</b></a></li>
+                    <li><a th:href="@{/message/list(pageNum=1)}"><i class="fa-regular fa-message"></i></a></li>
+                    <li><a th:href="@{/user/login}"><i class="fa-regular fa-user"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="frame2">
+        <form id="search" th:action="@{/test}" method="GET">
+            <!-- input type 추후 변경 -->
+            <input type="search" name="searchValue" placeholder="상품명을 검색하세요"/>
+            <button type="submit">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </form>
+    </div>
+</div>
+<!-- header 삽입 -->
+<div th:replace="thyme/frameHeader :: header"></div>
+<p id="title">공동구매 참여자 목록</p>
+<hr>
+<div class="back">
+    <table>
+        <thead>
+        <tr>
+            <th class="left-rounded">순서</th>
+            <th>이름</th>
+            <th>전화번호</th>
+            <th>추가사항</th>
+            <th>등록일</th>
+            <th class="right-rounded">수락 여부</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="participation, iterStat : ${participationList}">
+            <td th:text="${iterStat.index + 1}" class="left-rounded">1</td>
+            <td th:text="${participation.member.name}">홍길동</td>
+            <td th:text="${participation.member.phone}">010-1234-5678</td>
+            <td th:text="${participation.content}">S사이즈</td>
+            <td th:text="${#dates.format(participation.createdDate, 'yyyy-MM-dd')}">2024-05-19</td>
+            <td class="right-rounded">
+                <button class="status-accept"
+                        onclick="handleAcceptance(1, [[${participation.id}]], [[${memberId}]])">
+                    수락
+                </button>
+                <button class="status-reject"
+                        onclick="handleAcceptance(2, [[${participation.id}]], [[${memberId}]])">
+                    거절
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

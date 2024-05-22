@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>공동구매 신청 리스트</title>
+    <link rel="stylesheet" th:href="@{/style/header.css}" href="../../../static/style/header.css"/>
+    <link rel="stylesheet" th:href="@{/style/participation/list.css}"
+          href="../../../static/style/participation/list.css">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
+</head>
+<body>
+<!-- header 삽입 -->
+<div th:insert="~{thyme/frameHeader :: header}"></div>
+<p id="title">공동구매 참여자 목록</p>
+<input type="hidden" name="memberId" value="6"> <!-- 이 값을 서버에서 동적으로 설정 -->
+<input type="hidden" name="groupBuyingId" value="6">
+<hr>
+<div class="back">
+    <table>
+        <thead>
+        <tr>
+            <th class="left-rounded">순서</th>
+            <th>이름</th>
+            <th>전화번호</th>
+            <th>추가사항</th>
+            <th>등록일</th>
+            <th class="right-rounded">수락 여부</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="participation, iterStat : ${participationList}">
+            <a th:href="@{/participation/detail(participationId=${participation.id})}">
+                <td th:text="${iterStat.index + 1}" class="left-rounded">1</td>
+                <td th:text="${participation.member.nickname}">홍길동</td>
+                <td th:text="${participation.member.phone}">010-1234-5678</td>
+                <td th:text="${participation.content}">S사이즈 tls</td>
+                <td th:text="${#temporals.format(participation.createdAt, 'yyyy-MM-dd')}">2024-05-19</td>
+                <td th:classappend="${participation.accept == 1 ? 'status-accept' : (participation.accept == 2 ? 'status-reject' : 'status-pending')}"
+                    class="right-rounded">
+                    <div th:text="${participation.accept == 1 ? '수락' : (participation.accept == 2 ? '거절' : '대기')}"
+                         th:class="${participation.accept == 1 ? 'status-accept' : (participation.accept == 2 ? 'status-reject' : 'status-pending')}">
+                        대기
+                    </div>
+                </td>
+            </a>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
