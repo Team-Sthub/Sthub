@@ -23,7 +23,7 @@ public class SImage {
     @Column(name = "path", nullable = false, columnDefinition = "CLOB")
     private String path;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "secondhandId")
     private Secondhand secondhand;
 
