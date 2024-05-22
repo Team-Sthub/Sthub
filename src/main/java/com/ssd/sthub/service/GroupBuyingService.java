@@ -5,6 +5,7 @@ import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingDetailDTO;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingListDTO;
+import com.ssd.sthub.dto.groupBuying.PostGroupBuyingDTO;
 import com.ssd.sthub.repository.GroupBuyingRepository;
 import com.ssd.sthub.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,11 +28,11 @@ public class GroupBuyingService {
     public final MemberRepository memberRepository;
 
     // 공동구매 게시글 작성
-    public GroupBuying postGroupBuying(Long memberId, GroupBuyingDetailDTO groupBuyingDetailDTO) {
+    public GroupBuying postGroupBuying(Long memberId, PostGroupBuyingDTO postGroupBuyingDTO) {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
         );
-        GroupBuying groupBuying = new GroupBuying(groupBuyingDetailDTO, member);
+        GroupBuying groupBuying = new GroupBuying(postGroupBuyingDTO, member);
         return groupBuyingRepository.save(groupBuying);
     }
 
@@ -79,7 +80,7 @@ public class GroupBuyingService {
         return new GroupBuyingListDTO(groupBuyingListDto, groupBuyings.getTotalPages());
     }
 
-    // 공동구매 게시글(상세) 조회 (작성자 확인은 controller에서 하고 뷰 설정) 작성자 수락 여부 확인 후 링크 공개 및 미공개 해야함.
+    // 공동구매 게시글(상세) 조회 (작성자 확인은 controller에서 하고 뷰 설정) + 수락 여부에 따라 오픈채팅 링크 공개여부 달라짐
     public GroupBuying getGroupBuying(Long memberId, Long groupBuyingId) throws NullPointerException {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
@@ -87,6 +88,7 @@ public class GroupBuyingService {
         GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingId).orElseThrow(
                 () -> new EntityNotFoundException("해당 공동구매 게시글 조회에 실패했습니다.")
         );
+
         return groupBuying;
     }
 

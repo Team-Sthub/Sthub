@@ -1,22 +1,18 @@
 package com.ssd.sthub.dto.groupBuying;
 
-import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.enumerate.Category;
-import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class GroupBuyingDetailDTO {
+public class PostGroupBuyingDTO {
 
-    private Long id;
     private String title; // 제목
     private Category category; // 카테고리
     private String product; // 상품
