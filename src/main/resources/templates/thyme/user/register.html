@@ -7,15 +7,11 @@
     <script th:src=" 'https://maps.googleapis.com/maps/api/js?key=' + AIzaSyBG0mcLkUd6Oz5Q4uCD_cXE-dGNaoAi-fg + '&callback=initMap' " async defer></script>
     <link rel="stylesheet" th:href="@{/style/user/register.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
-    <!-- 현재 내 위치 불러오기 -->
-    <script>
-        function displayAddress(address) {
-            var displayDiv = document.getElementById('address-display');
-            displayDiv.innerText = address;
-        }
-    </script>
 </head>
 <body>
+<div th:if="${successMessage}" class="alert alert-success" role="alert">
+    <p th:text="${successMessage}"></p>
+</div>
 <div>
     <div class="frame1">
         <div class="logo">
@@ -30,7 +26,7 @@
                         <td id="img">
                             <div class="imgCircle">
                                 <i class="fa-solid fa-user" title="Insert image" id="image-icon"></i>
-                                <input type="file" id="file-input" name="profile" style="display: none;" />
+                                <input type="file" id="file-input" style="display: none;"/>
                             </div>
                         </td>
                         <td>
@@ -64,10 +60,6 @@
                                 </div>
                                 <div class="location">
                                     <label id="name1"><b>동네 인증</b></label>
-                                    <script>
-                                        // register.js 파일이 로드된 후에 initMap() 함수를 호출합니다.
-                                        initMap();
-                                    </script>
                                     <div id="gooleMap">
                                         <div id="map"></div>
                                     </div>
@@ -80,9 +72,10 @@
                                 <br>
                                 <div id="nowAddress">
                                     <a>현 위치는&nbsp;</a>
-                                    <div id="address-display"></div>
+                                    <div id="address-display" name="address-display"></div>
                                     <a>&nbsp;입니다. </a>
                                 </div>
+                                <input type="hidden" id="address" name="address">
                                 <input type="hidden" id="latitude" name="latitude">
                                 <input type="hidden" id="longitude" name="longitude">
                                 <input type="hidden" id="profile" name="profile">

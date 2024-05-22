@@ -5,10 +5,7 @@ import com.ssd.sthub.domain.enumerate.Bank;
 import com.ssd.sthub.dto.member.MemberDTO;
 import com.ssd.sthub.dto.member.RegisterDTO;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -56,6 +53,7 @@ public class Member extends BaseTime {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @Setter
     @Column(name = "profile", nullable = true)
     private String profile;
 

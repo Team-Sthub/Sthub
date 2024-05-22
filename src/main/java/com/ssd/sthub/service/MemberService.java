@@ -21,13 +21,15 @@ public class MemberService {
     public final MemberRepository memberRepository;
 
     // 회원가입
-    public Member register(RegisterDTO registerDTO) {
+    public Member register(String imgUrl, RegisterDTO registerDTO) {
         Optional<Member> isMember = memberRepository.findByNickname(registerDTO.getNickname());
-        if(isMember != null) {
+        if(isMember.isPresent()) {
             new EntityNotFoundException("이미 있는 사용자입니다.");
         }
-
         Member newMember = new Member(registerDTO);
+        if (imgUrl != null) {
+            newMember.setProfile(imgUrl);
+        }
         return memberRepository.save(newMember);
     }
 
