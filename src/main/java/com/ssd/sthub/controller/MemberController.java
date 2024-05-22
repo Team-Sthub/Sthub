@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
 
@@ -49,15 +50,15 @@ public class MemberController {
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<SuccessResponse<Member>> login(HttpServletRequest httpServletRequest, @RequestBody LoginDTO loginDTO) {
+    public ModelAndView login(HttpServletRequest httpServletRequest, @ModelAttribute LoginDTO loginDTO) {
         Member member = memberService.login(loginDTO);
+
         httpServletRequest.getSession().invalidate(); // 세션 생성 전 기존 세션 파기
         HttpSession session = httpServletRequest.getSession();
         session.setAttribute("memberId", member.getId()); // 세션에 로그인 한 사용자의 memberId 등록
         session.setMaxInactiveInterval(1800); // session이 30분동안 유지
-        log.info("세션에 등록된 memberId " + session.getAttribute("memberId"));
-        log.info("로그인 세션 Id : " + session.getId());
-        return ResponseEntity.ok(SuccessResponse.create(member));
+
+        return new ModelAndView("redirect:/secondhand/list/ALL?pageNum=1");
     }
 
     // 프로필 조회

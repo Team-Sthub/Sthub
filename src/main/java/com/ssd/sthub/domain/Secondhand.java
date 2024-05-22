@@ -10,12 +10,16 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "secondhand")
+@ToString
 public class Secondhand extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +57,9 @@ public class Secondhand extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "memberId")
     private Member member;
+
+    @OneToMany(mappedBy = "secondhand", cascade = CascadeType.ALL)
+    private List<SImage> imageList = new ArrayList<>();
 
     @Builder
     public Secondhand(Member member,  PostSecondhandDTO request) {
