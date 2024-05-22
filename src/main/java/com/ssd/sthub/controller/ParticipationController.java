@@ -28,13 +28,16 @@ public class ParticipationController {
         Participation participation = participationService.createParticipation(memberId, groupBuyingId, request);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("participation", participation);
-        return new ModelAndView("redirect:/participation/list?pageNum=0&groupBuyingId="+groupBuyingId);
+        return new ModelAndView("redirect:/participation/detail?participationId="+participation.getId());
     }
 
     // 참여 신청폼 상세 조회
     @GetMapping("/detail")
-    public ResponseEntity<SuccessResponse<Participation>> getParticipation(@RequestParam Long participationId) {
-        return ResponseEntity.ok(SuccessResponse.create(participationService.getParticipation(participationId)));
+    public ModelAndView getParticipation(@RequestParam Long participationId) {
+        Participation participation = participationService.getParticipation(participationId);
+        ModelAndView modelAndView = new ModelAndView("thyme/participation/detail");
+        modelAndView.addObject("participation", participation);
+        return modelAndView;
     }
 
     // 참여 신청폼 리스트 조회

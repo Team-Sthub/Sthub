@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>공동구매 신청 리스트</title>
     <link rel="stylesheet" th:href="@{/style/header.css}" href="../../../static/style/header.css"/>
-    <link rel="stylesheet" th:href="@{/style/participation/list.css}" href="../../../static/style/participation/list.css">
+    <link rel="stylesheet" th:href="@{/style/participation/list.css}"
+          href="../../../static/style/participation/list.css">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
 </head>
 <body>
@@ -28,20 +29,20 @@
         </thead>
         <tbody>
         <tr th:each="participation, iterStat : ${participationList}">
-            <td th:text="${iterStat.index + 1}" class="left-rounded">1</td>
-            <td th:text="${participation.member.nickname}">홍길동</td>
-            <td th:text="${participation.member.phone}">010-1234-5678</td>
-            <td th:text="${participation.content}">S사이즈</td>
-            <td th:text="${#temporals.format(participation.createdAt, 'yyyy-MM-dd')}">2024-05-19</td>
-            <td class="right-rounded"
-                th:classappend="${participation.accept == 1 ? 'status-accept' : (participation.accept == 2 ? 'status-reject' : 'status-pending')}">
-                <div th:class="${participation.accept == 1 ? '' : (participation.accept == 2 ? 'status-reject' : 'status-pending')}"
-                     class="status-accept">
-                    대기
-                </div>
-            </td>
-
-        </tr>
+            <a th:href="@{/participation/detail(participationId=${participation.id})}">여기!!
+                <td th:text="${iterStat.index + 1}" class="left-rounded">1</td>
+                <td th:text="${participation.member.nickname}">홍길동</td>
+                <td th:text="${participation.member.phone}">010-1234-5678</td>
+                <td th:text="${participation.content}">S사이즈</td>
+                <td th:text="${#temporals.format(participation.createdAt, 'yyyy-MM-dd')}">2024-05-19</td>
+                <td class="right-rounded"
+                    th:classappend="${participation.accept == 1 ? 'status-accept' : (participation.accept == 2 ? 'status-reject' : 'status-pending')}">
+                    <div th:class="${participation.accept == 1 ? '' : (participation.accept == 2 ? 'status-reject' : 'status-pending')}"
+                         class="status-accept">
+                        대기
+                    </div>
+                </td>
+            </a>
         </tbody>
     </table>
 </div>
