@@ -2,6 +2,7 @@ package com.ssd.sthub.domain;
 
 import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingDetailDTO;
+import com.ssd.sthub.dto.groupBuying.PostGroupBuyingDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -68,8 +69,20 @@ public class GroupBuying extends BaseTime {
         this.chatLink = groupBuyingDetailDTO.getChatLink();
         this.meetingPlace = groupBuyingDetailDTO.getMeetingPlace();
         this.content = groupBuyingDetailDTO.getContent();
-        this.imageUrl = groupBuyingDetailDTO.getImageUrl();
         this.status = groupBuyingDetailDTO.getStatus();
+        this.member = member;
+    }
+
+    public GroupBuying(PostGroupBuyingDTO postGroupBuyingDTO, Member member) {
+        this.title = postGroupBuyingDTO.getTitle();
+        this.category = postGroupBuyingDTO.getCategory();
+        this.product = postGroupBuyingDTO.getProduct();
+        this.price = postGroupBuyingDTO.getPrice();
+        this.deadline = postGroupBuyingDTO.getDeadline();
+        this.chatLink = postGroupBuyingDTO.getChatLink();
+        this.meetingPlace = postGroupBuyingDTO.getMeetingPlace();
+        this.content = postGroupBuyingDTO.getContent();
+        this.status = postGroupBuyingDTO.getStatus();
         this.member = member;
     }
 
@@ -77,11 +90,12 @@ public class GroupBuying extends BaseTime {
         this.title = groupBuyingDetailDTO.getTitle();
         this.category = groupBuyingDetailDTO.getCategory();
         this.product = groupBuyingDetailDTO.getProduct();
+        this.price = groupBuyingDetailDTO.getPrice();
         this.deadline = groupBuyingDetailDTO.getDeadline();
         this.chatLink = groupBuyingDetailDTO.getChatLink();
         this.meetingPlace = groupBuyingDetailDTO.getMeetingPlace();
         this.content = groupBuyingDetailDTO.getContent();
-        this.imageUrl = groupBuyingDetailDTO.getImageUrl();
         this.status = groupBuyingDetailDTO.getStatus();
     }
+
 }
