@@ -1,12 +1,12 @@
 package com.ssd.sthub.controller;
 
-
 import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.dto.member.LoginDTO;
 import com.ssd.sthub.dto.member.MemberDTO;
 import com.ssd.sthub.dto.member.RegisterDTO;
 import com.ssd.sthub.dto.member.UserViewDTO;
 import com.ssd.sthub.response.SuccessResponse;
+import com.ssd.sthub.service.AWSS3SService;
 import com.ssd.sthub.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -15,9 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j
@@ -25,7 +28,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/user")
 public class MemberController {
-
+    private final AWSS3SService awss3SService;
     private final MemberService memberService;
 
     // 로그인 아이콘 클릭
@@ -44,8 +47,13 @@ public class MemberController {
 
     // 회원가입
     @PostMapping("/register")
-    public ResponseEntity<SuccessResponse<Member>> register(@RequestBody RegisterDTO registerDTO) {
-        return ResponseEntity.ok(SuccessResponse.create(memberService.register(registerDTO)));
+    public String register(@RequestPart(value = "profile", required = false) MultipartFile multipartFile, @ModelAttribute @Validated RegisterDTO request) throws IOException {
+        String imgUrl = null;
+        if (multipartFile != null) {
+            imgUrl = awss3SService.uploadFile(multipartFile);
+        }
+        memberService.register(imgUrl, request);
+        return "redirect:/user/login";
     }
 
     // 로그인

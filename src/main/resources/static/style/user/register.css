@@ -132,6 +132,7 @@ select {
     background: #4CAF50;
     border-radius: 15px;
     border: none;
+    cursor: pointer;
 }
 
 .location #gooleMap {

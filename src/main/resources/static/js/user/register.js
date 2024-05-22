@@ -1,5 +1,7 @@
 // 지도 띄우기
 let map;
+var address;
+var file;
 
 function initMap() {
     // 지도 생성
@@ -30,7 +32,7 @@ function initMap() {
             geocoder.geocode({'location': pos}, function(results, status) {
                 if (status === 'OK') {
                     if (results[0]) {
-                        var address = results[0].formatted_address.split(" ").slice(1, 4).join(" ");
+                        address = results[0].formatted_address.split(" ").slice(1, 4).join(" ");
                         displayAddress(address); // 결과를 화면에 출력
                     } else {
                         displayAddress('주소를 찾을 수 없습니다.');
@@ -39,6 +41,12 @@ function initMap() {
                     displayAddress('Geocoder 오류: ' + status);
                 }
             });
+
+            // 현재 위치 화면에 출력
+            function displayAddress(address) {
+                var displayDiv = document.getElementById('address-display');
+                displayDiv.innerText = address;
+            }
         }, function() {
             handleLocationError(true, infoWindow, map.getCenter());
         });
@@ -47,94 +55,6 @@ function initMap() {
         handleLocationError(false, infoWindow, map.getCenter());
     }
 }
-
-// 주소로 위치 찾기
-function searchAddress() {
-    const address = document.getElementById('address-input').value;
-    geocoder.geocode({'address': address}, function(results, status) {
-        if (status === 'OK') {
-            const pos = results[0].geometry.location;
-            map.setCenter(pos);
-
-            if (marker) {
-                marker.setMap(null);
-            }
-            marker = new google.maps.Marker({
-                position: pos,
-                map: map,
-                title: address
-            });
-
-            document.getElementById('address-display').textContent = results[0].formatted_address;
-            document.getElementById('latitude').value = pos.lat();
-            document.getElementById('longitude').value = pos.lng();
-        } else {
-            console.error('Geocode was not successful for the following reason: ' + status);
-        }
-    });
-}
-
-// 위치 정보를 가져와 폼 필드에 설정한 후 폼을 제출
-function getLocationAndSubmit() {
-    const addressInput = document.getElementById('address-input');
-    const addressDisplay = document.getElementById('address-display');
-    const addressField = document.getElementById('address');
-
-    if (addressInput.value) {
-        addressField.value = addressInput.value;
-    } else {
-        addressField.value = addressDisplay.textContent;
-    }
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            document.getElementById('latitude').value = position.coords.latitude;
-            document.getElementById('longitude').value = position.coords.longitude;
-            document.getElementById('register-form').submit();
-        }, function(error) {
-            alert("Geolocation is not supported by this browser or an error occurred.");
-            document.getElementById('register-form').submit();
-        });
-    } else {
-        alert("Geolocation is not supported by this browser.");
-        document.getElementById('register-form').submit();
-    }
-}
-
-// 위치 정보를 가져오는데 실패한 경우 오류를 처리
-function handleLocationError(browserHasGeolocation, pos) {
-    alert(browserHasGeolocation ?
-        'Error: The Geolocation service failed.' :
-        'Error: Your browser doesn\'t support geolocation.');
-}
-
-// 이미지 미리보기
-document.addEventListener('DOMContentLoaded', function() {
-    const imageIcon = document.getElementById('image-icon');
-    const fileInput = document.getElementById('file-input');
-
-    if (imageIcon && fileInput) {
-        imageIcon.addEventListener('click', function() {
-            fileInput.click();
-        });
-
-        fileInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    imageIcon.style.backgroundImage = `url(${e.target.result})`;
-                    imageIcon.style.backgroundSize = 'cover';
-                    imageIcon.style.backgroundPosition = 'center';
-                    imageIcon.style.color = 'transparent'; // 아이콘 텍스트를 숨김
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    } else {
-        console.error("Image icon or file input element not found");
-    }
-});
 
 // 중복 확인 버튼을 누를 때의 동작 설정
 document.getElementById("checkId").addEventListener("click", function() {
@@ -150,3 +70,116 @@ document.getElementById("checkId").addEventListener("click", function() {
     };
     xhr.send();
 });
+
+// 주소로 위치 찾기
+function searchAddress() {
+    const inputAddress = document.getElementById('address-input').value;
+    console.error("검색창에 들어온 주소는 " + inputAddress);
+
+    geocoder.geocode({'address': inputAddress}, function(results, status) {
+        if (status === 'OK') {
+            const pos = results[0].geometry.location;
+            map.setCenter(pos);
+
+            if (marker) {
+                marker.setMap(null);
+            }
+            marker = new google.maps.Marker({
+                position: pos,
+                map: map,
+                title: inputAddress
+            });
+
+            displayAddress(results[0].formatted_address);
+            document.getElementById('latitude').value = pos.lat();
+            document.getElementById('longitude').value = pos.lng();
+        } else {
+            console.error('Geocode was not successful for the following reason: ' + status);
+        }
+    });
+}
+
+// 이미지 미리보기
+document.addEventListener('DOMContentLoaded', function() {
+    const imageIcon = document.getElementById('image-icon');
+    const fileInput = document.getElementById('file-input');
+    const profileField = document.getElementById('profile');
+
+    if (imageIcon && fileInput && profileField) {
+        imageIcon.addEventListener('click', function() {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', function(event) {
+            file = event.target.files[0];
+            if (file) {
+                profileField.value = file.name;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imageIcon.style.backgroundImage = `url(${e.target.result})`;
+                    imageIcon.style.backgroundSize = 'cover';
+                    imageIcon.style.backgroundPosition = 'center';
+                    imageIcon.style.color = 'transparent'; // 아이콘 텍스트를 숨김
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    } else {
+        console.error("Image icon or file input element not found");
+    }
+});
+
+// 위치 정보를 가져와 폼 필드에 설정한 후 폼을 제출
+function getLocationAndSubmit() {
+    const addressInput = document.getElementById('address-input');
+    const addressField = document.getElementById('address');
+
+    if (addressInput.value !== "") {
+        addressField.value = addressInput.value;
+    } else {
+        addressField.value = address;
+    }
+    
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            document.getElementById('latitude').value = position.coords.latitude;
+            document.getElementById('longitude').value = position.coords.longitude;
+            submitForm();
+        }, function(error) {
+            alert("Geolocation is not supported by this browser or an error occurred.");
+            submitForm();
+        });
+    } else {
+        alert("Geolocation is not supported by this browser.");
+        submitForm();
+    }
+}
+
+// 위치 정보를 가져오는데 실패한 경우 오류를 처리
+function handleLocationError(browserHasGeolocation, pos) {
+    alert(browserHasGeolocation ?
+        'Error: The Geolocation service failed.' :
+        'Error: Your browser doesn\'t support geolocation.');
+}
+
+// 폼 데이터 서버 전송
+function submitForm() {
+    const form = document.getElementById('register-form');
+    const formData = new FormData(form);
+
+    const fileInput = document.getElementById('file-input');
+    if (fileInput.files.length > 0) {
+        formData.append('profile', fileInput.files[0]);
+    }
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+    }).then(response => {
+        return response.text(); // 서버로부터의 응답을 처리
+    }).then(text => {
+        console.log(text); // 서버 응답 출력
+    }).catch(error => {
+        console.error('Error:', error);
+    });
+}
