@@ -2,10 +2,12 @@
 let map;
 var address;
 var file;
+var marker;
+var previousMarker;
 
 function initMap() {
     // 지도 생성
-    var map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: -34.397, lng: 150.644}, // 초기 중심 위치 (예시)
         zoom: 12.3 // 초기 줌 레벨
     });
@@ -18,7 +20,7 @@ function initMap() {
                 lng: position.coords.longitude
             };
 
-            var marker = new google.maps.Marker({
+            marker = new google.maps.Marker({
                 position: pos,
                 map: map,
                 title: '현재 위치'
@@ -58,37 +60,58 @@ function initMap() {
 
 // 중복 확인 버튼을 누를 때의 동작 설정
 document.getElementById("checkId").addEventListener("click", function() {
-    // AJAX를 이용해 GET 요청 보냄
-    let xhr = new XMLHttpRequest();
-    let nickname = document.getElementById("nickname").value;
-    xhr.open("GET", "/user/register/check?nickname=" + encodeURIComponent(nickname), true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // 응답 처리
-            alert(xhr.responseText); // 서버에서 받은 응답을 그대로 출력
+    const responseNickname = document.getElementById('nickname').value;
+    console.log(responseNickname);
+    console.log("인코딩 " + encodeURIComponent(responseNickname));
+    fetch(`/user/register/check?nickname=${encodeURIComponent(responseNickname)}`, {
+        method: 'GET',
+    }).then(response => {
+        if (response.ok) {
+            return response.json();
+        } else if (response.status === 409) {
+            throw new Error('이미 사용 중인 아이디입니다.');
+        } else {
+            throw new Error('아이디 중복 체크 중 오류가 발생했습니다.');
         }
-    };
-    xhr.send();
+    }).then(data => {
+        const responseElement = document.getElementById('response');
+        responseElement.style.color = 'red';
+        responseElement.style.fontSize = '12px';
+        responseElement.textContent = data.data;
+    }).catch(error => {
+        const errorMessage = error.message;
+        const errorMessageElement = document.getElementById('response');
+        errorMessageElement.style.color = 'red';
+        errorMessageElement.style.fontSize = '12px';
+        errorMessageElement.textContent = errorMessage;
+        console.error('Error:', error);
+    });
 });
 
 // 주소로 위치 찾기
 function searchAddress() {
     const inputAddress = document.getElementById('address-input').value;
-    console.error("검색창에 들어온 주소는 " + inputAddress);
 
+    var geocoder = new google.maps.Geocoder;
     geocoder.geocode({'address': inputAddress}, function(results, status) {
         if (status === 'OK') {
             const pos = results[0].geometry.location;
             map.setCenter(pos);
 
-            if (marker) {
+            if (marker) {       // 현재 위치에 대한 마커 제거
                 marker.setMap(null);
             }
-            marker = new google.maps.Marker({
+            if (previousMarker) {       // 기존 검색 마커 제거
+                previousMarker.setMap(null);
+            }
+            var newMarker = new google.maps.Marker;
+            newMarker = new google.maps.Marker({
                 position: pos,
                 map: map,
                 title: inputAddress
             });
+            // 새로운 마커를 이전 마커로 설정
+            previousMarker = newMarker;
 
             displayAddress(results[0].formatted_address);
             document.getElementById('latitude').value = pos.lat();
@@ -128,6 +151,19 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error("Image icon or file input element not found");
     }
 });
+
+// 비밀번호 확인
+function checkPasswordMatch() {
+    var password = document.getElementById("password").value;
+    var confirmPassword = document.getElementById("checkPassword").value;
+    var passwordMatchMessage = document.getElementById("checkpwd");
+
+    if (password !== confirmPassword) {
+        passwordMatchMessage.innerHTML = "비밀번호가 일치하지 않습니다.";
+    } else {
+        passwordMatchMessage.innerHTML = "";
+    }
+}
 
 // 위치 정보를 가져와 폼 필드에 설정한 후 폼을 제출
 function getLocationAndSubmit() {
@@ -176,10 +212,28 @@ function submitForm() {
         method: 'POST',
         body: formData,
     }).then(response => {
-        return response.text(); // 서버로부터의 응답을 처리
-    }).then(text => {
-        console.log(text); // 서버 응답 출력
+        if (!response.ok) {
+            // 기존 에러 메시지 제거
+            document.querySelectorAll('.error-message').forEach(element => {
+                element.textContent = '';
+            });
+
+            return response.json().then(errors => {
+                // 서버로부터 받은 에러 메시지 표시
+                Object.keys(errors).forEach(field => {
+                    const errorMessageElement = document.getElementById(field + '-error');
+                    if (errorMessageElement) {
+                        errorMessageElement.textContent = errors[field];
+                    }
+                });
+                throw new Error('회원가입에 실패하였습니다.');
+            });
+        }
+        return response.json();
+    }).then(data => {
+        alert(data.message); // 서버 응답 메시지 ("회원가입에 성공하였습니다.")
+        window.location.href = '/user/login'; // 로그인 페이지로 리디렉션
     }).catch(error => {
-        console.error('Error:', error);
+        alert(error.message);
     });
 }

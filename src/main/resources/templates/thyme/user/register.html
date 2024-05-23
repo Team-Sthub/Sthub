@@ -9,9 +9,6 @@
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
 </head>
 <body>
-<div th:if="${successMessage}" class="alert alert-success" role="alert">
-    <p th:text="${successMessage}"></p>
-</div>
 <div>
     <div class="frame1">
         <div class="logo">
@@ -36,19 +33,26 @@
                                     <button type="button" id="checkId"><b>중복 확인</b></button>
                                 </div>
                                 <!-- 서버 응답 출력 -->
+                                <div id="nickname-error" class="error-message"></div>
                                 <div id="response"></div>
                                 <div class ="email">
                                     <input type="email" id="email" name="email" placeholder="이메일">
+                                    <div id="email-error" class="error-message"></div>
                                 </div>
                                 <div class="pw">
                                     <input type="password" id="password" name="password" placeholder="비밀번호">
-                                    <input type="password" id="checkPassword" name="checkPassword" placeholder="비밀번호 확인">
+                                    <div id="password-error" class="error-message"></div>
+                                </div>
+                                <div class="checkPw">
+                                    <input type="password" id="checkPassword" name="checkPassword" placeholder="비밀번호 확인" oninput="checkPasswordMatch()">
+                                    <div id="checkpwd"></div>
                                 </div>
                                 <div class="phoneNum">
-                                    <input type="text" id="phone" name="phone" placeholder="전화번호">
+                                    <input type="text" id="phone" name="phone" placeholder="전화번호(000-0000-0000)">
+                                    <div id="phone-error" class="error-message"></div>
                                 </div>
                                 <div class="bankAccount">
-                                    <select id="bank" name="bank">
+                                    <select id="bank" name="bank" required>
                                         <option value="">은행 선택&nbsp;▾</option>
                                         <option value="SHINHAN">신한은행</option>
                                         <option value="HANA">하나은행</option>
@@ -56,7 +60,7 @@
                                         <option value="WOORI">우리은행</option>
                                         <option value="NONGHYUP">농협</option>
                                     </select>
-                                    <input type="text" id="account" name="account" placeholder="계좌번호">
+                                    <input type="text" id="account" name="account" placeholder="계좌번호" required>
                                 </div>
                                 <div class="location">
                                     <label id="name1"><b>동네 인증</b></label>
@@ -67,7 +71,7 @@
                                 <label id="name2">다른 주소로 변경</label>
                                 <div class="search">
                                     <input type="text" id="address-input" placeholder="주소를 입력하세요">
-                                    <button id="search-button" onclick="searchAddress()"><b>검색</b></button>
+                                    <button type="button" id="search-button" onclick="searchAddress()"><b>검색</b></button>
                                 </div>
                                 <br>
                                 <div id="nowAddress">

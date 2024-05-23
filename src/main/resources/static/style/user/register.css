@@ -187,4 +187,18 @@ input#address-input {
     background: #4CAF50;
     border-radius: 15px;
     border: none;
+    cursor: pointer;
+}
+
+/* 비밀번호 확인 메세지 */
+#checkpwd {
+    color: red;
+    font-size: 12px;
+}
+
+/* 에러 메시지 출력*/
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
 }
