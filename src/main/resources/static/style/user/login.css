@@ -49,6 +49,7 @@ button, .menu a{
     background: #4CAF50;
     color: #FFFFFF;
     order: 0;
+    cursor: pointer;
 }
 
 .menu a{

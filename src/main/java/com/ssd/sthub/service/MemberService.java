@@ -46,13 +46,8 @@ public class MemberService {
     }
 
     // 아이디 중복 확인
-    public String checkNickname(String nickname) {
-        Optional<Member> member = memberRepository.findByNickname(nickname);
-        if (member != null) {
-            return "이미 존재하는 아이디입니다.";
-        } else {
-            return "사용가능한 아이디입니다.";
-        }
+    public boolean checkNickname(String nickname) {
+        return memberRepository.findByNickname(nickname).isEmpty();
     }
 
     // 프로필 조회

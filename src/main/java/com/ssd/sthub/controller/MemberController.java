@@ -10,17 +10,22 @@ import com.ssd.sthub.service.AWSS3SService;
 import com.ssd.sthub.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -41,19 +46,35 @@ public class MemberController {
 
     // 아이디 중복 확인
     @GetMapping("/register/check")
-    public ResponseEntity<SuccessResponse<String>> checkNickname(@RequestBody String nickname) {
-        return ResponseEntity.ok(SuccessResponse.create(memberService.checkNickname(nickname)));
+    public ResponseEntity<SuccessResponse<String>> checkNickname(@RequestParam String nickname) {
+        boolean isAvailable = memberService.checkNickname(nickname);    // 존재하면 true
+        if (isAvailable) {
+            return ResponseEntity.ok(SuccessResponse.create("사용 가능한 아이디입니다."));
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(SuccessResponse.create("이미 사용 중인 아이디입니다."));
+        }
     }
 
     // 회원가입
     @PostMapping("/register")
-    public String register(@RequestPart(value = "profile", required = false) MultipartFile multipartFile, @ModelAttribute @Validated RegisterDTO request) throws IOException {
+    public ResponseEntity<?> register(@RequestPart(value = "profile", required = false) MultipartFile multipartFile, @Valid @ModelAttribute RegisterDTO request, BindingResult bindingResult) throws IOException {
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errors);
+        }
+
         String imgUrl = null;
         if (multipartFile != null) {
             imgUrl = awss3SService.uploadFile(multipartFile);
         }
         memberService.register(imgUrl, request);
-        return "redirect:/user/login";
+
+        Map<String, String> successResponse = new HashMap<>();
+        successResponse.put("message", "회원가입에 성공하였습니다.");
+        return ResponseEntity.ok(successResponse);
     }
 
     // 로그인
