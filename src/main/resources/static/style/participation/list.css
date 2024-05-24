@@ -65,28 +65,25 @@ td {
     border-bottom-right-radius: 10px;
 }
 
-.status-accept {
-    background-color: #FF4343;
-    color: white;
+.status-accept, .status-reject, .status-pending {
     padding: 10px 20px;
     border-radius: 20px;
     display: inline-block;
+    position: relative; /* position을 relative로 설정 */
+    z-index: 2; /* td의 배경 위로 올라오게 함 */
+}
+
+.status-accept {
+    background-color: #FF4343;
+    color: white;
 }
 
 .status-reject {
     background-color: black;
-    text-align: center;
     color: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    display: inline-block;
 }
 
 .status-pending {
     background-color: #3D39FE;
-    text-align: center;
     color: white;
-    padding: 5px 0px;
-    border-radius: 20px;
-    display: inline-block;
 }
