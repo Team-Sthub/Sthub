@@ -1,15 +1,18 @@
 package com.ssd.sthub.controller;
 
+import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.Participation;
 import com.ssd.sthub.dto.participation.ParticipationRequestDto;
+import com.ssd.sthub.repository.MemberRepository;
 import com.ssd.sthub.response.SuccessResponse;
 import com.ssd.sthub.service.ParticipationService;
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,18 +21,27 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/participation")
 public class ParticipationController {
     private final ParticipationService participationService;
-    private final HttpServletRequest httpServletRequest;
+    private final MemberRepository memberRepository;
 
     // 참여 신청폼으로 이동
     @GetMapping("/moveToForm")
-    public String showCreateForm() {return "thyme/participation/create";}
+    public String showCreateForm(Model model, @SessionAttribute(name = "memberId") Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
+        model.addAttribute("member", member);
+        return "thyme/participation/create";
+    }
 
     // 참여 신청폼 작성
     @PostMapping("/create")
     public ModelAndView createParticipation(@SessionAttribute(name = "memberId") Long memberId, Long groupBuyingId, @ModelAttribute ParticipationRequestDto.request request) {
         Participation participation = participationService.createParticipation(memberId, groupBuyingId, request);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("participation", participation);
+        modelAndView.addObject("member", member);
         return new ModelAndView("redirect:/participation/detail?participationId="+participation.getId());
     }
 
