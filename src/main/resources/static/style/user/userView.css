@@ -32,11 +32,11 @@ div.userInfo {
     width: 100px;
 }
 
-#image-icon {
+.profile {
     margin-left: 3%;
     margin-top: 20%;
-    font-size: 3.7em; /* 아이콘 크기 증가 */
-    cursor: pointer;
+    width: 60px;
+    height: 60px;
 }
 
 #file-input {

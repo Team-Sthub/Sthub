@@ -51,13 +51,13 @@
     margin-right: 5.1em;
 }
 
-.headerMenu nav ul li a i {
-    margin-left: 1.5em; /* <i> 태그의 왼쪽 마진을 1em으로 유지 */
+.headerMenu nav ul li a div {
+    margin-left: 1em; /* <i> 태그의 왼쪽 마진을 1em으로 유지 */
     margin-right: 0; /* <i> 태그의 오른쪽 마진을 0으로 설정 */
 }
 
-.headerMenu nav ul li:last-child a i {
-    margin-left: -3em; /* 마지막 <a> 안의 <i> 태그의 왼쪽 마진을 1em으로 유지 */
+.headerMenu nav ul li:last-child a div {
+    margin-left: -2em; /* 마지막 <a> 안의 <i> 태그의 왼쪽 마진을 1em으로 유지 */
     margin-right: 0; /* 마지막 <a> 안의 <i> 태그의 오른쪽 마진을 0으로 설정 */
 }
 
@@ -95,11 +95,9 @@
 }
 
 /* 아이콘 스타일링 */
-.fa-regular fa-message {
-    color: #333333;
-}
-
-.fa-regular fa-user {
+.icon-wrapper.fa-regular fa-message,
+icon-wrapper.fa-regular fa-user
+{
     color: #333333;
 }
 
@@ -108,3 +106,16 @@
     font-size: 20px;
 }
 
+.icon-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.icon-wrapper i {
+    font-size: 18px; /* 아이콘 크기 조정 */
+}
+
+.icon-wrapper span {
+    font-size: 11px; /* 문구 크기 조정 */
+}
