@@ -53,10 +53,11 @@ public class MemberService {
     // 프로필 조회
     public UserViewDTO getMember(Long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
-        if (member == null) {
+        if (member.isEmpty()) {
             new EntityNotFoundException("회원 조회에 실패했습니다.");
         }
-        return new UserViewDTO(memberId, member.get().getNickname(), member.get().getProfile(), member.get().getMannerGrade(), member.get().getAddress());
+        Member foundMember = member.get();
+        return new UserViewDTO(memberId, foundMember.getNickname(), foundMember.getProfile(), foundMember.getMannerGrade(), foundMember.getAddress());
     }
 
     // 프로필 상세 조회

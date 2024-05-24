@@ -16,12 +16,10 @@
         <div class="userInfo">
             <div class="userProfileBox">
                 <div class="userProfile">
-                    <i class="fa-solid fa-user" title="Insert image" id="image-icon"></i>
-                    <input type="file" id="file-input" name="profile" style="display: none;" />
+                    <img th:src="${user.profile}" class="profile" alt="프로필 이미지" />
                     <br>
                 </div>
-                <span>사용자 닉네임</span>
-                <!-- <span th:text="${user.nickname}"></span> -->
+                <span th:text="${user.nickname}"></span>
             </div>
             <div class="vertical-line"></div>
             <div class="userBox">
@@ -29,16 +27,14 @@
                     <a th:href="@{/user/userInfo}" class="edit-button">정보수정</a>
                 </div>
                 <div class="manner">
-                    <div class="rectangle">닉네임의 매너 등급</div>
-                    <!-- <div class="rectangle" th:text="${user.nickname} + '의 매너 등급'"></div> -->
+                    <div class="rectangle" th:text="${user.nickname} + '의 매너 등급'"></div>
                     <!-- 별점 표시.. -->
 
                 </div>
                 <br>
                 <div class="location">
-                    <div class="rectangle">닉네임의 동네</div>
-                    <!-- <div class="rectangle" th:text="${user.nickname} + '의 동네'"></div> -->
-                    <!-- <span th:text="${user.address}"></span> -->
+                    <div class="rectangle" th:text="${user.nickname} + '의 동네'"></div>
+                    <span th:inline="text">&nbsp;&nbsp;[[${user.address}]]</span>
                 </div>
             </div>
         </div>

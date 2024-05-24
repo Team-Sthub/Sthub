@@ -2,8 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>로그인</title>
     <link rel="stylesheet" th:href="@{/style/user/login.css}">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var errorMessage = /*[[${errorMessage}]]*/ '';
+        if (errorMessage) {
+            alert(errorMessage);
+        }
+        /*]]>*/
+    </script>
 </head>
 <body>
 <div>

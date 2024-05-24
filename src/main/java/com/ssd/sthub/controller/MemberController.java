@@ -8,6 +8,7 @@ import com.ssd.sthub.dto.member.UserViewDTO;
 import com.ssd.sthub.response.SuccessResponse;
 import com.ssd.sthub.service.AWSS3SService;
 import com.ssd.sthub.service.MemberService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -80,20 +81,39 @@ public class MemberController {
     // 로그인
     @PostMapping("/login")
     public ModelAndView login(HttpServletRequest httpServletRequest, @ModelAttribute LoginDTO loginDTO) {
-        Member member = memberService.login(loginDTO);
+        ModelAndView mav = new ModelAndView();
+        try {
+            Member member = memberService.login(loginDTO);
 
-        httpServletRequest.getSession().invalidate(); // 세션 생성 전 기존 세션 파기
-        HttpSession session = httpServletRequest.getSession();
-        session.setAttribute("memberId", member.getId()); // 세션에 로그인 한 사용자의 memberId 등록
-        session.setMaxInactiveInterval(1800); // session이 30분동안 유지
+            httpServletRequest.getSession().invalidate(); // 세션 생성 전 기존 세션 파기
+            HttpSession session = httpServletRequest.getSession();
+            session.setAttribute("memberId", member.getId()); // 세션에 로그인 한 사용자의 memberId 등록
+            session.setMaxInactiveInterval(1800); // session이 30분동안 유지
+            mav.setViewName("redirect:/secondhand/list/ALL?pageNum=1");
+        } catch (EntityNotFoundException e) {
+            mav.setViewName("thyme/user/login"); // 로그인 페이지로 다시 보냄
+            mav.addObject("errorMessage", e.getMessage());
+        }
+        return mav;
+    }
 
-        return new ModelAndView("redirect:/secondhand/list/ALL?pageNum=1");
+    // 로그아웃
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return "redirect:/thyme/user/login";
     }
 
     // 프로필 조회
     @GetMapping("/myPage")
-    public ResponseEntity<SuccessResponse<UserViewDTO>> getMember(@RequestHeader Long memberId) {
-        return ResponseEntity.ok(SuccessResponse.create(memberService.getMember(memberId)));
+    public ModelAndView getMember(@SessionAttribute(name = "memberId") Long memberId) {
+        UserViewDTO user = memberService.getMember(memberId);
+        ModelAndView mav = new ModelAndView("thyme/user/userView");
+        mav.addObject("user", user);
+        return mav;
     }
 
     // 프로필 상세 조회
