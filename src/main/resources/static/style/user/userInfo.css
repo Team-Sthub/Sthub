@@ -1,0 +1,225 @@
+div.userView {
+    margin-top: 1%;
+    display: flex;
+    flex-direction: column; /* 자식 요소의 자식들을 세로로 정렬 */
+    justify-content: center; /* 수평 정렬 */
+    align-items: center; /* 수직 정렬 */
+}
+
+.userInfo {
+    border: 2px solid #005100;
+    border-radius: 10px;
+    width: 60%;
+}
+
+div.userInfo form{
+    display: flex;
+    align-items: center; /* 수직 정렬 */
+}
+
+.userProfileBox {
+    display: flex; /* 자식 요소를 Flexbox 컨테이너로 설정 */
+    flex-direction: column; /* 자식 요소의 자식들을 세로로 정렬 */
+    align-items: center; /* 자식 요소의 자식들을 수평으로 가운데 정렬 */
+    width: 25%;
+    margin-right: 15px;
+}
+
+.userProfile {
+    text-align: center;
+    margin-top: 3%; /* 수직 여백 */
+    margin-bottom: 5%;
+    background: rgba(76, 175, 80, 0.15);
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+}
+
+#image-icon {
+    margin-left: 3%;
+    margin-top: 20%;
+    font-size: 3.7em; /* 아이콘 크기 증가 */
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+}
+
+#icon {
+    margin-top: 20%;
+    font-size: 3.7em; /* 아이콘 크기 증가 */
+    cursor: pointer;
+}
+
+#profile-image{
+    margin-top: 20%;
+    width: 60px;
+    height: 60px;
+}
+
+#file-input {
+    display: none; /* 파일 입력 요소 숨김 */
+}
+
+.vertical-line {
+    width: 1.5px; /* 선의 두께 */
+    background-color: #005100; /* 선의 색상 */
+    height: 180px;
+    margin-right: 20px;
+}
+
+.userBox {
+    display: flex; /* 부모 요소를 Flexbox 컨테이너로 설정 */
+    flex-direction: column; /* 자식 요소의 자식들을 세로로 정렬 */
+    margin-left: 5%;
+    width: 70%;
+    margin-right: 20px;
+    margin-bottom: 2%;
+}
+
+.userBox > * {
+    margin-bottom: 20px; /* 각 요소 사이의 간격 조정 */
+}
+
+.editBtn {
+    display: flex;
+    margin-top: 12px;
+    justify-content: flex-end;
+}
+
+#update-form input {
+    display: inline-block;
+    margin-left: 10px;
+    height: 32px;
+    position: relative;
+    background: #ebebeb;
+    border-radius: 15px;
+    border: none;
+}
+
+.manner, .location {
+    display: flex; /* 부모 요소를 Flexbox 컨테이너로 설정 */
+    align-items: center;
+}
+
+.rectangle {
+    display: inline-block;
+    border: 2px solid rgba(76, 175, 80, 0.5);
+    border-radius: 10px;
+    padding: 5px;
+    margin-right: 0;
+}
+
+.edit-button {
+    align-items: center; /* 수직 가운데 정렬 */
+    background: rgba(0, 81, 0, 0.2);
+    border-radius: 15px;
+    cursor: pointer;
+    color: #005100;
+    border: none;
+    font-size: 11px;
+    padding: 5px;
+}
+
+.userBank {
+    display: flex; /* Flexbox 레이아웃 사용 */
+}
+
+.userBank > * {
+    margin-right: 20px; /* 각 요소 사이의 간격 설정 */
+}
+
+select {
+    -webkit-appearance: none; /* Safari 및 Chrome에서의 기본 UI 해제 */
+    appearance: none; /* 기본 UI 해제 */
+    padding: 5px; /* 내부 여백 설정 */
+    margin-left: 10px;
+
+    height: 35px;
+    position: relative;
+    background: #EBEBEB;
+    border-radius: 15px;
+    border: none;
+}
+
+.userAddress {
+    margin-top: -3%;
+    flex-direction: column; /* 자식 요소의 자식들을 세로로 정렬 */
+}
+
+.userAddress #gooleMap {
+    display: flex;
+    margin-bottom: 3%;
+    border-radis: 15px;
+    overflow: hidden; /* 둥근 모서리 바깥 부분 숨기기 */
+}
+
+.userAddress #map {
+    height: 350px;
+    width: 85%;
+    flex-shrink: 0; /* 자식 요소가 축소되지 않도록 설정 */
+}
+
+#name1 {
+    margin-top: 2%;
+    margin-left: 1%;
+    font-size: 13px;
+}
+
+#name2 {
+    font-size: 13px;
+}
+
+#nowAddress {
+    display: flex;
+    align-content: center;
+    align-items: center; /* 수직 가운데 정렬 */
+    justify-content: center; /* 수평 가운데 정렬 */
+}
+
+#address-display {
+    color: #4CAF50;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.search {
+    margin-top: 0%;
+    display: flex; /* 가로로 배치하기 위해 Flexbox 사용 */
+    align-items: center; /* 수직 가운데 정렬 */
+}
+
+input#address-input {
+    margin-top: 1%;
+    width: 70%;
+    height: 35px;
+    position: relative;
+    background: #EBEBEB;
+    border-radius: 15px;
+    border: none;
+}
+
+#search-button {
+    margin-top: 1%;
+    margin-left: 3%;
+    width: 12%;
+    height: 35px;
+    color: #FFFFFF;
+
+    background: #4CAF50;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+}
+
+/* 비밀번호 확인 메세지 */
+#checkpwd {
+    color: red;
+    font-size: 12px;
+}
+
+/* 에러 메시지 출력*/
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}

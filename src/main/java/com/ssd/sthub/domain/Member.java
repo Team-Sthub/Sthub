@@ -12,7 +12,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import java.sql.Timestamp;
 
-@Getter
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @DynamicUpdate

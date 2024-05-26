@@ -71,11 +71,8 @@ public class MemberService {
     }
 
     // 마이페이지 사용자 정보 수정
-    public Member updateMember(Long memberId, MemberDTO memberDTO) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
-
-        member.updateInfo(memberDTO);
-        return memberRepository.save(member);
+    public Member updateMember(Member existingMember) {
+        // 이미 변경된 필드를 가지고 있는 existingMember 객체를 활용하여 업데이트
+        return memberRepository.save(existingMember);
     }
 }

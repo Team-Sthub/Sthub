@@ -16,7 +16,10 @@
         <div class="userInfo">
             <div class="userProfileBox">
                 <div class="userProfile">
-                    <img th:src="${user.profile}" class="profile" alt="프로필 이미지" />
+                    <!-- user.profile이 null이 아닌 경우 이미지를 표시 -->
+                    <img th:if="${user.profile != null}" th:src="${user.profile}" class="profile" alt="프로필 이미지" />
+                    <!-- user.profile이 null인 경우 아이콘을 표시 -->
+                    <i th:unless="${user.profile != null}" class="fa-solid fa-user" title="Insert image" id="image-icon"></i>
                     <br>
                 </div>
                 <span th:text="${user.nickname}"></span>
@@ -24,7 +27,7 @@
             <div class="vertical-line"></div>
             <div class="userBox">
                 <div class="editBtn">
-                    <a th:href="@{/user/userInfo}" class="edit-button">정보수정</a>
+                    <a th:href="@{/user/myPage/detail}" class="edit-button">정보 수정</a>
                 </div>
                 <div class="manner">
                     <div class="rectangle" th:text="${user.nickname} + '의 매너 등급'"></div>
