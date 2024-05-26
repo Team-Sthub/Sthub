@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create.html</title>
+    <link rel="stylesheet" th:href="@{/style/header.css}">
+    <link rel="stylesheet" th:href="@{/style/groupBuying/create.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
+</head>
+<body>
+
+    <!-- 외부 js  -->
+    <script th:src="@{/js/groupBuying/create.js}"></script>
+    <!-- header 삽입 -->
+    <div th:replace="thyme/frameHeader :: header"></div>
+
+    <p id="main-title">공동구매 글 작성하기</p>
+    <hr/>
+
+    <form id="create" th:action="@{/groupBuying/create}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <div class="title-context">
+            <input type="text" th:id="title" th:name="title" placeholder="제목을 입력하세요."/>
+        </div>
+        <div class="info">
+            <div id="head">
+                <p id="info-title">공동구매 정보</p>
+            </div>
+            <div id="info1">
+                <div id="writeCategory">
+                    <label id="name1" th:for="category">카테고리</label>
+                    <select id="category" th:name="category">
+                        <option th:value="BOOK">교재</option>
+                        <option th:value="ELECTRONIC">전자기기</option>
+                        <option th:value="STATIONERY">문구</option>
+                        <option th:value="TRANSFER">양도</option>
+                    </select>
+                </div>
+                <div id="writeProduct">
+                    <label id="name2" th:for="product">상품명</label>
+                    <input type="text" id="product" th:name="product" placeholder="작성해주세요"/>
+                </div>
+                <div id="writePrice">
+                    <label id="name3" th:for="price">가격</label>
+                    <input type="text" id="price" th:name="price" placeholder="00000"/>
+                </div>
+                <div id="writeDead">
+                    <label id="name4" th:for="deadline">기한</label>
+                    <input type="text" id="deadline" th:name="deadline" placeholder="0000-00-00"/>
+                </div>
+            </div>
+            <div id="info2">
+                <div id="writeChatURL">
+                    <label id="name5" th:for="chatLink">오픈채팅 링크</label>
+                    <input type="text" id="chatLink" th:name="chatLink" placeholder="카카오톡 오픈채팅방 링크를 작성해주세요"/>
+                </div>
+                <div id="writePlace">
+                    <label id="name6" th:for="meetingPlace">장소</label>
+                    <input type="text" id="meetingPlace" th:name="meetingPlace" placeholder="나눔할 장소를 작성해주세요"/>
+                </div>
+            </div>
+        </div>
+        <div class="editor-toolbar">
+            <label for="file-upload">
+                <i class="fas fa-image" title="Insert image" id="image-icon"></i>
+            </label>
+            <input type="file" id="file-upload" th:name="imgUrl" multiple />
+        </div>
+
+        <div class="content-area">
+            <label>
+                <textarea th:name="content" placeholder="내용을 입력하세요"></textarea>
+            </label>
+        </div>
+        <input id="createBtn" type="submit" value="글 등록하기" />
+    </form>
+</body>
+</html>

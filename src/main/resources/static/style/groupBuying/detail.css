@@ -102,6 +102,7 @@ hr {
 
 #category {
     margin-left: 15px;
+    font-size: 12px;
 }
 
 #readProduct {
@@ -200,7 +201,7 @@ hr {
     display: flex;
 }
 
-#btn_message {
+#btn_message, #btn_update {
     background-color : white;
     width: 30%;
     height: 40px;
@@ -209,7 +210,7 @@ hr {
     align-items: center; /* 수직 가운데 정렬 */
 }
 
-.message {
+.message, .update {
     position: relative;
     text-align: center;
     display: inline-block;
@@ -224,7 +225,7 @@ hr {
     border-radius: 5px;
 }
 
-#btn_application {
+#btn_application, #btn_delete {
     background-color : white;
     width: 30%;
     height: 40px;
@@ -233,7 +234,7 @@ hr {
     align-items: center; /* 수직 가운데 정렬 */
 }
 
-.application {
+.application, .delete {
     position: relative;
     text-align: center;
     display: inline-block;
@@ -248,7 +249,7 @@ hr {
     border-radius: 5px;
 }
 
-#btn_appList {
+#btn_appList, #btn_appGetList {
     background-color : white;
     width: 30%;
     height: 40px;
@@ -257,7 +258,7 @@ hr {
     align-items: center; /* 수직 가운데 정렬 */
 }
 
-.appList {
+.appList,.appGetList {
     position: relative;
     text-align: center;
     display: inline-block;
@@ -302,7 +303,7 @@ hr {
     width: 55%;
     height: 100px;
     margin: 0 auto;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .content-area {
@@ -351,4 +352,33 @@ textarea {
     flex: none;
     flex-grow: 0;
     background-color: white;
+}
+
+.image-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.image-item {
+    width: 60%;
+    margin-bottom: 10px; /* 이미지 사이의 간격 조절 */
+    object-fit: contain;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    width: 30%;
+    height: 30%;
+}
+
+#btn_list2 {
+    width: 40%;
+    margin: 0 auto;
+    margin-top: 15px;
+    padding-top: 2px;
+    margin-bottom: 15px;
+    display: flex;
 }
