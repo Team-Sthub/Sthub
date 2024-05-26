@@ -6,6 +6,7 @@ import com.ssd.sthub.domain.Secondhand;
 import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.dto.secondhand.SecondhandDTO;
 import com.ssd.sthub.repository.MemberRepository;
+import com.ssd.sthub.repository.SCommentRepository;
 import com.ssd.sthub.repository.SImageRepository;
 import com.ssd.sthub.repository.SecondhandRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,6 +29,7 @@ public class SecondhandService {
     private final SecondhandRepository secondhandRepository;
     private final MemberRepository memberRepository;
     private final SImageRepository sImageRepository;
+    private final SCommentRepository sCommentRepository;
     private final AWSS3SService awss3SService;
 
     // 중고거래 게시글 작성
@@ -102,6 +104,7 @@ public class SecondhandService {
                         .collect(Collectors.toList())
         );
         sImageRepository.deleteAllBySecondhand(secondhand);
+        sCommentRepository.deleteAllBySecondhand(secondhand);
         secondhandRepository.deleteById(secondhandId);
         return "delete success";
     }

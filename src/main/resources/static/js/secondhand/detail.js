@@ -33,13 +33,11 @@ function toggleTransaction(type) {
 }
 
 function sendDeleteRequest(secondhandId) {
+    alert(secondhandId);
     var url = '/secondhand/delete?secondhandId=' + secondhandId;
 
     fetch(url, {
         method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        },
     })
         .then(response => {
             if (response.ok) {

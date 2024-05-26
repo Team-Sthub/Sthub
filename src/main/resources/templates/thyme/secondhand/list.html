@@ -68,8 +68,5 @@
     <button th:if="${secondhandList[0].totalPage > secondhandList[0].currentPage + 10}"
             th:onclick="|window.location.href='@{/secondhand/list/{category}(category=${secondhandList[0].category}, pageNum=${secondhandList[0].currentPage + 10})}'|">&gt;</button>
 </div>
-
-
-
 </body>
 </html>
