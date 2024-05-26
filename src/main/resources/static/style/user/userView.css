@@ -39,6 +39,11 @@ div.userInfo {
     height: 60px;
 }
 
+#image-icon {
+    margin-top: 20%;
+    font-size: 3.7em; /* 아이콘 크기 증가 */
+}
+
 #file-input {
     display: none; /* 파일 입력 요소 숨김 */
 }
