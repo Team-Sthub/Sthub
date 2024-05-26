@@ -23,7 +23,6 @@ public class GroupBuyingListDTO {
         private Long id;
         private String title;
         private Long price;
-        private String imageUrl;
         private String nickname;
         private String status;
     }

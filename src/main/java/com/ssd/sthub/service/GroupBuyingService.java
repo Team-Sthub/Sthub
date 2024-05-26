@@ -1,11 +1,13 @@
 package com.ssd.sthub.service;
 
+import com.ssd.sthub.domain.GImage;
 import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingDetailDTO;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingListDTO;
 import com.ssd.sthub.dto.groupBuying.PostGroupBuyingDTO;
+import com.ssd.sthub.repository.GImageRepository;
 import com.ssd.sthub.repository.GroupBuyingRepository;
 import com.ssd.sthub.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,18 +28,32 @@ public class GroupBuyingService {
 
     public final GroupBuyingRepository groupBuyingRepository;
     public final MemberRepository memberRepository;
+    public final GImageRepository gImageRepository;
 
     // 공동구매 게시글 작성
-    public GroupBuying postGroupBuying(Long memberId, PostGroupBuyingDTO postGroupBuyingDTO) {
+    public PostGroupBuyingDTO.Response postGroupBuying(Long memberId, List<String> imgUrls, PostGroupBuyingDTO postGroupBuyingDTO) {
         Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
-        );
+                () -> new EntityNotFoundException("회원 조회에 실패했습니다."));
+
+
         GroupBuying groupBuying = new GroupBuying(postGroupBuyingDTO, member);
-        return groupBuyingRepository.save(groupBuying);
+        groupBuyingRepository.save(groupBuying);
+
+        if(imgUrls != null && !imgUrls.isEmpty()) {
+            for (String imgUrl : imgUrls) {
+                GImage gImage = GImage.builder()
+                        .path(imgUrl)
+                        .groupBuying(groupBuying)
+                        .build();
+                gImageRepository.save(gImage);
+            }
+        }
+
+        return new PostGroupBuyingDTO.Response(groupBuying, gImageRepository.findAllByGroupBuying(groupBuying));
     }
 
     // 공동구매 게시글 수정
-    public GroupBuying updateGroupBuying(Long memberId, GroupBuyingDetailDTO groupBuyingDetailDTO) {
+    public GroupBuying updateGroupBuying(Long memberId, GroupBuyingDetailDTO.PatchRequest groupBuyingDetailDTO) {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
         );
@@ -74,14 +90,13 @@ public class GroupBuyingService {
         }
 
         List<GroupBuyingListDTO.GroupBuyingDTO> groupBuyingListDto = groupBuyings.stream()
-                .map(groupBuying -> new GroupBuyingListDTO.GroupBuyingDTO(groupBuying.getId(), groupBuying.getTitle(), groupBuying.getPrice(),
-                        groupBuying.getImageUrl(), groupBuying.getMember().getNickname(), groupBuying.getStatus()))
+                .map(groupBuying -> new GroupBuyingListDTO.GroupBuyingDTO(groupBuying.getId(), groupBuying.getTitle(), groupBuying.getPrice(), groupBuying.getMember().getNickname(), groupBuying.getStatus()))
                 .collect(Collectors.toList());
         return new GroupBuyingListDTO(groupBuyingListDto, groupBuyings.getTotalPages());
     }
 
     // 공동구매 게시글(상세) 조회 (작성자 확인은 controller에서 하고 뷰 설정) + 수락 여부에 따라 오픈채팅 링크 공개여부 달라짐
-    public GroupBuying getGroupBuying(Long memberId, Long groupBuyingId) throws NullPointerException {
+    public GroupBuyingDetailDTO.Response getGroupBuying(Long memberId, Long groupBuyingId) throws NullPointerException {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
         );
@@ -89,7 +104,7 @@ public class GroupBuyingService {
                 () -> new EntityNotFoundException("해당 공동구매 게시글 조회에 실패했습니다.")
         );
 
-        return groupBuying;
+        return new GroupBuyingDetailDTO.Response(groupBuying, groupBuying.getImageList());
     }
 
     // 마이페이지 - 공구 모집 조회 (페이징 포함)
@@ -102,7 +117,7 @@ public class GroupBuyingService {
         Page<GroupBuying> groupBuyings = groupBuyingRepository.findAllByMemberId(memberId, pageRequest);
         List<GroupBuyingListDTO.GroupBuyingDTO> groupBuyingListDto = groupBuyings.stream()
                 .map(groupBuying -> new GroupBuyingListDTO.GroupBuyingDTO(groupBuying.getId(), groupBuying.getTitle(), groupBuying.getPrice(),
-                        groupBuying.getImageUrl(), groupBuying.getMember().getNickname(), groupBuying.getStatus()))
+                        groupBuying.getMember().getNickname(), groupBuying.getStatus()))
                 .collect(Collectors.toList());
         return new GroupBuyingListDTO(groupBuyingListDto, groupBuyings.getTotalPages());
     }

@@ -12,6 +12,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -50,9 +52,6 @@ public class GroupBuying extends BaseTime {
     @Column(nullable = false)
     private String content; // 내용
 
-    @Lob
-    private String imageUrl; // 이미지 최대 3개
-
     @Column(nullable = false)
     @ColumnDefault("'모집중'")
     private String status; // 상태 : 모집중, 모집완료
@@ -61,7 +60,10 @@ public class GroupBuying extends BaseTime {
     @JoinColumn(name = "memberId")
     private Member member;
 
-    public GroupBuying(GroupBuyingDetailDTO groupBuyingDetailDTO, Member member) {
+    @OneToMany(mappedBy = "groupBuying", cascade = CascadeType.ALL)
+    private List<GImage> imageList = new ArrayList<>();
+
+    public GroupBuying(GroupBuyingDetailDTO.PatchRequest groupBuyingDetailDTO, Member member) {
         this.title = groupBuyingDetailDTO.getTitle();
         this.category = groupBuyingDetailDTO.getCategory();
         this.product = groupBuyingDetailDTO.getProduct();
@@ -86,7 +88,7 @@ public class GroupBuying extends BaseTime {
         this.member = member;
     }
 
-    public void updateGroupBuying(GroupBuyingDetailDTO groupBuyingDetailDTO) {
+    public void updateGroupBuying(GroupBuyingDetailDTO.PatchRequest groupBuyingDetailDTO) {
         this.title = groupBuyingDetailDTO.getTitle();
         this.category = groupBuyingDetailDTO.getCategory();
         this.product = groupBuyingDetailDTO.getProduct();
