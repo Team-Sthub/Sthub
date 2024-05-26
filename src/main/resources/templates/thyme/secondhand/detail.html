@@ -54,12 +54,10 @@
             <div id="transactionOptions">
                 <p id="delivery" class="transaction-option"
                    th:class="${secondhand.secondhand.type.name eq 'DELIVERY' || secondhand.secondhand.type.name eq 'ALL'} ? 'selected' : ''"
-                   th:style="${secondhand.secondhand.type.name eq 'DELIVERY' || secondhand.secondhand.type.name eq 'ALL'} ? 'color: black' : 'color: gray'"
-                   onclick="toggleTransaction('DELIVERY')">택배거래</p>
+                   th:style="${secondhand.secondhand.type.name eq 'DELIVERY' || secondhand.secondhand.type.name eq 'ALL'} ? 'color: black' : 'color: gray'">택배거래</p>
                 <p id="direct" class="transaction-option"
                    th:class="${secondhand.secondhand.type.name eq 'DIRECT' || secondhand.secondhand.type.name eq 'ALL'} ? 'selected' : ''"
-                   th:style="${secondhand.secondhand.type.name eq 'DIRECT' || secondhand.secondhand.type.name eq 'ALL'} ? 'color: black' : 'color: gray'"
-                   onclick="toggleTransaction('DIRECT')">직거래</p>
+                   th:style="${secondhand.secondhand.type.name eq 'DIRECT' || secondhand.secondhand.type.name eq 'ALL'} ? 'color: black' : 'color: gray'">직거래</p>
             </div>
             <input type="hidden" id="type" th:name="type" value=""/>
         </div>

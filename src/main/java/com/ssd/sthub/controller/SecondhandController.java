@@ -53,8 +53,9 @@ public class SecondhandController {
 
     // 중고거래 게시글 수정 클릭
     @GetMapping("/moveToUpdateForm")
-    public String showUpdateForm() {
-        return "thyme/secondhand/update";
+    public ModelAndView showUpdateForm(@RequestParam Long secondhandId) {
+        SecondhandDTO.DetailResponse secondhand = secondhandService.getSecondhand(secondhandId);
+        return new ModelAndView("thyme/secondhand/update", "secondhand", secondhand);
     }
 
     // 거래 최종 방식 클릭
@@ -64,6 +65,7 @@ public class SecondhandController {
     }
 
     // 중고거래 게시글 수정 + 거래 최종 방식 선택
+    @ResponseStatus(HttpStatus.SEE_OTHER)
     @PatchMapping("/update")
     public ModelAndView updateSecondhand(@RequestHeader Long memberId, @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @RequestPart @Validated SecondhandDTO.PatchRequest request) throws BadRequestException {
         awss3SService.deleteImages(secondhandService.getImageUrls(request.getSecondhandId())); // 기존 이미지 삭제
