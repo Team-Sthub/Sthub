@@ -9,6 +9,7 @@ import com.ssd.sthub.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.matcher.StringMatcher;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -49,21 +50,37 @@ public class SecondhandController {
         return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + secondhandId);
     }
 
+    // 중고거래 게시글 수정 클릭
+    @GetMapping("/moveToUpdateForm")
+    public String showUpdateForm() {
+        return "thyme/secondhand/update";
+    }
+
+    // 거래 최종 방식 클릭
+    @GetMapping("/check")
+    public ModelAndView showCheckForm(@RequestParam Long secondhandId) {
+        return new ModelAndView( "redirect:/secondhand/check", "secondhandId", secondhandId);
+    }
+
     // 중고거래 게시글 수정 + 거래 최종 방식 선택
     @PatchMapping("/update")
     public ModelAndView updateSecondhand(@RequestHeader Long memberId, @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @RequestPart @Validated SecondhandDTO.PatchRequest request) throws BadRequestException {
         awss3SService.deleteImages(secondhandService.getImageUrls(request.getSecondhandId())); // 기존 이미지 삭제
         List<String> imgUrls = awss3SService.uploadFiles(multipartFiles); // s3 이미지 등록
         SecondhandDTO.DetailResponse secondhand = secondhandService.updateSecondhand(memberId, imgUrls, request);
-        ModelAndView modelAndView = new ModelAndView("redirect:thyme/secondhand/detail");
+        ModelAndView modelAndView = new ModelAndView("redirect:/secondhand/detail");
         modelAndView.addObject("secondhand", secondhand);
         return modelAndView;
     }
 
     // 중고거래 게시글 삭제
     @DeleteMapping("/delete")
-    public ResponseEntity<SuccessResponse<String>> deleteSecondhand(@SessionAttribute Long memberId, @RequestParam Long secondhandId) throws BadRequestException {
-        return ResponseEntity.ok(SuccessResponse.create(secondhandService.deleteSecondhand(memberId, secondhandId)));
+    public ModelAndView deleteSecondhand(@SessionAttribute Long memberId, @RequestParam Long secondhandId) throws BadRequestException {
+        String result = secondhandService.deleteSecondhand(memberId, secondhandId);
+        if(!result.equals("delete success"))
+            result = "delete fail";
+
+        return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + secondhandId, "result", result);
     }
 
     // 중고거래 게시글 상세 조회 + 판매 내역 상세 조회 + 구매 내역 상세 조회
@@ -90,8 +107,10 @@ public class SecondhandController {
 
     // 중고거래 게시글 댓글 작성
     @PostMapping("/detail/comment")
-    public ResponseEntity<SuccessResponse<SCommentDTO.Response>> createComment(@RequestHeader Long memberId, @RequestBody SCommentDTO.Request request) {
-        return ResponseEntity.ok(SuccessResponse.create(sCommentService.createComment(memberId, request)));
+    public ModelAndView createComment(@SessionAttribute Long memberId, @ModelAttribute SCommentDTO.Request request) {
+        log.info("secondhandId " + request.getSecondhandId());
+        SCommentDTO.Response comment = sCommentService.createComment(memberId, request);
+        return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + request.getSecondhandId());
     }
 
     // 중고거래 게시글 댓글 전체 조회
@@ -104,10 +123,5 @@ public class SecondhandController {
     @GetMapping("/selling/list")
     public ResponseEntity<SuccessResponse<Page<Secondhand>>> getSellingSecondhands(@RequestHeader Long memberId, @RequestParam int pageNum) throws BadRequestException {
         return ResponseEntity.ok(SuccessResponse.create(secondhandService.getSellingSecondhands(memberId, pageNum)));
-    }
-
-    @GetMapping("/test")
-    public String test() {
-        return "thyme/secondhand/list";
     }
 }
