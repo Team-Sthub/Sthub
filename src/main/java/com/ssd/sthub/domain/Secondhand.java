@@ -2,7 +2,6 @@ package com.ssd.sthub.domain;
 
 import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.domain.enumerate.Transaction;
-import com.ssd.sthub.dto.secondhand.PostSecondhandDTO;
 import com.ssd.sthub.dto.secondhand.SecondhandDTO;
 import jakarta.persistence.*;
 import lombok.*;
@@ -61,8 +60,11 @@ public class Secondhand extends BaseTime {
     @OneToMany(mappedBy = "secondhand", cascade = CascadeType.ALL)
     private List<SImage> imageList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "secondhand", cascade = CascadeType.ALL)
+    private List<SComment> commentList = new ArrayList<>();
+
     @Builder
-    public Secondhand(Member member,  PostSecondhandDTO request) {
+    public Secondhand(Member member, SecondhandDTO.PostRequest request) {
         this.member = member;
         this.title = request.getTitle();
         this.category = request.getCategory();

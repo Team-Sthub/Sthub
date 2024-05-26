@@ -1,10 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Detail.html</title>
+    <link rel="stylesheet" th:href="@{/style/header.css}">
+    <link rel="stylesheet" th:href="@{/style/secondhand/detail.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
 </head>
 <body>
+<!-- header 삽입 -->
+<div th:replace="thyme/frameHeader :: header"></div>
 
+<div><a th:href="@{/secondhand/list/ALL(pageNum=1)}" class="btn_wrap">목록</a></div>
+
+<p id="detail-title" th:text="${secondhand.secondhand.title}">제목</p>
+<p id="user-nickname" th:text="${secondhand.secondhand.member.nickname}">작성자</p>
+<hr/>
+
+<div class="info">
+    <div id="head">
+        <p id="info-title">판매 정보</p>
+        <div id="status" th:text="${secondhand.secondhand.status}">상태</div>
+    </div>
+    <div id="info1">
+        <div id="readCategory">
+            <label id="name1" for="category">카테고리</label>
+            <p id="category" th:text="${secondhand.secondhand.category}"></p>
+        </div>
+        <div id="readProduct">
+            <label id="name2" for="product">상품명</label>
+            <p id="product" th:text="${secondhand.secondhand.product}">공학용 계산기</p>
+        </div>
+        <div id="readPrice">
+            <label id="name3" for="price">가격</label>
+            <p id="price" th:text="${secondhand.secondhand.price}">5000원</p>
+        </div>
+    </div>
+    <div id="info2">
+        <div id="writeTransaction">
+            <label id="name4" th:for="type">희망 거래 방식</label>
+            <div id="transactionOptions">
+                <p id="delivery" class="transaction-option" onclick="toggleTransaction('DELIVERY')">택배거래</p>
+                <p id="direct" class="transaction-option" onclick="toggleTransaction('DIRECT')">직거래</p>
+            </div>
+            <input type="hidden" id="type" th:name="type" value=""/>
+        </div>
+        <div id="writePlace">
+            <label id="name5" th:for="place">장소</label>
+            <input type="text" th:text="${secondhand.secondhand.place}" id="place" th:name="place" placeholder="작성해주세요"/>
+        </div>
+    </div>
+</div>
+
+<!-- 이미지 출력 -->
+<div>
+
+</div>
+
+<!-- 내용 출력 -->
+<div>
+        <pre id="content" th:text="${groupBuying.content}">
+            공대생의 영원한 단짝 공학용 계산기 같이 사실 분 구합니다!!!!
+            4월 7일까지 신청해주세요.
+            신청시 옾챗 들어오시고 이름/전화번호/계산기 색상 작성 바랍니다</pre>
+</div>
+
+<div id="btn_list">
+    <div id="btn_message">
+        <a th:href="@{/groupBuying/list}" class="message">1:1 쪽지하기</a>
+    </div>
+    <div id="btn_application">
+        <a th:href="@{/groupBuying/list}" class="application">공동구매 신청하기</a>
+    </div>
+    <div id="btn_appList">
+        <a th:href="@{/groupBuying/list}" class="appList">신청자 목록 보기</a>
+    </div>
+    <div id="btn_complaint">
+        <a th:href="@{/groupBuying/list}" class="complaint">신고하기</a>
+    </div>
+</div>
+<hr/>
+
+<!-- 댓글 -->
+<div id="comment">
+    <div class="content-area">
+        <p id="comment-nickname">블러드234</p>
+        <textarea placeholder="내용을 입력하세요"></textarea>
+    </div>
+    <input id="createBtn" type="submit" value="등록" />
+</div>
 </body>
 </html>
