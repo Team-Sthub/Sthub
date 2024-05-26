@@ -75,7 +75,7 @@ public class GroupBuying extends BaseTime {
         this.member = member;
     }
 
-    public GroupBuying(PostGroupBuyingDTO postGroupBuyingDTO, Member member) {
+    public GroupBuying(PostGroupBuyingDTO.Request postGroupBuyingDTO, Member member) {
         this.title = postGroupBuyingDTO.getTitle();
         this.category = postGroupBuyingDTO.getCategory();
         this.product = postGroupBuyingDTO.getProduct();
@@ -84,7 +84,7 @@ public class GroupBuying extends BaseTime {
         this.chatLink = postGroupBuyingDTO.getChatLink();
         this.meetingPlace = postGroupBuyingDTO.getMeetingPlace();
         this.content = postGroupBuyingDTO.getContent();
-        this.status = postGroupBuyingDTO.getStatus();
+        this.status = "모집중";
         this.member = member;
     }
 

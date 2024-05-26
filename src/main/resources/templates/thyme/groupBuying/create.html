@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Detail.html</title>
+    <title>Create.html</title>
     <link rel="stylesheet" th:href="@{/style/header.css}">
     <link rel="stylesheet" th:href="@{/style/groupBuying/create.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
@@ -50,12 +50,12 @@
             </div>
             <div id="info2">
                 <div id="writeChatURL">
-                    <label id="name5" th:for="chatURL">오픈채팅 링크</label>
-                    <input type="text" id="chatURL" th:name="chatURL" placeholder="카카오톡 오픈채팅방 링크를 작성해주세요"/>
+                    <label id="name5" th:for="chatLink">오픈채팅 링크</label>
+                    <input type="text" id="chatLink" th:name="chatLink" placeholder="카카오톡 오픈채팅방 링크를 작성해주세요"/>
                 </div>
                 <div id="writePlace">
-                    <label id="name6" th:for="place">장소</label>
-                    <input type="text" id="place" th:name="place" placeholder="나눔할 장소를 작성해주세요"/>
+                    <label id="name6" th:for="meetingPlace">장소</label>
+                    <input type="text" id="meetingPlace" th:name="meetingPlace" placeholder="나눔할 장소를 작성해주세요"/>
                 </div>
             </div>
         </div>

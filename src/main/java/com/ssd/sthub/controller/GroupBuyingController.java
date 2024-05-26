@@ -36,18 +36,22 @@ public class GroupBuyingController {
         return ResponseEntity.ok(SuccessResponse.create(groupBuyingService.getAllGroupBuying(category, pageNum)));
     }
 
-    // 공동구매 게시글 상세 조회 (일단 뷰 확인용)
-//    @GetMapping("/detail")
-//    public String showDetail() {
-//        return "thyme/groupBuying/detail";
-//    }
-
     // 공동구매 게시글(상세) 조회 (작성자 확인은 controller에서 하고 뷰 설정) 작성자 수락 여부 확인 후 링크 공개 및 미공개 해야함.
     @GetMapping("/detail")
     public ModelAndView getGroupBuying(@SessionAttribute(name = "memberId") Long memberId, @RequestParam Long groupBuyingId) {
         GroupBuyingDetailDTO.Response groupBuying = groupBuyingService.getGroupBuying(memberId, groupBuyingId);
-//        if(memberId == groupBuying.getMember().getId())
-            return new ModelAndView("thyme/groupBuying/detail", "groupBuying", groupBuying);
+
+        String nickname = groupBuyingService.getNickname(memberId);
+
+        ModelAndView modelAndView;
+        if (memberId == groupBuying.getGroupBuying().getMember().getId()) {
+            modelAndView = new ModelAndView("thyme/groupBuying/writerDetail");
+        } else {
+            modelAndView = new ModelAndView("thyme/groupBuying/detail");
+        }
+        modelAndView.addObject("groupBuying", groupBuying);
+        modelAndView.addObject("memberNickname", nickname);
+        return modelAndView;
     }
 
     // 공동구매 게시글 작성 클릭
@@ -58,7 +62,7 @@ public class GroupBuyingController {
 
     // 공동구매 게시글 작성
     @PostMapping("/create")
-    public ModelAndView postGroupBuying(@SessionAttribute(name = "memberId") Long memberId, @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @RequestBody PostGroupBuyingDTO postGroupBuyingDTO) {
+    public ModelAndView postGroupBuying(@SessionAttribute(name = "memberId") Long memberId, @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @ModelAttribute PostGroupBuyingDTO.Request request) {
         log.info("memberId  : " + memberId);
         log.info("게시글 생성 세션 Id : " + httpServletRequest.getSession().getId());
 
@@ -67,7 +71,7 @@ public class GroupBuyingController {
             imgUrls = awss3SService.uploadFiles(multipartFiles); // s3 이미지 등록
         }
 
-        PostGroupBuyingDTO.Response groupBuying = groupBuyingService.postGroupBuying(memberId, imgUrls, postGroupBuyingDTO);
+        PostGroupBuyingDTO.Response groupBuying = groupBuyingService.postGroupBuying(memberId, imgUrls, request);
         Long groupBuyingId = groupBuying.getGroupBuying().getId();
         log.info("groupBuyingId =" + groupBuyingId);
         return new ModelAndView("redirect:/groupBuying/detail?groupBuyingId=" + groupBuyingId);

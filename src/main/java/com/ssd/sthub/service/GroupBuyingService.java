@@ -12,6 +12,7 @@ import com.ssd.sthub.repository.GroupBuyingRepository;
 import com.ssd.sthub.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -31,7 +33,7 @@ public class GroupBuyingService {
     public final GImageRepository gImageRepository;
 
     // 공동구매 게시글 작성
-    public PostGroupBuyingDTO.Response postGroupBuying(Long memberId, List<String> imgUrls, PostGroupBuyingDTO postGroupBuyingDTO) {
+    public PostGroupBuyingDTO.Response postGroupBuying(Long memberId, List<String> imgUrls, PostGroupBuyingDTO.Request postGroupBuyingDTO) {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new EntityNotFoundException("회원 조회에 실패했습니다."));
 
@@ -48,6 +50,10 @@ public class GroupBuyingService {
                 gImageRepository.save(gImage);
             }
         }
+
+        log.info("게시글 저장 : ", groupBuying.getId());
+        GroupBuying checkGroupBuying = groupBuyingRepository.findById(groupBuying.getId()).orElseThrow(
+                () -> new EntityNotFoundException("중고거래 게시글 저장에 실패하였습니다."));
 
         return new PostGroupBuyingDTO.Response(groupBuying, gImageRepository.findAllByGroupBuying(groupBuying));
     }
@@ -103,7 +109,8 @@ public class GroupBuyingService {
         GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingId).orElseThrow(
                 () -> new EntityNotFoundException("해당 공동구매 게시글 조회에 실패했습니다.")
         );
-
+        log.info("groupBuying 가져옴 : " + groupBuying.getId().toString());
+        log.info("groupBuying 이미지 가져옴: " + groupBuying.getImageList().toString());
         return new GroupBuyingDetailDTO.Response(groupBuying, groupBuying.getImageList());
     }
 
@@ -120,5 +127,13 @@ public class GroupBuyingService {
                         groupBuying.getMember().getNickname(), groupBuying.getStatus()))
                 .collect(Collectors.toList());
         return new GroupBuyingListDTO(groupBuyingListDto, groupBuyings.getTotalPages());
+    }
+
+    // 회원 닉네임 조회
+    public String getNickname(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
+        );
+        return member.getNickname();
     }
 }

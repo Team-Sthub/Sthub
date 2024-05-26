@@ -8,6 +8,8 @@
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
 </head>
 <body>
+    <!-- 외부 js  -->
+    <script th:src="@{/js/groupBuying/detail.js}"></script>
     <!-- header 삽입 -->
     <div th:replace="thyme/frameHeader :: header"></div>
 
@@ -53,8 +55,10 @@
     </div>
 
     <!-- 이미지 출력 -->
-    <div>
-
+    <div class="image-area">
+        <div th:each="image : ${groupBuying.getGImages()}" class="image-container">
+            <img th:src="@{${image.path}}" th:alt="${image.path}" class="image-item">
+        </div>
     </div>
 
     <!-- 내용 출력 -->
@@ -84,7 +88,7 @@
     <!-- 댓글 -->
     <div id="comment">
         <div class="content-area">
-            <p id="comment-nickname">블러드234</p>
+            <p id="comment-nickname" th:text="${memberNickname}">블러드234</p>
             <textarea placeholder="내용을 입력하세요"></textarea>
         </div>
         <input id="createBtn" type="submit" value="등록" />

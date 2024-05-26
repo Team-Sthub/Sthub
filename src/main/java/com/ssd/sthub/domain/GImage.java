@@ -33,4 +33,13 @@ public class GImage {
         this.path = path;
         this.groupBuying = groupBuying;
     }
+
+    @Override
+    public String toString() {
+        return "GImage{" +
+                "id=" + id +
+                ", path='" + path + '\'' +
+                ", groupBuying=" + groupBuying +
+                '}';
+    }
 }

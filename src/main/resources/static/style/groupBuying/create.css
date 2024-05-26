@@ -144,7 +144,7 @@ hr {
     font-size: 12px;
 }
 
-#chatURL {
+#chatLink {
     border: none;
     margin-left: 10px;
     width: 75%;
@@ -162,7 +162,7 @@ hr {
     font-size: 12px;
 }
 
-#place {
+#meetingPlace {
     border: none;
     margin-left: 10px;
     width: 80%;
