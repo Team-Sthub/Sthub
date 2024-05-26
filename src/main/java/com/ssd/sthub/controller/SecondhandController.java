@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.matcher.StringMatcher;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -74,13 +75,15 @@ public class SecondhandController {
     }
 
     // 중고거래 게시글 삭제
+    @ResponseStatus(HttpStatus.SEE_OTHER)
     @DeleteMapping("/delete")
     public ModelAndView deleteSecondhand(@SessionAttribute Long memberId, @RequestParam Long secondhandId) throws BadRequestException {
         String result = secondhandService.deleteSecondhand(memberId, secondhandId);
-        if(!result.equals("delete success"))
-            result = "delete fail";
 
-        return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + secondhandId, "result", result);
+        if(result.equals("delete success"))
+            return new ModelAndView("redirect:/secondhand/list/ALL?pageNum=1");
+        else
+            return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + secondhandId, "result", "delete fail");
     }
 
     // 중고거래 게시글 상세 조회 + 판매 내역 상세 조회 + 구매 내역 상세 조회

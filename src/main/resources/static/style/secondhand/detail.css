@@ -231,7 +231,7 @@ input[type="text"]:focus, textarea:focus {
 }
 
 #createBtn {
-    margin: 5% auto;
+    margin: 33px auto;
     width: 300px;
     height: 30px;
     border-radius: 3px;
@@ -390,6 +390,6 @@ textarea {
     width: 100%;
 }
 
-.comment form {
+.comment-form {
     display: flex;
 }

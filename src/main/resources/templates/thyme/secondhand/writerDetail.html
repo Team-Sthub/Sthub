@@ -88,18 +88,17 @@
         <a th:href="@{/secondhand/moveToUpdateForm}" class="update">수정하기</a>
     </div>
     <div id="btn_delete">
-        <a href="#" th:onclick="'sendDeleteRequest(' + ${secondhand.secondhand.id} + ')'" class="delete">삭제하기</a>
+        <a th:href="@{'#'}" th:onclick="'sendDeleteRequest(\'' + ${secondhand.secondhand.id} + '\')'" class="delete">삭제하기</a>
     </div>
     <div id="btn_check">
         <a th:href="@{/secondhand/check(secondhandId=${secondhand.secondhand.id})}" class="check">거래 최종 방식</a>
     </div>
 </div>
 
-<!-- 여기까진 완료 -->
 <!-- 댓글 섹션 -->
 <hr/>
 <div id="comment">
-    <form th:action="@{/secondhand/detail/comment}" method="post">
+    <form class="comment-form" th:action="@{/secondhand/detail/comment}" method="post">
         <div class="comment-area">
             <input type="hidden" th:name="secondhandId" th:value="${secondhand.secondhand.id}"/>
             <p id="comment-nickname" th:text="${secondhand.secondhand.member.nickname}">블러드234</p>
