@@ -56,9 +56,15 @@ public class ParticipationController {
 
     // 참여 신청폼 리스트 조회
     @GetMapping("/list")
-    public ModelAndView getParticipations(@RequestParam int pageNum, @RequestParam Long groupBuyingId) {
+    public ModelAndView getParticipations(@RequestParam int pageNum, @SessionAttribute(name = "memberId") Long memberId, @RequestParam Long groupBuyingId) {
         Page<Participation> participationList = participationService.getParticipationList(groupBuyingId, pageNum);
-        ModelAndView modelAndView = new ModelAndView("thyme/participation/list");
+        ModelAndView modelAndView;
+        if (memberId != null && participationService.isGroupBuyingWriter(memberId, groupBuyingId)) {
+            modelAndView = new ModelAndView("thyme/participation/list-writer");
+        } else {
+            modelAndView = new ModelAndView("thyme/participation/list");
+        }
+
         modelAndView.addObject("participationList", participationList);
         return modelAndView;
     }
@@ -75,8 +81,8 @@ public class ParticipationController {
         Long groupBuyingId = request.getGroupBuyingId();
         participationService.accpetMember(memberId, participationId, request);
 
-        Page<Participation> participationList = participationService.getParticipationList(groupBuyingId, 1);
-        ModelAndView modelAndView = new ModelAndView("thyme/participation/list");
+        Page<Participation> participationList = participationService.getParticipationList(groupBuyingId, 0);
+        ModelAndView modelAndView = new ModelAndView("thyme/participation/list-writer");
         modelAndView.addObject("participationList", participationList);
         return modelAndView;
     }

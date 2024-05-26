@@ -108,4 +108,12 @@ public class ParticipationService {
             throw new BadRequestException("공동구매에 참여하지 않았습니다.");
         return participations;
     }
+
+    //공동구매 작성자 확인
+    public boolean isGroupBuyingWriter(Long memberId, Long groupBuyingId) {
+        GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingId)
+                .orElseThrow(() -> new EntityNotFoundException("공동구매 게시글 조회에 실패했습니다."));
+
+        return groupBuying.getMember().getId().equals(memberId);
+    }
 }
