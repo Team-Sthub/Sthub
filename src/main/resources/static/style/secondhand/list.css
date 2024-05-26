@@ -57,6 +57,11 @@ hr {
     border-radius: 5px;
 }
 
+.product-box-link {
+    text-decoration: none; /* 하이퍼링크 글자 밑줄, 색깔 없애기 */
+    color: inherit;
+}
+
 .product-box img {
     margin-top: 10%;
     width: 100%;
@@ -81,12 +86,22 @@ hr {
     margin-left: 3px;
 }
 
+#create {
+    background-color: #C9E7CA;
+    width: 120px;
+    height: 35px;
+    border: none;
+    border-radius: 5px;
+    float: right;
+    margin-right: 15%;
+    margin-top: 20px;
+}
+
 #title {
     color: black;
     font-weight: bold;
 }
 
-/* 페이징 처리 관련 코드 */
 /* 페이징 처리 관련 코드 */
 .pagination {
     display: flex;

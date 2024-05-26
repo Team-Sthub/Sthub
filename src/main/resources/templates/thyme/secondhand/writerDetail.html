@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/style/header.css}">
     <link rel="stylesheet" th:href="@{/style/secondhand/detail.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
-    <script th:src="@{/js/secondhand/writerDetail.js}"></script>
+    <script th:src="@{/js/secondhand/detail.js}"></script>
 </head>
 <body>
 <!-- header 삽입 -->
@@ -54,12 +54,10 @@
                 <div id="transactionOptions">
                     <p id="delivery" class="transaction-option"
                        th:class="${secondhand.secondhand.type.name eq 'DELIVERY' || secondhand.secondhand.type.name eq 'ALL'} ? 'selected' : ''"
-                       th:style="${secondhand.secondhand.type.name eq 'DELIVERY' || secondhand.secondhand.type.name eq 'ALL'} ? 'color: black' : 'color: gray'"
-                       onclick="toggleTransaction('DELIVERY')">택배거래</p>
+                       th:style="${secondhand.secondhand.type.name eq 'DELIVERY' || secondhand.secondhand.type.name eq 'ALL'} ? 'color: black' : 'color: gray'">택배거래</p>
                     <p id="direct" class="transaction-option"
                        th:class="${secondhand.secondhand.type.name eq 'DIRECT' || secondhand.secondhand.type.name eq 'ALL'} ? 'selected' : ''"
-                       th:style="${secondhand.secondhand.type.name eq 'DIRECT' || secondhand.secondhand.type.name eq 'ALL'} ? 'color: black' : 'color: gray'"
-                       onclick="toggleTransaction('DIRECT')">직거래</p>
+                       th:style="${secondhand.secondhand.type.name eq 'DIRECT' || secondhand.secondhand.type.name eq 'ALL'} ? 'color: black' : 'color: gray'">직거래</p>
                 </div>
             <input type="hidden" id="type" th:name="type" value=""/>
         </div>
@@ -85,21 +83,20 @@
 <!-- 버튼 리스트 출력 -->
 <div id="btn_list">
     <div id="btn_update">
-        <a th:href="@{/secondhand/moveToUpdateForm}" class="update">수정하기</a>
+        <a th:href="@{/secondhand/moveToUpdateForm(secondhandId=${secondhand.secondhand.id})}" class="update">수정하기</a>
     </div>
     <div id="btn_delete">
-        <a href="#" th:onclick="'sendDeleteRequest(' + ${secondhand.secondhand.id} + ')'" class="delete">삭제하기</a>
+        <a th:href="@{'#'}" th:onclick="'sendDeleteRequest(\'' + ${secondhand.secondhand.id} + '\')'" class="delete">삭제하기</a>
     </div>
     <div id="btn_check">
         <a th:href="@{/secondhand/check(secondhandId=${secondhand.secondhand.id})}" class="check">거래 최종 방식</a>
     </div>
 </div>
 
-<!-- 여기까진 완료 -->
 <!-- 댓글 섹션 -->
 <hr/>
 <div id="comment">
-    <form th:action="@{/secondhand/detail/comment}" method="post">
+    <form class="comment-form" th:action="@{/secondhand/detail/comment}" method="post">
         <div class="comment-area">
             <input type="hidden" th:name="secondhandId" th:value="${secondhand.secondhand.id}"/>
             <p id="comment-nickname" th:text="${secondhand.secondhand.member.nickname}">블러드234</p>

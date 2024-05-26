@@ -1,10 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Create.html</title>
+    <link rel="stylesheet" th:href="@{/style/header.css}">
+    <link rel="stylesheet" th:href="@{/style/secondhand/create.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
 </head>
 <body>
+<!-- 외부 js  -->
+<script th:src="@{/js/secondhand/create.js}"></script>
 
+<!-- header 삽입 -->
+<div th:replace="thyme/frameHeader :: header"></div>
+
+<p id="main-title">중고거래 글 작성하기</p>
+<hr/>
+
+<form id="create" th:action="@{/secondhand/update}" enctype="multipart/form-data" onsubmit="return validateUpdateForm()">
+    <div class="title-context">
+        <input type="text" th:id="title" th:name="title" th:value="${secondhand.secondhand.title}" placeholder="제목을 입력하세요."/>
+    </div>
+    <div class="info">
+        <p id="info-title">판매정보</p>
+        <div id="info1">
+            <div id="writeCategory">
+                <label id="name1" th:for="category">카테고리</label>
+                <select id="category" th:name="category">
+                    <option th:value="BOOK" th:text="${'교재'}" th:selected="${secondhand.secondhand.category.name eq 'BOOK'}"></option>
+                    <option th:value="ELECTRONIC" th:text="${'전자기기'}" th:selected="${secondhand.secondhand.category.name eq 'ELECTRONIC'}"></option>
+                    <option th:value="STATIONERY" th:text="${'문구'}" th:selected="${secondhand.secondhand.category.name eq 'STATIONERY'}"></option>
+                    <option th:value="TRANSFER" th:text="${'양도'}" th:selected="${secondhand.secondhand.category.name eq 'TRANSFER'}"></option>
+                </select>
+            </div>
+            <div id="writeProduct">
+                <label id="name2" th:for="product">상품명</label>
+                <input type="text" id="product" th:name="product" th:value="${secondhand.secondhand.product}" placeholder="작성해주세요"/>
+            </div>
+            <div id="writePrice">
+                <label id="name3" th:for="price">가격</label>
+                <input type="text" id="price" th:name="price" th:value="${secondhand.secondhand.price}" placeholder="작성해주세요"/>
+            </div>
+        </div>
+        <div id="info2">
+            <div id="writeTransaction">
+                <label id="name4" th:for="type">희망 거래 방식</label>
+                <div id="transactionOptions">
+                    <p id="delivery" class="transaction-option"
+                       th:class="${secondhand.secondhand.type.name eq 'DELIVERY' || secondhand.secondhand.type.name eq 'ALL'} ? 'selected' : ''"
+                       th:style="${secondhand.secondhand.type.name eq 'DELIVERY' || secondhand.secondhand.type.name eq 'ALL'} ? 'color: black' : 'color: gray'"
+                       onclick="toggleTransaction('DELIVERY')">택배거래</p>
+                    <p id="direct" class="transaction-option"
+                       th:class="${secondhand.secondhand.type.name eq 'DIRECT' || secondhand.secondhand.type.name eq 'ALL'} ? 'selected' : ''"
+                       th:style="${secondhand.secondhand.type.name eq 'DIRECT' || secondhand.secondhand.type.name eq 'ALL'} ? 'color: black' : 'color: gray'"
+                       onclick="toggleTransaction('DIRECT')">직거래</p>
+                </div>
+                <input type="hidden" id="type" th:name="type" value=""/>
+            </div>
+            <div id="writePlace">
+                <label id="name5" th:for="place">장소</label>
+                <input type="text" id="place" th:name="place" th:value="${secondhand.secondhand.place}" placeholder="작성해주세요"/>
+            </div>
+        </div>
+    </div>
+    <div class="editor-toolbar">
+        <label for="file-upload">
+            <i class="fas fa-image" title="Insert image" id="image-icon"></i>
+        </label>
+        <input type="file" id="file-upload" th:name="imgUrl" multiple />
+    </div>
+
+    <div class="content-area">
+        <label>
+            <textarea th:name="content" th:text="${secondhand.secondhand.content}" placeholder="내용을 입력하세요"></textarea>
+        </label>
+    </div>
+    <input id="createBtn" type="submit" value="글 수정하기" />
+</form>
 </body>
 </html>
