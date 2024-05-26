@@ -1,0 +1,395 @@
+.btn_wrap {
+    position: relative;
+    text-align: center;
+    margin-top: 20px;
+    margin-left: 73.5%;
+    display: inline-block;
+    padding: 6px 12px;
+    border: 1px solid #00000033;
+    width: 2%;
+    height: 12px;
+    text-align: center;
+    text-decoration-line: none;
+    color: #000000;
+    font-size: 10px;
+}
+
+#detail-title {
+    width: 55%;
+    position: relative;
+    margin: 2px auto 0;
+    color: #000000;
+    font-size: 20px;
+}
+
+#user-nickname {
+    position: relative;
+    width: 55%;
+    margin: 3px auto 0;
+    color: #00000080;
+    font-size: 13px;
+}
+
+#main-title {
+    position: relative;
+    text-align: center;
+    margin-top: 30px;
+    margin-right: 50%;
+}
+
+hr {
+    width: 60%;
+}
+
+.title-context {
+    position: relative; /* 위치를 상대적으로 설정 */
+    display: flex;
+    margin: 0 auto;
+    align-items: center; /* 수직 가운데 정렬 */
+    justify-content: left; /* 수평 가운데 정렬 */
+}
+
+#title {
+    border-right: 0px;
+    border-left: 0px;
+    border-top: 0px;
+    width: 40%;
+    border-color: #E5E5E5;
+    margin-left: 20%; /* top, right, bottom, left 순서 */
+    justify-content: center; /* 수평 가운데 정렬 */
+}
+
+.info {
+    background-color: #EDF7ED;
+    width: 60%;
+    height: 150px;
+    margin: 0 auto 2%;
+}
+
+.info-header {
+    display: flex;
+    align-items: center;
+}
+
+#info1, #info2 {
+    margin-top: 2px;
+    margin-left: 2%;
+    display: flex;
+}
+
+#info-title {
+    display: block;
+    margin-left: 10px;
+    font-size: 12px;
+}
+
+#status {
+    width: 10%;
+    height: 20px;
+    border-radius: 15px;
+    border: none;
+    flex: none;
+    flex-grow: 0;
+    background: #4CAF5080;
+    font-size: 10px;
+    font-weight: bold;
+    text-align : center;
+    margin-left: 10px;
+    line-height: 20px;
+}
+
+#writeCategory {
+    background-color : white;
+    border-radius: 30px;
+    width: 25%;
+    height: 40px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+}
+
+#name1, #name2, #name3, #name4, #name5 {
+    margin-left: 10px;
+    justify-content: center; /* 수평 가운데 정렬 */
+    font-size: 12px;
+}
+
+#category {
+    margin-left: 10px;
+}
+
+#writeProduct {
+    background-color : white;
+    border-radius: 30px;
+    width: 25%;
+    height: 40px;
+    margin-left: 15px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+    font-size: 12px;
+}
+
+#product {
+    border: none;
+    margin-left: 10px;
+    background-color: transparent; /* 텍스트 상자의 배경색을 투명으로 설정 */
+}
+
+input[type="text"]:focus, textarea:focus {
+    outline: none; /* 클릭 시 파란색 테두리 제거 */
+}
+
+#writePrice {
+    background-color : white;
+    border-radius: 30px;
+    width: 25%;
+    height: 40px;
+    margin-left: 15px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+    font-size: 12px;
+}
+
+#price {
+    border: none;
+    margin-left: 10px;
+    background-color: transparent; /* 텍스트 상자의 배경색을 투명으로 설정 */
+}
+
+#writeTransaction {
+    background-color: white;
+    border-radius: 30px;
+    width: 25%;
+    height: 40px;
+    margin-top: 2%;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+}
+
+#transactionOptions {
+    display: flex;
+}
+
+#type {
+    margin-left: 10px;
+}
+
+#writePlace {
+    background-color : white;
+    border-radius: 30px;
+    width: 40%;
+    height: 40px;
+    margin-top: 2%;
+    margin-left: 15px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+    font-size: 12px;
+}
+
+#place {
+    border: none;
+    margin-left: 10px;
+    background-color: transparent; /* 텍스트 상자의 배경색을 투명으로 설정 */
+}
+
+#image-icon {
+    font-size: 25px;
+}
+
+.editor-toolbar {
+    background-color: #F9F9F9;
+    width: 60%;
+    height: 10%;
+    text-align: left;
+    margin: 30px auto 0px;
+    display: flex;
+    align-items: center; /* 수직 가운데 정렬 */
+    justify-content: flex-start; /* 왼쪽 정렬 */
+}
+
+.editor-toolbar i {
+    cursor: pointer;
+    margin: 0 5px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.editor-toolbar label {
+    font-size: 5px;
+    margin-left: 5px; /* 아이콘과 텍스트 사이의 간격 조절 */
+    color: gray;
+}
+
+.content-area {
+    margin: 0 auto; /* 여백 제거 */
+    overflow-y: scroll; /* 스크롤 가능하게 변경 */
+    width: 60%;
+}
+
+.hidden-input {
+    display: none;
+}
+
+#createBtn {
+    margin: 5% auto;
+    width: 300px;
+    height: 30px;
+    border-radius: 3px;
+    background-color: white;
+    border: 1px solid gray;
+    display: flex;
+    justify-content: center;
+}
+
+.selected {
+    background-color: #ddd;
+}
+
+#create {
+    float: right;
+    margin-right: 15%;
+    margin-top: 2%;
+    background-color: #C9E7CA;
+    width: 150px;
+    height: 40px;
+    border: none;
+    border-radius: 6px;
+}
+
+.image-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.image-item {
+    width: 60%;
+    margin-bottom: 10px; /* 이미지 사이의 간격 조절 */
+    object-fit: contain;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+}
+
+#btn_list {
+    width: 47%;
+    margin: 0 auto;
+    margin-top: 15px;
+    padding-top: 2px;
+    margin-bottom: 15px;
+    display: flex;
+}
+
+#btn_update, #btn_delete, #btn_check {
+    background-color : white;
+    width: 30%;
+    height: 40px;
+    margin-left: 15px;
+    display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+}
+
+.update, .delete, .check {
+    position: relative;
+    text-align: center;
+    display: inline-block;
+    padding: 9px 12px;
+    border: 1px solid #00000033;
+    text-align: center;
+    text-decoration-line: none;
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    width: 80%;
+    border-radius: 5px;
+    margin-bottom: 70px;
+    margin-top: 15px;
+}
+
+#comment {
+    padding-top: 2px;
+    display: flex;
+    width: 55%;
+    height: 100px;
+    margin: 10px auto 0;
+}
+
+.comment-area {
+    width: 100%;
+    height: 95px;
+    margin-top: 5px;
+    border: 1px solid #00000033;
+    padding-bottom: 3px;
+}
+
+#comment-nickname {
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-left: 11px;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+textarea {
+    margin-left: 10px;
+    width: 95%;
+    height: 65%;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: none;
+    font-weight: normal;
+}
+
+#createBtn {
+    position: relative;
+    text-align: center;
+    margin: 5% auto;
+    margin-left: 10px;
+    padding: 10px 12px;
+    border: 1px solid #00000033;
+    width: 10%;
+    height: 35px;
+    text-align: center;
+    text-decoration-line: none;
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 5px;
+    flex: none;
+    flex-grow: 0;
+    background-color: white;
+}
+
+#comment {
+    display: flex;
+    flex-direction: column; /* 수직 방향으로 요소들을 배치 */
+}
+
+.comment {
+    margin-bottom: 10px; /* 각 댓글 사이에 10px 여백 추가 */
+}
+
+.comment-info {
+    display: flex;
+    align-items: center;
+}
+
+.comment-info p {
+    margin-right: 10px; /* 각 요소 사이에 10px 여백 */
+}
+
+.comment-content {
+    margin-top: 5px; /* 댓글 내용과 다음 요소 사이에 5px 여백 추가 */
+}
+
+.comment hr {
+    width: 100%;
+}
+
+.comment form {
+    display: flex;
+}

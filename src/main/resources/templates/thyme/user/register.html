@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <title>회원가입</title>
     <!-- 구글맵 API -->
-    <script th:src=" 'https://maps.googleapis.com/maps/api/js?key=' + AIzaSyBG0mcLkUd6Oz5Q4uCD_cXE-dGNaoAi-fg + '&callback=initMap' " async defer></script>
-    <link rel="stylesheet" th:href="@{/style/user/register.css}">
+    <script th:src=" 'https://maps.googleapis.com/maps/api/js?key=' + AIzaSyBG0mcLkUd6Oz5Q4uCD_cXE-dGNaoAi-fg + '&callback=initMap' " async defer></script>    <link rel="stylesheet" th:href="@{/style/user/register.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
 </head>
 <body>
@@ -64,6 +63,9 @@
                                 </div>
                                 <div class="location">
                                     <label id="name1"><b>동네 인증</b></label>
+                                    <script>
+                                        initMap();
+                                    </script>
                                     <div id="gooleMap">
                                         <div id="map"></div>
                                     </div>

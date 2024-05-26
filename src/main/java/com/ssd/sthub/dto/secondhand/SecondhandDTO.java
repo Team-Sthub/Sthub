@@ -1,5 +1,6 @@
 package com.ssd.sthub.dto.secondhand;
 
+import com.ssd.sthub.domain.SComment;
 import com.ssd.sthub.domain.SImage;
 import com.ssd.sthub.domain.Secondhand;
 import com.ssd.sthub.domain.enumerate.Category;
@@ -18,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SecondhandDTO {
     @Getter
+    @AllArgsConstructor
     public static class PostRequest {
         @NotEmpty(message = "제목을 넣어주세요.")
         private String title; // 제목
@@ -56,8 +58,19 @@ public class SecondhandDTO {
 
     @Getter
     @AllArgsConstructor
-    public static class Response {
+    public static class DetailResponse {
         private Secondhand secondhand;
         private List<SImage> sImages;
+        private List<SComment> sComments;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class ListResponse {
+        private Secondhand secondhand;
+        private List<SImage> sImages;
+        private Category category;
+        private int totalPage;
+        private int currentPage;
     }
 }
