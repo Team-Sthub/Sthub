@@ -27,13 +27,46 @@
 
 <!-- 중고거래 게시글 리스트 -->
 <div class="product-grid">
-    <div class="product-box" th:each="secondhand : ${secondhandList}">
-        <!-- 이미지가 있는 경우 가장 첫 번째 이미지를 썸네일로 사용-->
-        <img th:src="${secondhand.getSImages().get(0).getPath()}" alt="Thumbnail Image">
-        <p th:text="${secondhand.getSecondhand().}"></p>
-        <p th:text="${product.price}"></p>
-        <!-- 필요한 상품 정보를 출력합니다. -->
+    <div th:each="secondhand : ${secondhandList}">
+        <a th:href="@{/secondhand/detail(secondhandId=${secondhand.secondhand.id})}" class="product-box-link">
+            <div class="product-box">
+                <span th:text="${#strings.substring(secondhand.secondhand.createdAt, 0, 10)}"></span>
+                <!-- 이미지가 있는 경우 가장 첫 번째 이미지를 썸네일로 사용-->
+                <div th:if="${secondhand.SImages == null or secondhand.SImages.isEmpty()}">
+                    <img th:src="@{/images/no_img.jpg}" alt="No Image" />
+                </div>
+                <div th:if="${secondhand.SImages != null and !secondhand.SImages.isEmpty()}">
+                    <img th:src="@{${secondhand.SImages[0].path}}" alt="Image"/>
+                </div>
+                <p id="title" th:text="${secondhand.secondhand.title}"><b>제목</b></p>
+                <p th:text="${secondhand.secondhand.member.nickname}">작성자</p>
+                <p th:text="${secondhand.secondhand.price} + '원'">가격</p>
+            </div>
+        </a>
     </div>
 </div>
+
+<!-- 페이지네이션 -->
+<div class="pagination">
+    <!-- 이전 버튼, currentPage가 11 이상일 때만 활성화 -->
+    <button th:if="${secondhandList[0].currentPage > 10}"
+            th:onclick="|window.location.href='@{/secondhand/list/{category}(category=${secondhandList[0].category}, pageNum=${secondhandList[0].currentPage - 10})}'|">&lt;</button>
+
+    <!-- 페이지 번호 반복 출력 -->
+    <span th:each="pageNumber : ${#numbers.sequence((secondhandList[0].currentPage - 1) / 10 * 10 + 1, ((secondhandList[0].currentPage - 1) / 10 + 1) * 10)}">
+        <a th:if="${pageNumber <= secondhandList[0].totalPage} and ${pageNumber != secondhandList[0].currentPage}"
+           th:href="@{/secondhand/list/{category}(category=${secondhandList[0].category}, pageNum=${pageNumber})}"
+           th:text="${pageNumber}" style="border: none;">Page</a>
+        <span th:if="${pageNumber <= secondhandList[0].totalPage} and ${pageNumber == secondhandList[0].currentPage}"
+              class="current-page" th:text="${pageNumber}"></span>
+    </span>
+
+    <!-- 다음 버튼, 총 페이지 수가 currentPage + 10 이상일 때만 활성화 -->
+    <button th:if="${secondhandList[0].totalPage > secondhandList[0].currentPage + 10}"
+            th:onclick="|window.location.href='@{/secondhand/list/{category}(category=${secondhandList[0].category}, pageNum=${secondhandList[0].currentPage + 10})}'|">&gt;</button>
+</div>
+
+
+
 </body>
 </html>

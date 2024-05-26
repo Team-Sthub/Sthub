@@ -4,7 +4,6 @@ import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.SImage;
 import com.ssd.sthub.domain.Secondhand;
 import com.ssd.sthub.domain.enumerate.Category;
-import com.ssd.sthub.dto.secondhand.PostSecondhandDTO;
 import com.ssd.sthub.dto.secondhand.SecondhandDTO;
 import com.ssd.sthub.repository.MemberRepository;
 import com.ssd.sthub.repository.SImageRepository;
@@ -17,10 +16,8 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -34,7 +31,7 @@ public class SecondhandService {
     private final AWSS3SService awss3SService;
 
     // 중고거래 게시글 작성
-    public SecondhandDTO.Response createSecondhand(Long memberId, List<String> imgUrls, PostSecondhandDTO request) {
+    public SecondhandDTO.DetailResponse createSecondhand(Long memberId, List<String> imgUrls, SecondhandDTO.PostRequest request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
 
@@ -54,11 +51,12 @@ public class SecondhandService {
             }
         }
 
-        return new SecondhandDTO.Response(newSecondhand, sImageRepository.findAllBySecondhand(secondhand));
+        List<SImage> sImages = sImageRepository.findAllBySecondhand(secondhand);
+        return new SecondhandDTO.DetailResponse(newSecondhand, sImages, null);
     }
 
     // 중고거래 게시글 수정
-    public SecondhandDTO.Response updateSecondhand(Long memberId, List<String> imgUrls, SecondhandDTO.PatchRequest request) throws BadRequestException {
+    public SecondhandDTO.DetailResponse updateSecondhand(Long memberId, List<String> imgUrls, SecondhandDTO.PatchRequest request) throws BadRequestException {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
 
@@ -86,7 +84,8 @@ public class SecondhandService {
             sImageRepository.save(sImage);
         }
 
-        return new SecondhandDTO.Response(secondhand, sImageRepository.findAllBySecondhand(secondhand));
+        List<SImage> sImages = sImageRepository.findAllBySecondhand(secondhand);
+        return new SecondhandDTO.DetailResponse(secondhand, sImages, secondhand.getCommentList());
     }
 
     // 중고거래 게시글 삭제
@@ -108,14 +107,14 @@ public class SecondhandService {
     }
 
     // 중고거래 게시글 상세 조회
-    public SecondhandDTO.Response getSecondhand(Long secondhandId) {
+    public SecondhandDTO.DetailResponse getSecondhand(Long secondhandId) {
         Secondhand secondhand = secondhandRepository.findById(secondhandId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 중고거래 게시글을 찾을 수 없습니다."));
-        return new SecondhandDTO.Response(secondhand, secondhand.getImageList());
+        return new SecondhandDTO.DetailResponse(secondhand, secondhand.getImageList(), secondhand.getCommentList());
     }
 
     // 중고거래 게시글 전체 조회
-    public List<SecondhandDTO.Response> getSecondhands(Category category, int pageNum) throws BadRequestException {
+    public List<SecondhandDTO.ListResponse> getSecondhands(Category category, int pageNum) throws BadRequestException {
         PageRequest pageRequest = PageRequest.of(pageNum, 10);
         Page<Secondhand> secondhands;
 
@@ -129,7 +128,7 @@ public class SecondhandService {
             throw new BadRequestException("작성된 게시글이 없습니다.");
 
         return secondhands.stream()
-                .map(s -> new SecondhandDTO.Response(s, s.getImageList()))
+                .map(s -> new SecondhandDTO.ListResponse(s, s.getImageList(), category, secondhands.getTotalPages(), pageNum + 1))
                 .collect(Collectors.toList());
     }
 
