@@ -282,7 +282,7 @@ input[type="text"]:focus, textarea:focus {
     display: flex;
 }
 
-#btn_update, #btn_delete, #btn_check {
+#btn_update, #btn_delete, #btn_check, #btn_message, #btn_complaint, #btn_purchase {
     background-color : white;
     width: 30%;
     height: 40px;
@@ -291,7 +291,7 @@ input[type="text"]:focus, textarea:focus {
     align-items: center; /* 수직 가운데 정렬 */
 }
 
-.update, .delete, .check {
+.update, .delete, .check, .message, .complaint, .purchase {
     position: relative;
     text-align: center;
     display: inline-block;
