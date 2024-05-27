@@ -54,13 +54,12 @@ public class ParticipationService {
         if(!groupBuying.getMember().getId().equals(memberId))
             throw new BadRequestException("작성자만 수락/거절 할 수 있습니다.");
 
-        if(request.getAccept() == 1) {
-            participation.accept(request);
-        } else if (request.getAccept() == 2) {
+        if (request.getAccept() == 1 || request.getAccept() == 2) {
             participation.accept(request);
         } else {
             throw new BadRequestException("잘못된 값입니다.");
         }
+
         return participationRepository.save(participation);
     }
 
@@ -79,7 +78,7 @@ public class ParticipationService {
                 .orElseThrow(() -> new EntityNotFoundException("신청서 조회에 실패했습니다."));
 
         if(!participation.getMember().getId().equals(memberId))
-            throw new BadRequestException("작성자만 삭제할 수 있습니다.");
+            throw new BadRequestException("작성자만 수정할 수 있습니다.");
 
         participation.update(request);
         return participationRepository.save(participation);
@@ -107,5 +106,13 @@ public class ParticipationService {
         if (participations == null || participations.isEmpty())
             throw new BadRequestException("공동구매에 참여하지 않았습니다.");
         return participations;
+    }
+
+    //공동구매 작성자 확인
+    public boolean isGroupBuyingWriter(Long memberId, Long groupBuyingId) {
+        GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingId)
+                .orElseThrow(() -> new EntityNotFoundException("공동구매 게시글 조회에 실패했습니다."));
+
+        return groupBuying.getMember().getId().equals(memberId);
     }
 }

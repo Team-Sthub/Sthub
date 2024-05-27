@@ -63,14 +63,17 @@ td {
 .right-rounded {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
+    text-align: center;
+    white-space: nowrap; /* 줄바꿈 방지 */
 }
 
-.status-accept, .status-reject, .status-pending {
+.status-accept, .status-reject, .status-pending, .status-accept-pre, .status-reject-pre {
     padding: 10px 20px;
     border-radius: 20px;
     display: inline-block;
     position: relative; /* position을 relative로 설정 */
     z-index: 2; /* td의 배경 위로 올라오게 함 */
+    border: none;
 }
 
 .status-accept {
@@ -85,5 +88,15 @@ td {
 
 .status-pending {
     background-color: #3D39FE;
+    color: white;
+}
+
+.status-accept-pre {
+    background-color: rgba(255, 67, 67, 0.5);
+    color: white;
+}
+
+.status-reject-pre {
+    background-color: rgba(0, 0, 0, 0.5);
     color: white;
 }
