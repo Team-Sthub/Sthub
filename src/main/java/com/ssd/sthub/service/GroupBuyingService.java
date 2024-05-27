@@ -7,12 +7,14 @@ import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingDetailDTO;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingListDTO;
 import com.ssd.sthub.dto.groupBuying.PostGroupBuyingDTO;
+import com.ssd.sthub.dto.secondhand.SecondhandDTO;
 import com.ssd.sthub.repository.GImageRepository;
 import com.ssd.sthub.repository.GroupBuyingRepository;
 import com.ssd.sthub.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -31,12 +33,12 @@ public class GroupBuyingService {
     public final GroupBuyingRepository groupBuyingRepository;
     public final MemberRepository memberRepository;
     public final GImageRepository gImageRepository;
+    private final AWSS3SService awss3SService;
 
     // 공동구매 게시글 작성
     public PostGroupBuyingDTO.Response postGroupBuying(Long memberId, List<String> imgUrls, PostGroupBuyingDTO.Request postGroupBuyingDTO) {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new EntityNotFoundException("회원 조회에 실패했습니다."));
-
 
         GroupBuying groupBuying = new GroupBuying(postGroupBuyingDTO, member);
         groupBuyingRepository.save(groupBuying);
@@ -59,7 +61,7 @@ public class GroupBuyingService {
     }
 
     // 공동구매 게시글 수정
-    public GroupBuying updateGroupBuying(Long memberId, GroupBuyingDetailDTO.PatchRequest groupBuyingDetailDTO) {
+    public GroupBuyingDetailDTO.PatchResponse updateGroupBuying(Long memberId, List<String> imgUrls, GroupBuyingDetailDTO.PatchRequest groupBuyingDetailDTO) throws BadRequestException {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
         );
@@ -67,8 +69,30 @@ public class GroupBuyingService {
                 () -> new EntityNotFoundException("해당 공동구매 게시글 조회에 실패했습니다.")
         );
 
+        if(!groupBuying.getMember().getId().equals(memberId))
+            throw new BadRequestException("작성자만 수정할 수 있습니다.");
+
+        awss3SService.deleteImages(
+                gImageRepository.findAllByGroupBuying(groupBuying)
+                        .stream().map(GImage::getPath)
+                        .collect(Collectors.toList())
+        );
+        gImageRepository.deleteAllByGroupBuying(groupBuying);
+
         groupBuying.updateGroupBuying(groupBuyingDetailDTO);
-        return groupBuyingRepository.save(groupBuying);
+        groupBuying = groupBuyingRepository.save(groupBuying);
+
+        for(String imgUrl : imgUrls) {
+            GImage gImage = GImage.builder()
+                    .path(imgUrl)
+                    .groupBuying(groupBuying)
+                    .build();
+            gImageRepository.save(gImage);
+        }
+
+        List<GImage> gImages = gImageRepository.findAllByGroupBuying(groupBuying);
+        return new GroupBuyingDetailDTO.PatchResponse(groupBuying, gImages, groupBuying.getCommentList());
+
     }
 
     // 공동구매 게시글 삭제
@@ -78,7 +102,7 @@ public class GroupBuyingService {
             new EntityNotFoundException("해당 공동구매 게시글 조회에 실패했습니다.");
         }
         if(findGroupBuying.get().getMember().getId() != memberId) {
-            new EntityNotFoundException("해당 공동구매 게시글 작성자와 현재 유저가 다릅니다.");
+            new BadRequestException("해당 공동구매 게시글 작성자와 현재 유저가 다릅니다.");
         }
         groupBuyingRepository.deleteById(groupBuyingId);
         return "삭제 완료되었습니다.";
@@ -109,8 +133,6 @@ public class GroupBuyingService {
         GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingId).orElseThrow(
                 () -> new EntityNotFoundException("해당 공동구매 게시글 조회에 실패했습니다.")
         );
-        log.info("groupBuying 가져옴 : " + groupBuying.getId().toString());
-        log.info("groupBuying 이미지 가져옴: " + groupBuying.getImageList().toString());
         return new GroupBuyingDetailDTO.Response(groupBuying, groupBuying.getImageList());
     }
 
@@ -135,5 +157,13 @@ public class GroupBuyingService {
                 () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
         );
         return member.getNickname();
+    }
+
+    // 공동구매 글 이미지 조회
+    public List<String> getImageUrls(Long groupBuyingId) {
+        return gImageRepository.findAllByGroupBuyingId(groupBuyingId)
+                .stream()
+                .map(GImage::getPath)
+                .collect(Collectors.toList());
     }
 }

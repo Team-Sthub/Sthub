@@ -1,5 +1,6 @@
 package com.ssd.sthub.dto.groupBuying;
 
+import com.ssd.sthub.domain.GComment;
 import com.ssd.sthub.domain.GImage;
 import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.domain.enumerate.Category;
@@ -29,6 +30,15 @@ public class GroupBuyingDetailDTO {
         private String meetingPlace; // 직거래 장소
         private String content; // 내용
         private String status; // 상태 : 모집중, 모집완료
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
+    public static class PatchResponse {
+        private GroupBuying groupBuying;
+        private List<GImage> gImages;
+        private List<GComment> gComments;
     }
 
     @Getter
