@@ -7,6 +7,7 @@
     <link rel="stylesheet" th:href="@{/style/participation/list.css}"
           href="../../../static/style/participation/list.css">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
+    <script th:src="@{/js/participation/list.js}"></script>
 </head>
 <body>
 <!-- header 삽입 -->
@@ -27,20 +28,24 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="participation, iterStat : ${participationList}"
-            th:onclick="|window.location.href='@{/participation/detail(participationId=${participation.id})}'|"
-            style="cursor: pointer;">
-            <td th:text="${iterStat.index + 1}" class="left-rounded">1</td>
-            <td th:text="${participation.member.nickname}">홍길동</td>
-            <td th:text="${participation.member.phone}">010-1234-5678</td>
-            <td th:text="${participation.content}">S사이즈</td>
-            <td th:text="${#temporals.format(participation.createdAt, 'yyyy-MM-dd')}">2024-05-19</td>
+        <tr th:each="participation, iterStat : ${participationList}" style="cursor: pointer;">
+            <td th:text="${iterStat.index + 1}" class="left-rounded"
+                th:onclick="'window.location.href=\'/participation/detail?participationId=' + ${participation.id} + '\''"></td>
+            <td th:text="${participation.member.nickname}"
+                th:onclick="'window.location.href=\'/participation/detail?participationId=' + ${participation.id} + '\''"></td>
+            <td th:text="${participation.member.phone}"
+                th:onclick="'window.location.href=\'/participation/detail?participationId=' + ${participation.id} + '\''"></td>
+            <td th:text="${participation.content}"
+                th:onclick="'window.location.href=\'/participation/detail?participationId=' + ${participation.id} + '\''"></td>
+            <td th:text="${#temporals.format(participation.createdAt, 'yyyy-MM-dd')}"
+                th:onclick="'window.location.href=\'/participation/detail?participationId=' + ${participation.id} + '\''"></td>
             <td class="right-rounded">
-                <button class="status-accept"
-                        onclick="handleAcceptance(1, [[${participation.id}]], [[${memberId}]], [[${groupBuyingId}}]])">
+                <button th:classappend="${participation.accept == 1} ? 'status-accept' : (${participation.accept == 0} ? 'status-accept-pre' : 'status-accept-pre')"
+                        th:onclick="|handleAcceptance(1, ${participation.id}, ${memberId}, ${participation.groupBuying.id})|">
                     수락
                 </button>
-                <button class="status-reject" onclick="handleAcceptance(2, [[${participation.id}]], [[${memberId}]])">
+                <button th:classappend="${participation.accept == 2} ? 'status-reject' : (${participation.accept == 0} ? 'status-reject-pre' : 'status-reject-pre')"
+                        th:onclick="|handleAcceptance(2, ${participation.id}, ${memberId}, ${participation.groupBuying.id})|">
                     거절
                 </button>
             </td>

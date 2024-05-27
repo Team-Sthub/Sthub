@@ -8,6 +8,7 @@ import com.ssd.sthub.response.SuccessResponse;
 import com.ssd.sthub.service.ParticipationService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/participation")
@@ -77,7 +79,11 @@ public class ParticipationController {
 
     // 참여 신청폼 수락/거절
     @PatchMapping("/list")
-    public ModelAndView patchParticipations(@SessionAttribute(name = "memberId") Long memberId, @RequestParam Long participationId, @RequestBody ParticipationRequestDto.AcceptRequest request) throws BadRequestException {
+    public ModelAndView patchParticipations(
+            @SessionAttribute(name = "memberId") Long memberId,
+            @RequestBody ParticipationRequestDto.AcceptRequest request) throws BadRequestException {
+
+        Long participationId = request.getParticipationId();
         Long groupBuyingId = request.getGroupBuyingId();
         participationService.accpetMember(memberId, participationId, request);
 

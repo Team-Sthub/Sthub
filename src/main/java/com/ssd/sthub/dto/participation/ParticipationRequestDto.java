@@ -25,6 +25,8 @@ public class ParticipationRequestDto {
     public static class AcceptRequest {
         @NotNull
         private Long groupBuyingId;
+        @NotNull
+        private Long participationId;
         private int accept; // 수락/거절 여부
     }
 }
