@@ -63,6 +63,9 @@ public class GroupBuying extends BaseTime {
     @OneToMany(mappedBy = "groupBuying", cascade = CascadeType.ALL)
     private List<GImage> imageList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "groupBuying", cascade = CascadeType.ALL)
+    private List<GComment> commentList = new ArrayList<>();
+
     public GroupBuying(GroupBuyingDetailDTO.PatchRequest groupBuyingDetailDTO, Member member) {
         this.title = groupBuyingDetailDTO.getTitle();
         this.category = groupBuyingDetailDTO.getCategory();

@@ -6,14 +6,18 @@ import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingDetailDTO;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingListDTO;
 import com.ssd.sthub.dto.groupBuying.PostGroupBuyingDTO;
+import com.ssd.sthub.dto.secondhand.SecondhandDTO;
 import com.ssd.sthub.response.SuccessResponse;
 import com.ssd.sthub.service.AWSS3SService;
 import com.ssd.sthub.service.GroupBuyingService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -77,16 +81,34 @@ public class GroupBuyingController {
         return new ModelAndView("redirect:/groupBuying/detail?groupBuyingId=" + groupBuyingId);
     }
 
+    // 중고거래 게시글 수정 클릭
+    @GetMapping("/moveToUpdateForm")
+    public ModelAndView showUpdateForm(@SessionAttribute(name = "memberId") Long memberId, @RequestParam Long groupBuyingId) throws BadRequestException {
+        GroupBuyingDetailDTO.Response groupBuying = groupBuyingService.getGroupBuying(memberId, groupBuyingId);
+        if(!groupBuying.getGroupBuying().getMember().getId().equals(memberId))
+            throw new BadRequestException("작성자만 수정할 수 있습니다.");
+        return new ModelAndView("thyme/groupBuying/update", "groupBuying", groupBuying);
+    }
+
     // 공동구매 게시글 수정
+    @ResponseStatus(HttpStatus.SEE_OTHER) // 리다이렉션 할 때 사용
     @PatchMapping("/update")
-    public ResponseEntity<SuccessResponse<GroupBuying>> updateGroupBuying(@RequestHeader Long memberId, @RequestBody GroupBuyingDetailDTO.PatchRequest groupBuyingDetailDTO) {
-        return ResponseEntity.ok(SuccessResponse.create(groupBuyingService.updateGroupBuying(memberId, groupBuyingDetailDTO)));
+    public ModelAndView updateGroupBuying(@SessionAttribute(name = "memberId") Long memberId, @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @ModelAttribute GroupBuyingDetailDTO.PatchRequest groupBuyingDetailDTO) throws BadRequestException {
+        awss3SService.deleteImages(groupBuyingService.getImageUrls(groupBuyingDetailDTO.getId())); // 기존 이미지 삭제
+        List<String> imgUrls = awss3SService.uploadFiles(multipartFiles); // s3 이미지 등록
+        GroupBuyingDetailDTO.PatchResponse groupBuying = groupBuyingService.updateGroupBuying(memberId, imgUrls, groupBuyingDetailDTO);
+        ModelAndView modelAndView = new ModelAndView("redirect:/groupBuying/detail?groupBuyingId=" + groupBuying.getGroupBuying().getId());
+        modelAndView.addObject("groupBuying", groupBuying);
+        return modelAndView;
     }
 
     // 공동구매 게시글 삭제
+    @ResponseStatus(HttpStatus.SEE_OTHER) // 리다이렉션 할 때 사용
     @DeleteMapping("/delete")
-    public ResponseEntity<SuccessResponse<String>> updateGroupBuying(@RequestHeader Long memberId, Long groupBuyingId) {
-        return ResponseEntity.ok(SuccessResponse.create(groupBuyingService.deleteGroupBuying(memberId, groupBuyingId)));
+    public ModelAndView updateGroupBuying(@SessionAttribute(name = "memberId") Long memberId, @RequestParam Long groupBuyingId) {
+        String result = groupBuyingService.deleteGroupBuying(memberId, groupBuyingId);
+        // view 설정해야함
+        return new ModelAndView();
     }
 
     // 마이페이지 - 공구 모집 조회
