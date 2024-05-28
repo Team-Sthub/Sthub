@@ -69,6 +69,18 @@ function initMap() {
     }
 }
 
+// 페이지가 로드될 때 initMap 함수를 호출
+window.onload = function() {
+    initMap();
+};
+
+// 페이지가 로드될 때 또는 리다이렉트 후 initMap 함수를 다시 호출
+window.onpageshow = function(event) {
+    if (event.persisted) {
+        initMap();
+    }
+};
+
 // 이미지 미리보기
 document.addEventListener('DOMContentLoaded', function() {
     const icon = document.getElementById('icon');
