@@ -26,10 +26,10 @@ public class GCommentService {
     private final GroupBuyingRepository groupBuyingRepository;
 
     // 공동구매 댓글 작성
-    public GComment createGComment(Long memberId, Long groupBuyingId, GCommentRequestDto.request request) throws NullPointerException {
+    public GComment createGComment(Long memberId, GCommentRequestDto.request request) throws NullPointerException {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
-        GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingId)
+        GroupBuying groupBuying = groupBuyingRepository.findById(request.getGroupBuyingId())
                 .orElseThrow(() -> new EntityNotFoundException("공동구매 게시글 조회에 실패했습니다."));
 
         GComment gComment = GComment.builder()
