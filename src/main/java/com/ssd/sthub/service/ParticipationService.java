@@ -70,16 +70,12 @@ public class ParticipationService {
     }
 
     // 신청폼 수정
-    public Participation updateParticipation(Long memberId, ParticipationRequestDto.PatchRequest request) throws BadRequestException{
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
-
-        Participation participation = participationRepository.findById(request.getParticipationId())
+    public Participation updateParticipation(Long memberId, Long participationId, ParticipationRequestDto.PatchRequest request) throws BadRequestException{
+        Participation participation = participationRepository.findById(participationId)
                 .orElseThrow(() -> new EntityNotFoundException("신청서 조회에 실패했습니다."));
 
         if(!participation.getMember().getId().equals(memberId))
             throw new BadRequestException("작성자만 수정할 수 있습니다.");
-
         participation.update(request);
         return participationRepository.save(participation);
     }
@@ -114,5 +110,13 @@ public class ParticipationService {
                 .orElseThrow(() -> new EntityNotFoundException("공동구매 게시글 조회에 실패했습니다."));
 
         return groupBuying.getMember().getId().equals(memberId);
+    }
+
+    // 신청서 작성자 확인
+    public boolean isParticipationWriter(Long memberId, Long participationId) {
+        Participation participation = participationRepository.findById(participationId)
+                .orElseThrow(() -> new EntityNotFoundException("신청서 조회에 실패했습니다."));
+
+        return participation.getMember().getId().equals(memberId);
     }
 }
