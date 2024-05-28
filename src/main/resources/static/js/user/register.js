@@ -58,6 +58,18 @@ function initMap() {
     }
 }
 
+// 페이지가 로드될 때 initMap 함수를 호출
+window.onload = function() {
+    initMap();
+};
+
+// 페이지가 로드될 때 또는 리다이렉트 후 initMap 함수를 다시 호출
+window.onpageshow = function(event) {
+    if (event.persisted) {
+        initMap();
+    }
+};
+
 // 중복 확인 버튼을 누를 때의 동작 설정
 document.getElementById("checkId").addEventListener("click", function() {
     const responseNickname = document.getElementById('nickname').value;
