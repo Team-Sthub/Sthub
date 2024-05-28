@@ -11,6 +11,7 @@ public class GCommentRequestDto {
 
     @Getter
     public static class request {
+        private Long groupBuyingId;
         private String content;
     }
 }

@@ -36,7 +36,7 @@ public class ParticipationController {
 
     // 참여 신청폼 작성
     @PostMapping("/create")
-    public ModelAndView createParticipation(@SessionAttribute(name = "memberId") Long memberId, Long groupBuyingId, @ModelAttribute ParticipationRequestDto.request request) {
+    public ModelAndView createParticipation(@SessionAttribute(name = "memberId") Long memberId, Long groupBuyingId, @ModelAttribute ParticipationRequestDto.Request request) {
         Participation participation = participationService.createParticipation(memberId, groupBuyingId, request);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
@@ -44,7 +44,7 @@ public class ParticipationController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("participation", participation);
         modelAndView.addObject("member", member);
-        return new ModelAndView("redirect:/participation/detail?participationId="+participation.getId());
+        return new ModelAndView("redirect:/participation/detail?participationId=" + participation.getId());
     }
 
     // 참여 신청폼 상세 조회
@@ -89,10 +89,13 @@ public class ParticipationController {
 
     // 참여 신청폼 수정
     @PostMapping("/update")
-    public ModelAndView updateParticipation(@SessionAttribute(name = "memberId") Long memberId, @RequestParam Long participationId, @ModelAttribute ParticipationRequestDto.PatchRequest request) throws BadRequestException {
+    public ModelAndView updateParticipation(
+            @SessionAttribute(name = "memberId") Long memberId,
+            @RequestParam Long participationId, @RequestBody ParticipationRequestDto.PatchRequest request) throws BadRequestException {
         Participation participation = participationService.updateParticipation(memberId, participationId, request);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("participation", participation);
+        log.info(request.getContent());
         return new ModelAndView("redirect:/participation/detail?participationId=" + participation.getId());
     }
 

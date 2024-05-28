@@ -10,13 +10,14 @@ public class ParticipationRequestDto {
 
     @Data
     @Getter
-    public static class request {
+    public static class Request {
         private String nickname;
         private String phone;
         @NotEmpty(message = "추가사항을 적어주세요. 없으면 '없음'으로 작성해주세요.")
         private String content;
     }
 
+    @Data
     @Getter
     public static class PatchRequest {
         @NotNull

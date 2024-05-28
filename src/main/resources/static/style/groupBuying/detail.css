@@ -382,3 +382,89 @@ textarea {
     margin-bottom: 15px;
     display: flex;
 }
+
+#comment {
+    padding-top: 2px;
+    display: flex;
+    width: 55%;
+    height: 100px;
+    margin: 10px auto 0;
+}
+
+.comment-area {
+    width: 100%;
+    height: 95px;
+    margin-top: 5px;
+    border: 1px solid #00000033;
+    padding-bottom: 3px;
+}
+
+#comment-nickname {
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-left: 11px;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+textarea {
+    margin-left: 10px;
+    width: 95%;
+    height: 65%;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: none;
+    font-weight: normal;
+}
+
+#createBtn {
+    position: relative;
+    text-align: center;
+    margin: 5% auto;
+    margin-left: 10px;
+    padding: 10px 12px;
+    border: 1px solid #00000033;
+    width: 10%;
+    height: 35px;
+    text-align: center;
+    text-decoration-line: none;
+    color: #000000;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 5px;
+    flex: none;
+    flex-grow: 0;
+    background-color: white;
+}
+
+#comment {
+    display: flex;
+    flex-direction: column; /* 수직 방향으로 요소들을 배치 */
+}
+
+.comment {
+    margin-bottom: 10px; /* 각 댓글 사이에 10px 여백 추가 */
+}
+
+.comment-info {
+    display: flex;
+    align-items: center;
+}
+
+.comment-info p {
+    margin-right: 10px; /* 각 요소 사이에 10px 여백 */
+}
+
+.comment-content {
+    margin-top: 5px; /* 댓글 내용과 다음 요소 사이에 5px 여백 추가 */
+}
+
+.comment hr {
+    width: 100%;
+}
+
+.comment-form {
+    display: flex;
+}

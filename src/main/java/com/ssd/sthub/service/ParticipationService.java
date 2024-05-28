@@ -25,7 +25,7 @@ public class ParticipationService {
     private final GroupBuyingRepository groupBuyingRepository;
 
     // 공동구매 신청서 작성
-    public Participation createParticipation(Long memberId, Long groupBuyingId, ParticipationRequestDto.request request) throws NullPointerException{
+    public Participation createParticipation(Long memberId, Long groupBuyingId, ParticipationRequestDto.Request request) throws NullPointerException{
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
         GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingId)

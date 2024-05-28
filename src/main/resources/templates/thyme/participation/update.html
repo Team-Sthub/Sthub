@@ -53,8 +53,7 @@
             </tr>
         </table>
         <div class="btn-container">
-            <button class="btn1" onclick="handleFormSubmit('${participation.id}', '${memberId}')">수정하기</button>
-            <button class="btn1" th:onclick="'handleFormSubmit(\'' + ${participation.id} + '\', \'' + ${memberId} + '\')'">수정하기2</button>
+            <button class="btn1" th:onclick="'handleFormSubmit(\'' + ${participation.id} + '\', \'' + ${memberId} + '\')'">수정하기</button>
             <button class="btn1" onclick="window.history.back()">취소하기</button>
         </div>
     </div>
