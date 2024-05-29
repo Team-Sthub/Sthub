@@ -27,6 +27,7 @@ public class ParticipationRequestDto {
     }
 
     @Getter
+    @Data
     public static class AcceptRequest {
         @NotNull
         private Long groupBuyingId;

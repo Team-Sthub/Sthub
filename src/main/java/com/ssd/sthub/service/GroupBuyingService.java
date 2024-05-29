@@ -132,7 +132,7 @@ public class GroupBuyingService {
         GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingId).orElseThrow(
                 () -> new EntityNotFoundException("해당 공동구매 게시글 조회에 실패했습니다.")
         );
-        return new GroupBuyingDetailDTO.Response(groupBuying, groupBuying.getImageList());
+        return new GroupBuyingDetailDTO.Response(groupBuying, groupBuying.getImageList(), groupBuying.getCommentList());
     }
 
     // 마이페이지 - 공구 모집 조회 (페이징 포함)

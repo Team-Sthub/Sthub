@@ -47,5 +47,6 @@ public class GroupBuyingDetailDTO {
     public static class Response {
         private GroupBuying groupBuying;
         private List<GImage> gImages;
+        private List<GComment> gComments;
     }
 }
