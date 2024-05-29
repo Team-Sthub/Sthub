@@ -4,13 +4,42 @@
     <meta charset="UTF-8">
     <title>거래 후기 남기기</title>
     <link rel="stylesheet" th:href="@{/style/header.css}" href="../../../static/style/header.css"/>
-    <link rel="stylesheet" th:href="@{/style/review/create.css}"
-          href="../../../static/style/review/create.css"/>
+    <link rel="stylesheet" th:href="@{/style/review/create.css}" href="../../../static/style/review/create.css">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
 </head>
 <body>
-<div th:replace="thyme/frameHeader :: header"></div>
-
-
+<!-- header 삽입 -->
+<div th:insert="~{thyme/frameHeader :: header}"></div>
+<div th:class="back">
+    <p id="title">거래 후기 남기기</p>
+    <hr>
+    <form class="review-form" th:action="@{/review/create}" onsubmit="return validateCreateForm()">
+        <div class="member-name">zzimnii님 거래 후기 남기기</div>
+        <p>어느 점이 좋았나요?</p>
+        <div class="tag-container">
+            <span class="tag-box">연락이 빨라요</span>
+            <span class="tag-box">친절하고 매너가 좋아요</span>
+            <span class="tag-box">좋은 물건을 저렴하게 판매해요</span>
+            <span class="tag-box-non">시간 약속을 잘 지켜요</span>
+            <span class="tag-box-non">물건 설명이 자세해요</span>
+            <span class="tag-box">물건 상태가 설명과 같아요</span>
+        </div>
+        <input class="review-text" type="text" placeholder="특별한 거래후기를 남겨주세요:)"/>
+        <p>매너 농도 평가하기</p>
+        <div class="star-rating">
+            <input type="radio" name="star" id="star1" value="1" class="star"/>
+            <label for="star1"></label>
+            <input type="radio" name="star" id="star2" value="2" class="star"/>
+            <label for="star2"></label>
+            <input type="radio" name="star" id="star3" value="3" class="star"/>
+            <label for="star3"></label>
+            <input type="radio" name="star" id="star4" value="4" class="star"/>
+            <label for="star4"></label>
+            <input type="radio" name="star" id="star5" value="5" class="star"/>
+            <label for="star5"></label>
+        </div>
+        <input type="button" class="btn1" value="등록하기">
+    </form>
+</div>
 </body>
 </html>
