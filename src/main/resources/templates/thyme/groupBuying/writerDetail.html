@@ -83,12 +83,24 @@
 <hr/>
 
 <!-- 댓글 -->
+<hr/>
 <div id="comment">
-    <div class="content-area">
-        <p id="comment-nickname" th:text="${memberNickname}">블러드234</p>
-        <textarea placeholder="내용을 입력하세요"></textarea>
+    <form class="comment-form" th:action="@{/groupBuying/detail/comment}" method="post">
+        <div class="comment-area">
+            <input type="hidden" th:name="groupBuyingId" th:value="${groupBuying.groupBuying.id}"/>
+            <p id="comment-nickname" th:text="${groupBuying.groupBuying.member.nickname}">블러드234</p>
+            <textarea th:name="content" placeholder="내용을 입력하세요"></textarea>
+        </div>
+        <input id="createBtn" type="submit" value="등록"/>
+    </form>
+    <div th:each="comment : ${groupBuying.GComments}" class="comment">
+        <hr/>
+        <div class="comment-info">
+            <p th:text="${comment.member.nickname}">닉네임</p>
+            <p th:text="${#strings.substring(comment.createdAt, 0, 10)}">작성일</p>
+        </div>
+        <div class="comment-content" th:text="${comment.content}"></div>
     </div>
-    <input id="createBtn" type="submit" value="등록" />
 </div>
 </body>
 </html>
