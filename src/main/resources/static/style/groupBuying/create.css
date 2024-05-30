@@ -216,7 +216,7 @@ textarea {
     display: none;
 }
 
-#createBtn {
+#createBtn, #updateBtn {
     margin: 3% auto;
     width: 300px;
     height: 30px;
@@ -225,4 +225,32 @@ textarea {
     border: 1px solid gray;
     display: flex;
     justify-content: center;
+}
+
+#head2 {
+    margin-top: 12px;
+    padding-top: 2px;
+    display: flex;
+}
+
+#info-title2 {
+    padding-left: 16px;
+    font-size: 12px;
+    padding-top: 5px;
+}
+
+#status {
+    width: 7%;
+    height: 20px;
+    border-radius: 15px;
+    border: none;
+    flex: none;
+    flex-grow: 0;
+    background: #4CAF5080;
+    font-size: 10px;
+    font-weight: bold;
+    text-align : center;
+    margin-left: 20px;
+    margin-top: 13px;
+    line-height: 20px;
 }
