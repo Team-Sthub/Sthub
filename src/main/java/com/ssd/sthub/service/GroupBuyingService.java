@@ -3,7 +3,6 @@ package com.ssd.sthub.service;
 import com.ssd.sthub.domain.GImage;
 import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.domain.Member;
-import com.ssd.sthub.domain.SImage;
 import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingDetailDTO;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingListDTO;
@@ -125,7 +124,7 @@ public class GroupBuyingService {
     }
 
     // 공동구매 전체 조회 (페이징 포함)
-    public GroupBuyingListDTO getAllGroupBuying(Category category, int pageNum) {
+    public List<GroupBuyingListDTO.ListResponse> getAllGroupBuying(Category category, int pageNum) {
         PageRequest pageRequest = PageRequest.of(pageNum, 8);
         Page<GroupBuying> groupBuyings;
 
@@ -135,10 +134,9 @@ public class GroupBuyingService {
             groupBuyings = groupBuyingRepository.findAllByCategoryOrderByCreatedAtDesc(category, pageRequest);
         }
 
-        List<GroupBuyingListDTO.GroupBuyingDTO> groupBuyingListDto = groupBuyings.stream()
-                .map(groupBuying -> new GroupBuyingListDTO.GroupBuyingDTO(groupBuying.getId(), groupBuying.getTitle(), groupBuying.getPrice(), groupBuying.getMember().getNickname(), groupBuying.getStatus()))
+        return groupBuyings.stream()
+                .map(g -> new GroupBuyingListDTO.ListResponse(g, g.getImageList(), category, groupBuyings.getTotalPages(), pageNum + 1))
                 .collect(Collectors.toList());
-        return new GroupBuyingListDTO(groupBuyingListDto, groupBuyings.getTotalPages());
     }
 
     // 공동구매 게시글(상세) 조회 (작성자 확인은 controller에서 하고 뷰 설정) + 수락 여부에 따라 오픈채팅 링크 공개여부 달라짐
@@ -153,18 +151,17 @@ public class GroupBuyingService {
     }
 
     // 마이페이지 - 공구 모집 조회 (페이징 포함)
-    public GroupBuyingListDTO getAllGroupBuyingByMemberId(Long memberId, int pageNum) {
+    public List<GroupBuyingListDTO.MyListResponse> getAllGroupBuyingByMemberId(Long memberId, int pageNum) {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
         );
 
         PageRequest pageRequest = PageRequest.of(pageNum, 8);
         Page<GroupBuying> groupBuyings = groupBuyingRepository.findAllByMemberId(memberId, pageRequest);
-        List<GroupBuyingListDTO.GroupBuyingDTO> groupBuyingListDto = groupBuyings.stream()
-                .map(groupBuying -> new GroupBuyingListDTO.GroupBuyingDTO(groupBuying.getId(), groupBuying.getTitle(), groupBuying.getPrice(),
-                        groupBuying.getMember().getNickname(), groupBuying.getStatus()))
+
+        return groupBuyings.stream()
+                .map(g -> new GroupBuyingListDTO.MyListResponse(g, g.getImageList(), groupBuyings.getTotalPages(), pageNum + 1))
                 .collect(Collectors.toList());
-        return new GroupBuyingListDTO(groupBuyingListDto, groupBuyings.getTotalPages());
     }
 
     // 회원 닉네임 조회

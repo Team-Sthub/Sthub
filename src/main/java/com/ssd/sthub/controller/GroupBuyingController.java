@@ -33,7 +33,7 @@ public class GroupBuyingController {
 
     // 공동구매 전체 조회
     @GetMapping("/list/{category}")
-    public ResponseEntity<SuccessResponse<GroupBuyingListDTO>> getAllGroupBuying(@PathVariable Category category, @RequestParam int pageNum) {
+    public ResponseEntity<SuccessResponse<List<GroupBuyingListDTO.ListResponse>>> getAllGroupBuying(@PathVariable Category category, @RequestParam int pageNum) {
         return ResponseEntity.ok(SuccessResponse.create(groupBuyingService.getAllGroupBuying(category, pageNum)));
     }
 
@@ -132,7 +132,7 @@ public class GroupBuyingController {
 
     // 마이페이지 - 공구 모집 조회
     @GetMapping("/mylist")
-    public ResponseEntity<SuccessResponse<GroupBuyingListDTO>> getAllGroupBuyingByMemberId(@RequestHeader Long memberId, @RequestParam int pageNuM) {
+    public ResponseEntity<SuccessResponse<List<GroupBuyingListDTO.MyListResponse>>> getAllGroupBuyingByMemberId(@RequestHeader Long memberId, @RequestParam int pageNuM) {
         return ResponseEntity.ok(SuccessResponse.create(groupBuyingService.getAllGroupBuyingByMemberId(memberId, pageNuM)));
     }
 }

@@ -27,7 +27,7 @@ public class GroupBuying extends BaseTime {
     @Column(name = "groupBuyingId")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String title; // 제목
 
     @Column(nullable = false)
