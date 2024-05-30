@@ -48,18 +48,3 @@ function validateCreateForm() {
     }
     return true;
 }
-
-function validateUpdateForm() {
-    var title = document.getElementById("sub-title").value;
-    var category = document.getElementById("category").value;
-    var product = document.getElementById("product").value;
-    var price = document.getElementById("price").value;
-
-    if (title === "" || category === "" || product === "" || price === "") {
-        alert("모든 필수 입력란을 작성해주세요.");
-        return false;
-    }
-
-    // 2024.05.27 patch 요청 전송 추가 필요
-    return true;
-}

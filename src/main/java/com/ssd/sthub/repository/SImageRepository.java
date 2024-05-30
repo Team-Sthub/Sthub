@@ -12,4 +12,5 @@ public interface SImageRepository extends JpaRepository<SImage, Long> {
     List<SImage> findAllBySecondhand(Secondhand secondhand);
     List<SImage> findAllBySecondhandId(Long secondhandId);
     void deleteAllBySecondhand(Secondhand secondhand);
+    void deleteByPath(String path);
 }

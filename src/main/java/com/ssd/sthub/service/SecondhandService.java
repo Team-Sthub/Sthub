@@ -59,35 +59,25 @@ public class SecondhandService {
 
     // 중고거래 게시글 수정
     public SecondhandDTO.DetailResponse updateSecondhand(Long memberId, List<String> imgUrls, SecondhandDTO.PatchRequest request) throws BadRequestException {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
-
         Secondhand secondhand = secondhandRepository.findById(request.getSecondhandId())
                 .orElseThrow(() -> new EntityNotFoundException("중고거래 게시글 조회에 실패했습니다."));
 
         if(!secondhand.getMember().getId().equals(memberId))
             throw new BadRequestException("작성자만 삭제할 수 있습니다.");
 
-        awss3SService.deleteImages(
-                sImageRepository.findAllBySecondhand(secondhand)
-                        .stream().map(SImage::getPath)
-                        .collect(Collectors.toList())
-        );
-        sImageRepository.deleteAllBySecondhand(secondhand);
+        if(imgUrls != null && !imgUrls.isEmpty()) {
+            for (String imgUrl : imgUrls) {
+                SImage sImage = SImage.builder()
+                        .path(imgUrl)
+                        .secondhand(secondhand)
+                        .build();
+                sImageRepository.save(sImage);
+            }
+        }
 
         secondhand.update(request);
         secondhand = secondhandRepository.save(secondhand);
-
-        for(String imgUrl : imgUrls) {
-            SImage sImage = SImage.builder()
-                    .path(imgUrl)
-                    .secondhand(secondhand)
-                    .build();
-            sImageRepository.save(sImage);
-        }
-
-        List<SImage> sImages = sImageRepository.findAllBySecondhand(secondhand);
-        return new SecondhandDTO.DetailResponse(secondhand, sImages, secondhand.getCommentList());
+        return new SecondhandDTO.DetailResponse(secondhand, secondhand.getImageList(), secondhand.getCommentList());
     }
 
     // 중고거래 게시글 삭제
@@ -103,8 +93,8 @@ public class SecondhandService {
                         .stream().map(SImage::getPath)
                         .collect(Collectors.toList())
         );
-        sImageRepository.deleteAllBySecondhand(secondhand);
-        sCommentRepository.deleteAllBySecondhand(secondhand);
+//        sImageRepository.deleteAllBySecondhand(secondhand);
+//        sCommentRepository.deleteAllBySecondhand(secondhand);
         secondhandRepository.deleteById(secondhandId);
         return "delete success";
     }
@@ -154,5 +144,12 @@ public class SecondhandService {
                 .stream()
                 .map(SImage::getPath)
                 .collect(Collectors.toList());
+    }
+
+    // 중고거래 글 이미지 삭제
+    public void deleteImages(List<String> imageUrls) {
+        for(String image : imageUrls) {
+            sImageRepository.deleteByPath(image);
+        }
     }
 }
