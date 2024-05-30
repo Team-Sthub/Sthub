@@ -3,6 +3,7 @@ package com.ssd.sthub.service;
 import com.ssd.sthub.domain.GImage;
 import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.domain.Member;
+import com.ssd.sthub.domain.SImage;
 import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingDetailDTO;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingListDTO;
@@ -60,49 +61,65 @@ public class GroupBuyingService {
     }
 
     // 공동구매 게시글 수정
+    @Transactional
     public GroupBuyingDetailDTO.PatchResponse updateGroupBuying(Long memberId, List<String> imgUrls, GroupBuyingDetailDTO.PatchRequest groupBuyingDetailDTO) throws BadRequestException {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
         );
-        GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingDetailDTO.getId()).orElseThrow(
+
+        log.info("멤버 찾음 : " + member.getId());
+
+        GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingDetailDTO.getGroupBuyingId()).orElseThrow(
                 () -> new EntityNotFoundException("해당 공동구매 게시글 조회에 실패했습니다.")
         );
+
+        log.info("groupBuying 찾음 : " + groupBuying.getId());
 
         if(!groupBuying.getMember().getId().equals(memberId))
             throw new BadRequestException("작성자만 수정할 수 있습니다.");
 
-        awss3SService.deleteImages(
-                gImageRepository.findAllByGroupBuying(groupBuying)
-                        .stream().map(GImage::getPath)
-                        .collect(Collectors.toList())
-        );
-        gImageRepository.deleteAllByGroupBuying(groupBuying);
+        if(imgUrls != null) {
+            for (String imgUrl : imgUrls) {
+                GImage gImage = GImage.builder()
+                        .path(imgUrl)
+                        .groupBuying(groupBuying)
+                        .build();
+                gImageRepository.save(gImage);
+            }
+        }
+
+        log.info("이미지 저장");
 
         groupBuying.updateGroupBuying(groupBuyingDetailDTO);
         groupBuying = groupBuyingRepository.save(groupBuying);
 
-        for(String imgUrl : imgUrls) {
-            GImage gImage = GImage.builder()
-                    .path(imgUrl)
-                    .groupBuying(groupBuying)
-                    .build();
-            gImageRepository.save(gImage);
-        }
+        log.info("groupBuying 수정 : " + groupBuying.getId());
+        log.info("groupBuying 수정 : " + groupBuying.getTitle());
 
+        // 추후에 지워야함
         List<GImage> gImages = gImageRepository.findAllByGroupBuying(groupBuying);
-        return new GroupBuyingDetailDTO.PatchResponse(groupBuying, gImages, groupBuying.getCommentList());
+        log.info("이미지 찾음 : " + gImages.toString());
+
+        return new GroupBuyingDetailDTO.PatchResponse(groupBuying, groupBuying.getImageList(), groupBuying.getCommentList());
 
     }
 
     // 공동구매 게시글 삭제
     public String deleteGroupBuying(Long memberId, Long groupBuyingId) {
-        Optional<GroupBuying> findGroupBuying = groupBuyingRepository.findById(groupBuyingId);
-        if (findGroupBuying == null) {
-            new EntityNotFoundException("해당 공동구매 게시글 조회에 실패했습니다.");
-        }
-        if(findGroupBuying.get().getMember().getId() != memberId) {
+        GroupBuying findGroupBuying = groupBuyingRepository.findById(groupBuyingId).orElseThrow(
+                () -> new EntityNotFoundException("해당 공동구매 게시글 조회에 실패했습니다.")
+        );
+
+        if(findGroupBuying.getMember().getId() != memberId) {
             new BadRequestException("해당 공동구매 게시글 작성자와 현재 유저가 다릅니다.");
         }
+
+        awss3SService.deleteImages(
+                gImageRepository.findAllByGroupBuying(findGroupBuying)
+                        .stream().map(GImage::getPath)
+                        .collect(Collectors.toList())
+        );
+
         groupBuyingRepository.deleteById(groupBuyingId);
         return "삭제 완료되었습니다.";
     }
@@ -164,5 +181,12 @@ public class GroupBuyingService {
                 .stream()
                 .map(GImage::getPath)
                 .collect(Collectors.toList());
+    }
+
+    // 중고거래 글 이미지 삭제
+    public void deleteImages(List<String> imageUrls) {
+        for(String image : imageUrls) {
+            gImageRepository.deleteByPath(image);
+        }
     }
 }

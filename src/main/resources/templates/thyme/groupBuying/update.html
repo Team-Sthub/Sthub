@@ -57,6 +57,15 @@
                 </div>
             </div>
         </div>
+
+        <!-- 이미지가 있던 경우 X 버튼 클릭해 삭제할 수 있어야 함 -->
+        <div th:each="image : ${groupBuying.getGImages()}" class="image-area2">
+            <div class="image-info">
+                <button type="button" class="delete-button" th:data-img-path="${image.path}" onclick="removeImage(this)">X</button>
+                <a th:href="@{image.path}" class="image"><p class="image-path" th:text="${image.path}"></p></a>
+            </div>
+        </div>
+
         <div class="editor-toolbar">
             <label for="file-upload">
                 <i class="fas fa-image" title="Insert image" id="image-icon"></i>

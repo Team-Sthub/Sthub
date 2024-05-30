@@ -100,16 +100,24 @@ public class GroupBuyingController {
         if(groupBuyingId != request.getGroupBuyingId())
             throw new BadRequestException("작성자만 수정할 수 있습니다.");
 
+        List<String> deletedImages = request.getDeleteImages();
+
+        // 삭제된 이미지 경로 처리 (기존 이미지 삭제)
+        if (!deletedImages.isEmpty()) {
+            awss3SService.deleteImages(deletedImages);
+            groupBuyingService.deleteImages(deletedImages);
+        }
+
         List<String> imgUrls = null;
-        if (multipartFiles != null && !multipartFiles.get(0).isEmpty()) {
-            awss3SService.deleteImages(groupBuyingService.getImageUrls(request.getGroupBuyingId())); // 기존 이미지 삭제
+        if(multipartFiles != null && !multipartFiles.isEmpty()) {
             imgUrls = awss3SService.uploadFiles(multipartFiles); // s3 이미지 등록
         }
+
         GroupBuyingDetailDTO.PatchResponse groupBuying = groupBuyingService.updateGroupBuying(memberId, imgUrls, request);
 
         log.info("돌아옴 ");
         ModelAndView modelAndView = new ModelAndView("redirect:/groupBuying/detail?groupBuyingId=" + groupBuying.getGroupBuying().getId());
-        //modelAndView.addObject("groupBuying", groupBuying);
+        //modelAndView.addObject("groupBuying", groupBuying); -> 안넣어도 됨
         return modelAndView;
     }
 

@@ -50,7 +50,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
             chatLink : document.getElementById('chatLink').value,
             meetingPlace : document.getElementById('meetingPlace').value,
             content : document.getElementById('content').value,
-            status : statusElement.innerText.trim()
+            status : statusElement.innerText.trim(),
+            deleteImages: deleteImages
         }
 
         formData.append('request', new Blob([JSON.stringify(requestData)], { type: 'application/json' }));
@@ -82,3 +83,21 @@ document.addEventListener('DOMContentLoaded', (event) => {
             });
     });
 });
+
+var deleteImages = [];
+
+function removeImage(button) {
+    var imgPath = button.getAttribute('data-img-path');
+    // 이미지 제거 로직 수행 (DOM에서 이미지 제거)
+    var imageInfoDiv = button.closest('.image-info');
+    imageInfoDiv.remove();
+
+    // 이미지 삭제 버튼에 data-img-path 속성이 있는 경우에만 deleteImages 배열에 추가
+    if (imgPath) {
+        deleteImages.push(imgPath);
+    }
+
+    // 필요하다면 imgPath 값을 활용하여 서버에 삭제 요청 등 수행
+    console.log('Image to be removed:', imgPath);
+    console.log(deleteImages);
+}
