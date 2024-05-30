@@ -4,20 +4,18 @@
     <meta charset="UTF-8">
     <title>Create.html</title>
     <link rel="stylesheet" th:href="@{/style/header.css}">
-    <link rel="stylesheet" th:href="@{/style/secondhand/create.css}">
+    <link rel="stylesheet" th:href="@{/style/secondhand/update.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
 </head>
 <body>
-<!-- 외부 js  -->
-<script th:src="@{/js/secondhand/create.js}"></script>
-
 <!-- header 삽입 -->
 <div th:replace="thyme/frameHeader :: header"></div>
 
 <p id="main-title">중고거래 글 작성하기</p>
 <hr/>
 
-<form id="create" th:action="@{/secondhand/update}" enctype="multipart/form-data" onsubmit="return validateUpdateForm()">
+<form id="update-form" enctype="multipart/form-data" th:action="@{/secondhand/update}" th:method="POST" th:onsubmit="'validateUpdateForm()'">
+    <input type="hidden" id="secondhandId" name="secondhandId" th:value="${secondhand.secondhand.id}"/>
     <div class="title-context">
         <input type="text" th:id="title" th:name="title" th:value="${secondhand.secondhand.title}" placeholder="제목을 입력하세요."/>
     </div>
@@ -63,6 +61,15 @@
             </div>
         </div>
     </div>
+
+    <!-- 이미지가 있던 경우 X 버튼 클릭해 삭제할 수 있어야 함 -->
+    <div th:each="image : ${secondhand.SImages}" class="image-area">
+        <div class="image-info">
+            <button type="button" class="delete-button" th:data-img-path="${image.path}" onclick="removeImage(this)">X</button>
+            <a th:href="@{image.path}" class="image"><p class="image-path" th:text="${image.path}"></p></a>
+        </div>
+    </div>
+
     <div class="editor-toolbar">
         <label for="file-upload">
             <i class="fas fa-image" title="Insert image" id="image-icon"></i>
@@ -77,5 +84,8 @@
     </div>
     <input id="createBtn" type="submit" value="글 수정하기" />
 </form>
+
+<!-- 외부 js  -->
+<script th:src="@{/js/secondhand/update.js}"></script>
 </body>
 </html>
