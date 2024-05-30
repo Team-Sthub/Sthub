@@ -42,6 +42,7 @@ hr {
     margin: 0 auto;
     margin-top: 16px;
     padding-bottom: 7px;
+    margin-bottom: 10px;
 }
 
 #info1, #info2 {
@@ -216,7 +217,7 @@ textarea {
     display: none;
 }
 
-#createBtn {
+#createBtn, #updateBtn {
     margin: 3% auto;
     width: 300px;
     height: 30px;
@@ -224,5 +225,66 @@ textarea {
     background-color: white;
     border: 1px solid gray;
     display: flex;
+    justify-content: center;
+}
+
+#head2 {
+    margin-top: 12px;
+    padding-top: 2px;
+    display: flex;
+}
+
+#info-title2 {
+    padding-left: 16px;
+    font-size: 12px;
+    padding-top: 5px;
+}
+
+#status {
+    width: 7%;
+    height: 20px;
+    border-radius: 15px;
+    border: none;
+    flex: none;
+    flex-grow: 0;
+    background: #4CAF5080;
+    font-size: 10px;
+    font-weight: bold;
+    text-align : center;
+    margin-left: 20px;
+    margin-top: 13px;
+    line-height: 20px;
+}
+
+.image-info {
+    display: flex;
+    margin: 1% auto;
+}
+
+.image {
+    margin-left: 10px; /* 이미지 텍스트 링크와 X 버튼 사이의 간격을 조정합니다. */
+}
+
+.delete-button {
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    height: 2%;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-right: 1em;
+}
+
+.image-path {
+    text-align: center;
+    text-decoration: none;
+    margin-left : 0px;
+}
+
+.image-area2 {
+    width: 55%;
+    margin: 0px auto;
+    display: flex;
+    align-items: center;
     justify-content: center;
 }

@@ -13,4 +13,6 @@ public interface GImageRepository extends JpaRepository<GImage, Long> {
     List<GImage> findAllByGroupBuying(GroupBuying groupBuying);
     List<GImage> findAllByGroupBuyingId(Long groupBuyingId);
     void deleteAllByGroupBuying(GroupBuying groupBuying);
+
+    void deleteByPath(String path);
 }

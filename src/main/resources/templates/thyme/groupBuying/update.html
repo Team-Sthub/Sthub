@@ -11,5 +11,79 @@
     <!-- header 삽입 -->
     <div th:replace="thyme/frameHeader :: header"></div>
 
+    <p id="main-title">공동구매 글 수정하기</p>
+    <hr/>
+
+    <form id="update" th:action="@{/groupBuying/update}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <div class="title-context">
+            <input type="text" th:id="title" th:name="title" th:value="${groupBuying.getGroupBuying().title}" placeholder="제목을 입력하세요."/>
+        </div>
+        <div class="info">
+            <div id="head2">
+                <p id="info-title2">공동구매 정보</p>
+                <div id="status" th:text="${groupBuying.getGroupBuying().status}"></div>
+            </div>
+            <div id="info1">
+                <div id="writeCategory">
+                    <label id="name1" th:for="category">카테고리</label>
+                    <select id="category" th:name="category">
+                        <option th:value="BOOK" th:text="${'교재'}" th:selected="${groupBuying.getGroupBuying().category.name eq 'BOOK'}">교재</option>
+                        <option th:value="ELECTRONIC" th:text="${'전자기기'}" th:selected="${groupBuying.getGroupBuying().category.name eq 'ELECTRONIC'}">전자기기</option>
+                        <option th:value="STATIONERY" th:text="${'문구'}" th:selected="${groupBuying.getGroupBuying().category.name eq 'STATIONERY'}">문구</option>
+                        <option th:value="TRANSFER" th:text="${'양도'}" th:selected="${groupBuying.getGroupBuying().category.name eq 'TRANSFER'}">양도</option>
+                    </select>
+                </div>
+                <div id="writeProduct">
+                    <label id="name2" th:for="product">상품명</label>
+                    <input type="text" id="product" th:name="product" th:value="${groupBuying.getGroupBuying().product}" placeholder="작성해주세요"/>
+                </div>
+                <div id="writePrice">
+                    <label id="name3" th:for="price">가격</label>
+                    <input type="text" id="price" th:name="price" th:value="${groupBuying.getGroupBuying().price}" placeholder="00000"/>
+                </div>
+                <div id="writeDead">
+                    <label id="name4" th:for="deadline">기한</label>
+                    <input type="text" id="deadline" th:name="deadline" th:value="${groupBuying.getGroupBuying().deadline}" placeholder="0000-00-00"/>
+                </div>
+            </div>
+            <div id="info2">
+                <div id="writeChatURL">
+                    <label id="name5" th:for="chatLink">오픈채팅 링크</label>
+                    <input type="text" id="chatLink" th:name="chatLink" th:value="${groupBuying.getGroupBuying().chatLink}" placeholder="카카오톡 오픈채팅방 링크를 작성해주세요"/>
+                </div>
+                <div id="writePlace">
+                    <label id="name6" th:for="meetingPlace">장소</label>
+                    <input type="text" id="meetingPlace" th:name="meetingPlace" th:value="${groupBuying.getGroupBuying().meetingPlace}" placeholder="나눔할 장소를 작성해주세요"/>
+                </div>
+            </div>
+        </div>
+
+        <!-- 이미지가 있던 경우 X 버튼 클릭해 삭제할 수 있어야 함 -->
+        <div th:each="image : ${groupBuying.getGImages()}" class="image-area2">
+            <div class="image-info">
+                <button type="button" class="delete-button" th:data-img-path="${image.path}" onclick="removeImage(this)">X</button>
+                <a th:href="@{image.path}" class="image"><p class="image-path" th:text="${image.path}"></p></a>
+            </div>
+        </div>
+
+        <div class="editor-toolbar">
+            <label for="file-upload">
+                <i class="fas fa-image" title="Insert image" id="image-icon"></i>
+            </label>
+            <input type="file" id="file-upload" th:name="imgUrl" multiple />
+        </div>
+
+        <div class="content-area">
+            <label>
+                <textarea th:id="content" th:name="content" th:text="${groupBuying.getGroupBuying().content}" placeholder="내용을 입력하세요"></textarea>
+            </label>
+        </div>
+<!--        <input id="createBtn" type="submit" value="글 수정하기" />-->
+        <input type="hidden" id="groupBuyingId" name="groupBuyingId" th:value="${groupBuying.getGroupBuying().id}" />
+        <input id="updateBtn" type="button" value="글 수정하기"/>
+    </form>
+    <!-- 외부 js  -->
+    <script th:src="@{/js/groupBuying/create.js}"></script>
+    <script th:src="@{/js/groupBuying/detail.js}"></script>
 </body>
 </html>

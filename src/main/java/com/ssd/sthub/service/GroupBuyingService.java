@@ -60,55 +60,71 @@ public class GroupBuyingService {
     }
 
     // 공동구매 게시글 수정
+    @Transactional
     public GroupBuyingDetailDTO.PatchResponse updateGroupBuying(Long memberId, List<String> imgUrls, GroupBuyingDetailDTO.PatchRequest groupBuyingDetailDTO) throws BadRequestException {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
         );
-        GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingDetailDTO.getId()).orElseThrow(
+
+        log.info("멤버 찾음 : " + member.getId());
+
+        GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingDetailDTO.getGroupBuyingId()).orElseThrow(
                 () -> new EntityNotFoundException("해당 공동구매 게시글 조회에 실패했습니다.")
         );
+
+        log.info("groupBuying 찾음 : " + groupBuying.getId());
 
         if(!groupBuying.getMember().getId().equals(memberId))
             throw new BadRequestException("작성자만 수정할 수 있습니다.");
 
-        awss3SService.deleteImages(
-                gImageRepository.findAllByGroupBuying(groupBuying)
-                        .stream().map(GImage::getPath)
-                        .collect(Collectors.toList())
-        );
-        gImageRepository.deleteAllByGroupBuying(groupBuying);
+        if(imgUrls != null) {
+            for (String imgUrl : imgUrls) {
+                GImage gImage = GImage.builder()
+                        .path(imgUrl)
+                        .groupBuying(groupBuying)
+                        .build();
+                gImageRepository.save(gImage);
+            }
+        }
+
+        log.info("이미지 저장");
 
         groupBuying.updateGroupBuying(groupBuyingDetailDTO);
         groupBuying = groupBuyingRepository.save(groupBuying);
 
-        for(String imgUrl : imgUrls) {
-            GImage gImage = GImage.builder()
-                    .path(imgUrl)
-                    .groupBuying(groupBuying)
-                    .build();
-            gImageRepository.save(gImage);
-        }
+        log.info("groupBuying 수정 : " + groupBuying.getId());
+        log.info("groupBuying 수정 : " + groupBuying.getTitle());
 
+        // 추후에 지워야함
         List<GImage> gImages = gImageRepository.findAllByGroupBuying(groupBuying);
-        return new GroupBuyingDetailDTO.PatchResponse(groupBuying, gImages, groupBuying.getCommentList());
+        log.info("이미지 찾음 : " + gImages.toString());
+
+        return new GroupBuyingDetailDTO.PatchResponse(groupBuying, groupBuying.getImageList(), groupBuying.getCommentList());
 
     }
 
     // 공동구매 게시글 삭제
     public String deleteGroupBuying(Long memberId, Long groupBuyingId) {
-        Optional<GroupBuying> findGroupBuying = groupBuyingRepository.findById(groupBuyingId);
-        if (findGroupBuying == null) {
-            new EntityNotFoundException("해당 공동구매 게시글 조회에 실패했습니다.");
-        }
-        if(findGroupBuying.get().getMember().getId() != memberId) {
+        GroupBuying findGroupBuying = groupBuyingRepository.findById(groupBuyingId).orElseThrow(
+                () -> new EntityNotFoundException("해당 공동구매 게시글 조회에 실패했습니다.")
+        );
+
+        if(findGroupBuying.getMember().getId() != memberId) {
             new BadRequestException("해당 공동구매 게시글 작성자와 현재 유저가 다릅니다.");
         }
+
+        awss3SService.deleteImages(
+                gImageRepository.findAllByGroupBuying(findGroupBuying)
+                        .stream().map(GImage::getPath)
+                        .collect(Collectors.toList())
+        );
+
         groupBuyingRepository.deleteById(groupBuyingId);
         return "삭제 완료되었습니다.";
     }
 
     // 공동구매 전체 조회 (페이징 포함)
-    public GroupBuyingListDTO getAllGroupBuying(Category category, int pageNum) {
+    public List<GroupBuyingListDTO.ListResponse> getAllGroupBuying(Category category, int pageNum) {
         PageRequest pageRequest = PageRequest.of(pageNum, 8);
         Page<GroupBuying> groupBuyings;
 
@@ -118,10 +134,9 @@ public class GroupBuyingService {
             groupBuyings = groupBuyingRepository.findAllByCategoryOrderByCreatedAtDesc(category, pageRequest);
         }
 
-        List<GroupBuyingListDTO.GroupBuyingDTO> groupBuyingListDto = groupBuyings.stream()
-                .map(groupBuying -> new GroupBuyingListDTO.GroupBuyingDTO(groupBuying.getId(), groupBuying.getTitle(), groupBuying.getPrice(), groupBuying.getMember().getNickname(), groupBuying.getStatus()))
+        return groupBuyings.stream()
+                .map(g -> new GroupBuyingListDTO.ListResponse(g, g.getImageList(), category, groupBuyings.getTotalPages(), pageNum + 1))
                 .collect(Collectors.toList());
-        return new GroupBuyingListDTO(groupBuyingListDto, groupBuyings.getTotalPages());
     }
 
     // 공동구매 게시글(상세) 조회 (작성자 확인은 controller에서 하고 뷰 설정) + 수락 여부에 따라 오픈채팅 링크 공개여부 달라짐
@@ -136,18 +151,17 @@ public class GroupBuyingService {
     }
 
     // 마이페이지 - 공구 모집 조회 (페이징 포함)
-    public GroupBuyingListDTO getAllGroupBuyingByMemberId(Long memberId, int pageNum) {
+    public List<GroupBuyingListDTO.MyListResponse> getAllGroupBuyingByMemberId(Long memberId, int pageNum) {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
         );
 
         PageRequest pageRequest = PageRequest.of(pageNum, 8);
         Page<GroupBuying> groupBuyings = groupBuyingRepository.findAllByMemberId(memberId, pageRequest);
-        List<GroupBuyingListDTO.GroupBuyingDTO> groupBuyingListDto = groupBuyings.stream()
-                .map(groupBuying -> new GroupBuyingListDTO.GroupBuyingDTO(groupBuying.getId(), groupBuying.getTitle(), groupBuying.getPrice(),
-                        groupBuying.getMember().getNickname(), groupBuying.getStatus()))
+
+        return groupBuyings.stream()
+                .map(g -> new GroupBuyingListDTO.MyListResponse(g, g.getImageList(), groupBuyings.getTotalPages(), pageNum + 1))
                 .collect(Collectors.toList());
-        return new GroupBuyingListDTO(groupBuyingListDto, groupBuyings.getTotalPages());
     }
 
     // 회원 닉네임 조회
@@ -164,5 +178,12 @@ public class GroupBuyingService {
                 .stream()
                 .map(GImage::getPath)
                 .collect(Collectors.toList());
+    }
+
+    // 중고거래 글 이미지 삭제
+    public void deleteImages(List<String> imageUrls) {
+        for(String image : imageUrls) {
+            gImageRepository.deleteByPath(image);
+        }
     }
 }

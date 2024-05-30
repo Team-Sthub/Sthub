@@ -20,7 +20,7 @@ public class GroupBuyingDetailDTO {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class PatchRequest {
-        private Long id;
+        private Long groupBuyingId;
         private String title; // 제목
         private Category category; // 카테고리
         private String product; // 상품
@@ -30,6 +30,7 @@ public class GroupBuyingDetailDTO {
         private String meetingPlace; // 직거래 장소
         private String content; // 내용
         private String status; // 상태 : 모집중, 모집완료
+        private List<String> deleteImages; // 삭제하고 싶은 이미지들
     }
 
     @Getter

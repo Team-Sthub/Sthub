@@ -21,7 +21,7 @@ public class GImage {
     @Column(name = "gImageId")
     private Long id;
 
-    @Column(name = "path", nullable = false, columnDefinition = "CLOB")
+    @Column(name = "path", nullable = false)
     private String path;
 
     @ManyToOne(fetch = FetchType.LAZY)
