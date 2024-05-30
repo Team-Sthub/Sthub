@@ -19,10 +19,6 @@
 <p id="user-nickname" th:text="${secondhand.secondhand.member.nickname}">작성자</p>
 <hr/>
 
-<div class="title-context">
-    <p id="title" th:text="${secondhand.secondhand.title}">제목</p>
-</div>
-
 <!-- 판매 정보 -->
 <div class="info">
     <div id="head" class="info-header">
@@ -98,7 +94,7 @@
 <div id="comment">
     <form class="comment-form" th:action="@{/secondhand/detail/comment}" method="post">
         <div class="comment-area">
-            <input type="hidden" th:name="secondhandId" th:value="${secondhand.secondhand.id}"/>
+            <input type="hidden" th:value="${secondhand.secondhand.id}"/>
             <p id="comment-nickname" th:text="${secondhand.secondhand.member.nickname}">블러드234</p>
             <textarea th:name="content" placeholder="내용을 입력하세요"></textarea>
         </div>

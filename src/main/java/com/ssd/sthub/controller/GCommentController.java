@@ -6,11 +6,14 @@ import com.ssd.sthub.dto.gComment.GCommentResponseDto;
 import com.ssd.sthub.response.SuccessResponse;
 import com.ssd.sthub.service.GCommentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/groupBuying")
 @RequiredArgsConstructor
@@ -19,8 +22,9 @@ public class GCommentController {
 
     // 공동구매 게시글 댓글 작성
     @PostMapping("/detail/comment")
-    public ResponseEntity<SuccessResponse<GComment>> createComment(@RequestHeader Long memberId, Long groupBuyingId, @RequestBody GCommentRequestDto.request request) {
-        return ResponseEntity.ok(SuccessResponse.create(gCommentService.createGComment(memberId, groupBuyingId, request)));
+    public ModelAndView createComment(@SessionAttribute Long memberId, @ModelAttribute GCommentRequestDto.request request) {
+        GComment gComment = gCommentService.createGComment(memberId, request);
+        return new ModelAndView("redirect:/groupBuying/detail?groupBuyingId=" + request.getGroupBuyingId());
     }
 
     // 공동구매 게시글 댓글 전체 조회

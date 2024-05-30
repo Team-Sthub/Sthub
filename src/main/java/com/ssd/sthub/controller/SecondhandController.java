@@ -1,5 +1,8 @@
 package com.ssd.sthub.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssd.sthub.domain.Secondhand;
 import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.dto.secondhand.SCommentDTO;
@@ -13,6 +16,7 @@ import net.bytebuddy.matcher.StringMatcher;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -65,15 +69,28 @@ public class SecondhandController {
     }
 
     // 중고거래 게시글 수정 + 거래 최종 방식 선택
-    @ResponseStatus(HttpStatus.SEE_OTHER)
-    @PatchMapping("/update")
-    public ModelAndView updateSecondhand(@RequestHeader Long memberId, @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @RequestPart @Validated SecondhandDTO.PatchRequest request) throws BadRequestException {
-        awss3SService.deleteImages(secondhandService.getImageUrls(request.getSecondhandId())); // 기존 이미지 삭제
-        List<String> imgUrls = awss3SService.uploadFiles(multipartFiles); // s3 이미지 등록
+    //@ResponseStatus(HttpStatus.SEE_OTHER)
+    @PostMapping("/update")
+    public ModelAndView updateSecondhand(@SessionAttribute Long memberId,
+                                         @RequestPart(value="imgUrl", required = false) List<MultipartFile> multipartFiles,
+                                         @RequestPart @Validated SecondhandDTO.PatchRequest request) throws BadRequestException {
+        List<String> deletedImages = request.getDeleteImages();
+
+        // 삭제된 이미지 경로 처리
+        if (!deletedImages.isEmpty()) {
+            awss3SService.deleteImages(deletedImages);
+            secondhandService.deleteImages(deletedImages);
+        }
+
+        List<String> imgUrls = null;
+        if(multipartFiles != null && !multipartFiles.isEmpty()) {
+            imgUrls = awss3SService.uploadFiles(multipartFiles); // s3 이미지 등록
+        }
+
         SecondhandDTO.DetailResponse secondhand = secondhandService.updateSecondhand(memberId, imgUrls, request);
-        ModelAndView modelAndView = new ModelAndView("redirect:/secondhand/detail");
-        modelAndView.addObject("secondhand", secondhand);
-        return modelAndView;
+        Long secondhandId = request.getSecondhandId();
+        // return new ModelAndView("redirect:/secondhand/detail?secondh");
+        return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + secondhandId);
     }
 
     // 중고거래 게시글 삭제
@@ -91,12 +108,19 @@ public class SecondhandController {
     // 중고거래 게시글 상세 조회 + 판매 내역 상세 조회 + 구매 내역 상세 조회
     @GetMapping("/detail")
     public ModelAndView getSecondhand(@SessionAttribute Long memberId, @RequestParam Long secondhandId) {
+        log.info("여기서 안되는 것이요");
+        log.info("request로 받아온 secondhandId " + secondhandId);
         SecondhandDTO.DetailResponse secondhand = secondhandService.getSecondhand(secondhandId);
         Long writerId = secondhand.getSecondhand().getMember().getId();
 
+        log.info("작성자 : " + writerId + " 로그인한 자 : " + memberId);
+        log.info("secondhandId : " + secondhand.getSecondhand().getId());
+
         // 작성자일 때와 작성자가 아닐 때의 View가 다름
-        if(Objects.equals(memberId, writerId))
+        if(String.valueOf(writerId).equals(String.valueOf(memberId))) {
+            log.info("writer!!");
             return new ModelAndView("thyme/secondhand/writerDetail", "secondhand", secondhand);
+        }
         else
             return new ModelAndView("thyme/secondhand/detail", "secondhand", secondhand);
     }

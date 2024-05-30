@@ -2,7 +2,6 @@ package com.ssd.sthub.service;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -17,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -79,11 +77,10 @@ public class AWSS3SService {
     }
 
     // S3 서버에서 파일 삭제 (다중)
-    public boolean deleteImages(List<String> fileNames) {
+    public void deleteImages(List<String> fileNames) {
         for(String fileName : fileNames) {
             amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
         }
-        return true;
     }
 
     // 기존 확장자명을 유지하면서, 식별되는 파일명을 생성

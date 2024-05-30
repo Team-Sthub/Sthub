@@ -1,0 +1,124 @@
+.back {
+    width: 97%;
+    margin: 2%;
+    height: 670px;
+}
+
+hr { width: 95%}
+
+.title {
+    position: relative;
+    margin-top: 40px;
+    margin-right: 2%;
+}
+
+.review-form {
+    width: 93%;
+    margin: 3% auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.member-name {
+    display: flex;
+    position: relative;
+    width: 20%;
+    height: 20%;
+    background: rgba(76, 175, 80, 0.1);
+    border-radius: 5em;
+    margin: 5px;
+    margin-left: 32px;
+    padding: 10px;
+}
+
+p {
+    margin-top: 15px;
+    margin-right: 30px;
+    margin-left: 37px;
+}
+
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px auto;
+}
+
+.tag-box {
+    flex: 0 1 calc(30% - 20px); /* 한 줄에 3개씩 배치되도록 설정 */
+    background: rgba(76, 175, 80, 0.6);
+    box-sizing: border-box;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5em;
+    margin: 10px;
+    white-space: nowrap;
+}
+
+.tag-box-non {
+    flex: 0 1 calc(30% - 20px); /* 한 줄에 3개씩 배치되도록 설정 */
+    background: rgba(0, 81, 0, 0.2);
+    box-sizing: border-box;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5em;
+    margin: 10px;
+    white-space: nowrap;
+}
+
+.review-text {
+    width: 80%;
+    height: 150px;
+    background: rgba(76, 175, 80, 0.2);
+    border-radius: 2em;
+    margin: 20px auto; /* 중앙 정렬을 위해 auto 마진 사용 */
+    border: none;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.review-text::placeholder {
+    font-size: 1.1rem; /* placeholder 텍스트 크기 증가 */
+    color: gray;
+}
+
+.btn1 {
+    background: rgba(76, 175, 80, 0.2);
+    width: 100px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    align-self: flex-end;
+    margin-top: 19px;
+    margin-bottom: 16px;
+    margin-right: 13px;
+}
+
+.star-rating {
+    display: flex;
+    align-items: center;
+    margin: 20px auto;
+}
+
+.star {
+    appearance: none;
+    padding: 1px;
+}
+
+.star::after {
+    content: '☆';
+    color: hsl(60, 80%, 45%);
+    font-size: 50px;
+}
+
+.star:hover::after,
+.star:has(~ .star:hover)::after,
+.star:checked::after,
+.star:has(~ .star:checked)::after {
+    content: '★';
+}
+
+.star:hover ~ .star::after {
+    content: '☆';
+}

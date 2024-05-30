@@ -20,7 +20,7 @@ public class SImage {
     @Column(name = "sImageId")
     private Long id;
 
-    @Column(name = "path", nullable = false, columnDefinition = "CLOB")
+    @Column(name = "path", nullable = false)
     private String path;
 
     @ManyToOne(fetch = FetchType.LAZY)

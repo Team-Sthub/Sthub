@@ -37,15 +37,16 @@ public class Participation extends BaseTime {
     private Member member;
 
     @Builder
-    public Participation(Member member, GroupBuying groupBuying, ParticipationRequestDto.request request) {
+    public Participation(Member member, GroupBuying groupBuying, ParticipationRequestDto.Request request) {
         this.member = member;
         this.groupBuying = groupBuying;
         this.content = request.getContent();
         this.accept = 0;
     }
 
-    public void update(ParticipationRequestDto.PatchRequest request) {
+    public Participation update(ParticipationRequestDto.PatchRequest request) {
         this.content = request.getContent();
+        return this;
     }
 
     public void accept(ParticipationRequestDto.AcceptRequest request) {
