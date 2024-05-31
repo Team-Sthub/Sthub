@@ -83,7 +83,6 @@ public class SecondhandController {
 
         SecondhandDTO.DetailResponse secondhand = secondhandService.updateSecondhand(memberId, imgUrls, request);
         Long secondhandId = request.getSecondhandId();
-        // return new ModelAndView("redirect:/secondhand/detail?secondh");
         return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + secondhandId);
     }
 
@@ -102,17 +101,11 @@ public class SecondhandController {
     // 중고거래 게시글 상세 조회 + 판매 내역 상세 조회 + 구매 내역 상세 조회
     @GetMapping("/detail")
     public ModelAndView getSecondhand(@SessionAttribute Long memberId, @RequestParam Long secondhandId) {
-        log.info("여기서 안되는 것이요");
-        log.info("request로 받아온 secondhandId " + secondhandId);
         SecondhandDTO.DetailResponse secondhand = secondhandService.getSecondhand(secondhandId);
         Long writerId = secondhand.getSecondhand().getMember().getId();
 
-        log.info("작성자 : " + writerId + " 로그인한 자 : " + memberId);
-        log.info("secondhandId : " + secondhand.getSecondhand().getId());
-
         // 작성자일 때와 작성자가 아닐 때의 View가 다름
         if(String.valueOf(writerId).equals(String.valueOf(memberId))) {
-            log.info("writer!!");
             return new ModelAndView("thyme/secondhand/writerDetail", "secondhand", secondhand);
         }
         else

@@ -84,5 +84,6 @@ public class Secondhand extends BaseTime {
         this.place = request.getPlace();
         this.trackingNum = request.getTrackingNum();
         this.content = request.getContent();
+        this.status = request.getStatus();
     }
 }

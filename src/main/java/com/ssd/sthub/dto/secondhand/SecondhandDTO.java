@@ -52,6 +52,8 @@ public class SecondhandDTO {
         private String trackingNum; // 운송장 번호
         @NotEmpty(message = "내용을 넣어주세요.")
         private String content; // 내용
+        @NotEmpty(message = "거래 상태를 넣어주세요.")
+        private String status;
         private List<String> deleteImages; // 삭제하고 싶은 이미지들
     }
 

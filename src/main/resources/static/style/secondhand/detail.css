@@ -15,7 +15,7 @@
 }
 
 #detail-title {
-    width: 55%;
+    width: 60%;
     position: relative;
     margin: 2px auto 0;
     color: #000000;
@@ -24,7 +24,7 @@
 
 #user-nickname {
     position: relative;
-    width: 55%;
+    width: 60%;
     margin: 3px auto 0;
     color: #00000080;
     font-size: 13px;
@@ -278,7 +278,7 @@ input[type="text"]:focus, textarea:focus {
     width: 47%;
     margin: 0 auto;
     margin-top: 15px;
-    padding-top: 2px;
+    padding-top: 20px;
     margin-bottom: 15px;
     display: flex;
 }
