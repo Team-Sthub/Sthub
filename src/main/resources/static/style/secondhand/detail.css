@@ -293,6 +293,7 @@ input[type="text"]:focus, textarea:focus {
 }
 
 .update, .delete, .check, .message, .complaint, .purchase {
+    cursor: pointer;
     position: relative;
     text-align: center;
     display: inline-block;
@@ -394,3 +395,4 @@ textarea {
 .comment-form {
     display: flex;
 }
+

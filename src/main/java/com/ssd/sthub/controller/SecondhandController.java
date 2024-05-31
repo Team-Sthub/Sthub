@@ -62,8 +62,7 @@ public class SecondhandController {
         return new ModelAndView( "redirect:/secondhand/check", "secondhandId", secondhandId);
     }
 
-    // 중고거래 게시글 수정 + 거래 최종 방식 선택
-    //@ResponseStatus(HttpStatus.SEE_OTHER)
+    // 중고거래 게시글 수정
     @PostMapping("/update")
     public ModelAndView updateSecondhand(@SessionAttribute Long memberId,
                                          @RequestPart(value="imgUrl", required = false) List<MultipartFile> multipartFiles,
@@ -82,6 +81,15 @@ public class SecondhandController {
         }
 
         SecondhandDTO.DetailResponse secondhand = secondhandService.updateSecondhand(memberId, imgUrls, request);
+        Long secondhandId = request.getSecondhandId();
+        return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + secondhandId);
+    }
+
+    // 중고거래 거래 최종 방식 수정
+    @PostMapping("/check")
+    public ModelAndView checkTransaction(@SessionAttribute Long memberId,
+                                         @ModelAttribute @Validated SecondhandDTO.CheckRequest request) throws BadRequestException {
+        SecondhandDTO.DetailResponse secondhand = secondhandService.checkSecondhand(memberId, request);
         Long secondhandId = request.getSecondhandId();
         return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + secondhandId);
     }

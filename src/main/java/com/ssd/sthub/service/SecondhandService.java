@@ -64,7 +64,7 @@ public class SecondhandService {
                 .orElseThrow(() -> new EntityNotFoundException("중고거래 게시글 조회에 실패했습니다."));
 
         if(!secondhand.getMember().getId().equals(memberId))
-            throw new BadRequestException("작성자만 삭제할 수 있습니다.");
+            throw new BadRequestException("작성자만 수정할 수 있습니다.");
 
         if(imgUrls != null && !imgUrls.isEmpty()) {
             for (String imgUrl : imgUrls) {
@@ -77,6 +77,20 @@ public class SecondhandService {
         }
 
         secondhand.update(request);
+        secondhand = secondhandRepository.save(secondhand);
+        return new SecondhandDTO.DetailResponse(secondhand, secondhand.getImageList(), secondhand.getCommentList());
+    }
+
+    // 중고거래 거래 최종 방식 선택
+    public SecondhandDTO.DetailResponse checkSecondhand(Long memberId, SecondhandDTO.CheckRequest request) throws BadRequestException {
+        Secondhand secondhand = secondhandRepository.findById(request.getSecondhandId())
+                .orElseThrow(() -> new EntityNotFoundException("중고거래 게시글 조회에 실패했습니다."));
+
+
+        if(!secondhand.getMember().getId().equals(memberId))
+            throw new BadRequestException("작성자만 수정할 수 있습니다.");
+
+        secondhand.checkTransaction(request);
         secondhand = secondhandRepository.save(secondhand);
         return new SecondhandDTO.DetailResponse(secondhand, secondhand.getImageList(), secondhand.getCommentList());
     }
