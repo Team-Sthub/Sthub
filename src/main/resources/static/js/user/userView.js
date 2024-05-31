@@ -1,38 +1,54 @@
-// 마우스를 올렸을 때 배경색을 변경하는 함수 정의
-function changeBackgroundColorOnHover(event) {
-    // 모든 메뉴의 배경색 초기화
+// 마우스를 올렸을 때와 벗어났을 때의 효과를 처리하는 함수 정의
+function handleHoverEffects(event) {
+    if (event.type === 'mouseenter') {
+        event.target.style.backgroundColor = 'rgba(76, 175, 80, 0.15)';
+    } else if (event.type === 'mouseleave' && !event.target.classList.contains('selected')) {
+        event.target.style.backgroundColor = '';
+    }
+}
+
+// 메뉴 항목을 클릭했을 때의 동작을 처리하는 함수 정의
+function handleMenuItemClick(event) {
+    var url = event.target.getAttribute('data-url');
+
+    // URL이 정의되어 있을 때만 AJAX 요청을 보냄
+    if (url) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    document.getElementById('categoryContent').innerHTML = xhr.responseText;
+                } else {
+                    console.error('요청 실패: ' + xhr.status);
+                }
+            }
+        };
+        xhr.send();
+    }
+
+    // 모든 메뉴 항목의 선택 상태 제거
     document.querySelectorAll('.menu').forEach(function(item) {
-        item.style.backgroundColor = ''; // 기본값으로 설정하여 원래 색상으로 돌아오게 함
+        item.classList.remove('selected');
+        item.style.backgroundColor = '';
     });
-    // 해당 메뉴의 배경색 변경
+
+    // 클릭한 메뉴 항목에 선택 상태 추가
+    event.target.classList.add('selected');
     event.target.style.backgroundColor = 'rgba(76, 175, 80, 0.15)';
 }
 
-// 마우스를 벗어났을 때 원래 색상으로 돌아오는 함수 정의
-function changeBackgroundColorOnMouseLeave(event) {
-    // 해당 메뉴의 배경색 초기화
-    event.target.style.backgroundColor = ''; // 기본값으로 설정하여 원래 색상으로 돌아오게 함
-}
-
-// 클릭했을 때 배경색을 변경하는 함수 정의
-function changeBackgroundColorOnClick(event) {
-    event.target.style.backgroundColor = 'rgba(76, 175, 80, 0.15)';
-    var href = event.target.getAttribute('data-href');
-    window.location.href = href;
-}
-
-// 각 메뉴 요소에 마우스를 올렸을 때, 벗어났을 때, 클릭했을 때 이벤트 추가
-var menuItems = document.querySelectorAll('.menu');
-menuItems.forEach(function(item) {
-    item.addEventListener('mouseenter', changeBackgroundColorOnHover);
-    item.addEventListener('mouseleave', changeBackgroundColorOnMouseLeave);
-    item.addEventListener('click', changeBackgroundColorOnClick);
-});
-
-// 각 메뉴 클릭 시 해당 화면 동적 로드
-$(document).ready(function() {
-    $('.menu').click(function() {
-        var target = $(this).data('target');
-        $('#categoryContent').load('/load-' + target);
+// 페이지가 로드될 때 실행되는 함수
+window.onload = function() {
+    // 각 메뉴 항목에 대한 클릭 이벤트 리스너 등록
+    var menuItems = document.querySelectorAll('.menu');
+    menuItems.forEach(function(item) {
+        item.addEventListener('mouseenter', handleHoverEffects);
+        item.addEventListener('mouseleave', handleHoverEffects);
+        item.addEventListener('click', handleMenuItemClick);
     });
-});
+
+    // 첫 번째 메뉴를 선택하여 해당 내용을 가져옴
+    var firstMenuItem = document.querySelector('.menu');
+    firstMenuItem.click();
+};

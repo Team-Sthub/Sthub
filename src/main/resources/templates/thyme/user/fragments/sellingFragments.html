@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>판매 내역</title>
+    <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/style/user/fragments/selling.css}">
+</head>
+<body>
+<div id="sellingFragments" th:fragment="sellingFragments">
+    <div class="editBtn2">
+        <!-- 판매내역 전체 조회 -->
+        <a th:href="@{/secondhand/selling/list}" class="edit-button2">더보기</a>
+    </div>
+    <div class="product-grid">
+        <div th:each="secondhand : ${secondhandList}">
+            <a th:href="@{/secondhand/detail(secondhandId=${secondhand.secondhand.id})}" class="product-box-link">
+                <div class="product-box">
+                    <!-- 이미지가 있는 경우 가장 첫 번째 이미지를 썸네일로 사용-->
+                    <div th:if="${secondhand.SImages == null or secondhand.SImages.isEmpty()}">
+                        <img th:src="@{/images/no_img.jpg}" alt="No Image" />
+                    </div>
+                    <div th:if="${secondhand.SImages != null and !secondhand.SImages.isEmpty()}">
+                        <img th:src="@{${secondhand.SImages[0].path}}" alt="Image"/>
+                    </div>
+                    <p id="title" th:text="${secondhand.secondhand.title}"><b>제목</b></p><br>
+                    <p id="price" th:text="${secondhand.secondhand.price} + '원'">가격</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

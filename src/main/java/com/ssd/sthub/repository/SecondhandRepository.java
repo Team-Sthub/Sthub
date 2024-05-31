@@ -21,6 +21,7 @@ public interface SecondhandRepository extends JpaRepository<Secondhand, Long> {
     void deleteById(Long secondhandId);
 
     Optional<Secondhand> findById(Long secondhandId);
+    List<Secondhand> findAllByMemberId(Long memberId);
 
     Page<Secondhand> findAllByMember(Member member, PageRequest pageRequest);
 

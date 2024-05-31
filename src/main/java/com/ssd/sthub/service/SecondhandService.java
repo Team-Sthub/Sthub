@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -136,6 +137,15 @@ public class SecondhandService {
         if(secondhands == null || secondhands.isEmpty())
             throw new BadRequestException("작성된 게시글이 없습니다.");
         return secondhands;
+    }
+
+    // 중고거래 상위4개 조회
+    public List<SecondhandDTO.top4ListResponse> getTop4Items(Long memberId) throws BadRequestException {
+        List<Secondhand> allItems = secondhandRepository.findAllByMemberId(memberId);
+        return allItems.stream()
+                .limit(4)
+                .map(s -> new SecondhandDTO.top4ListResponse(s, s.getImageList()))
+                .collect(Collectors.toList());
     }
 
     // 중고거래 글 이미지 조회

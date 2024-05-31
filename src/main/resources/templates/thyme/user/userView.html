@@ -6,9 +6,10 @@
     <link rel="stylesheet" th:href="@{/style/header.css}">
     <link rel="stylesheet" th:href="@{/style/user/userView.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
+
 </head>
 <body>
-    <div th:replace="thyme/frameHeader :: header"></div><br>
+    <div th:replace="~{thyme/frameHeader :: header}"></div>
 
     <!-- 로그인한 유저 -->
     <!-- <sec:authorize access="isAuthenticated()"> -->
@@ -43,20 +44,22 @@
         </div>
         <br><br>
         <div class="categoryMenu">
-            <div class="menu" th:attr="data-target='selling'">판매 상품</div>
-            <div class="menu" th:attr="data-target='purchase'">구매 상품</div>
-            <div class="menu" th:attr="data-target='groupbuying'">공구 모집</div>
-            <div class="menu" th:attr="data-target='participation'">공구 참여</div>
-            <div class="menu" th:attr="data-target='review'">후기 내역</div>
-            <div class="menu" th:attr="data-target='report'">신고 내역</div>
+            <div class="menu" id="selling" data-url="/secondhand/selling/top4List">판매 상품</div>
+            <div class="menu" id="purchase" data-url="/purchase/top4List">구매 상품</div>
+            <div class="menu" id="groupbuying" data-url="/groupBuying/top4List">공구 모집</div>
+            <div class="menu" id="participation" data-url="/participation/top4List">공구 참여</div>
+            <div class="menu" id="review" data-url="/review/list">후기 내역</div>
+            <div class="menu" id="complaints" data-url="/complaint/list">신고 내역</div>
         </div>
-        <div class="categoryContent">
+        <!-- 동적으로 정보 로드 -->
+        <div class="categoryContent" id="categoryContent">
 
         </div>
     </div>
 
     <!-- 로그인 하지 않은 유저 -->
     <!-- <sec:authorize access="!isAuthenticated()"> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script th:src="@{/js/user/userView.js}"></script>
 </body>
 </html>
