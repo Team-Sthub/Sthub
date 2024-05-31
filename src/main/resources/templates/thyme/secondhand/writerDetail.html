@@ -5,8 +5,10 @@
     <title>Detail.html</title>
     <link rel="stylesheet" th:href="@{/style/header.css}">
     <link rel="stylesheet" th:href="@{/style/secondhand/detail.css}">
+    <link rel="stylesheet" th:href="@{/style/secondhand/check.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
     <script th:src="@{/js/secondhand/detail.js}"></script>
+    <script th:src="@{/js/secondhand/check.js}"></script>
 </head>
 <body>
 <!-- header 삽입 -->
@@ -85,7 +87,7 @@
         <a th:href="@{'#'}" th:onclick="'sendDeleteRequest(\'' + ${secondhand.secondhand.id} + '\')'" class="delete">삭제하기</a>
     </div>
     <div id="btn_check">
-        <a th:href="@{/secondhand/check(secondhandId=${secondhand.secondhand.id})}" class="check">거래 최종 방식</a>
+        <a onclick="check()" class="check">거래 최종 방식</a>
     </div>
 </div>
 
@@ -107,6 +109,27 @@
             <p th:text="${#strings.substring(comment.createdAt, 0, 10)}">작성자</p>
         </div>
         <div class="comment-content" th:text="${comment.content}"></div>
+    </div>
+</div>
+
+<!-- 거래 최종 방식 선택 모달창-->
+<div class="modal">
+    <div class="modal_popup">
+        <div class="modal_menu">
+            <h3>거래 최종 방식 선택</h3>
+            <span onclick="close()" class="close">&times;</span>
+        </div>
+        <p class="transaction_type">거래방식</p>
+        <div class="transaction_list">
+            <div id="btn_delivery">
+                <a class="delivery">택배</a>
+            </div>
+            <div id="btn_direct">
+                <a class="direct">직거래</a>
+            </div>
+        </div>
+        <p class="transaction_info">운송장번호</p>
+        <input type="text" class="type_info" placeholder="'-'를 제외한 숫자만 입력해주세요." />
     </div>
 </div>
 </body>

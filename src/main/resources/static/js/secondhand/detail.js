@@ -53,3 +53,15 @@ function sendDeleteRequest(secondhandId) {
             alert('삭제 중 오류가 발생했습니다.');
         });
 }
+
+// 거래 최종 방식 클릭 시 동작
+function check() {
+    // display 속성을 block로 변경
+    document.querySelector('.modal').style.display = 'block';
+}
+
+// 모달창 닫기 클릭 시 동작
+function close() {
+    // display 속성을 none로 변경
+    document.querySelector('.modal').style.display = 'none';
+}

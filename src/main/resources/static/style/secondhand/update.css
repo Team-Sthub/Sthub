@@ -3,7 +3,7 @@
     text-align: center;
     margin-top: 30px;
     margin-right: 50%;
-    margin-left: 26px;
+    width: 60%;
 }
 
 hr {
@@ -35,6 +35,11 @@ hr {
     margin: 0 auto;
 }
 
+.info-header {
+    display: flex;
+    align-items: center;
+}
+
 #info1, #info2 {
     margin-top: 2px;
     margin-left: 2%;
@@ -45,6 +50,21 @@ hr {
     display: block;
     margin-left: 10px;
     font-size: 12px;
+}
+
+#status {
+    width: 10%;
+    height: 20px;
+    border-radius: 15px;
+    border: none;
+    flex: none;
+    flex-grow: 0;
+    background: #4CAF5080;
+    font-size: 10px;
+    font-weight: bold;
+    text-align : center;
+    margin-left: 10px;
+    line-height: 20px;
 }
 
 #writeCategory {

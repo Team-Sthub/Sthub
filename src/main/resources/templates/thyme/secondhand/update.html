@@ -20,8 +20,11 @@
         <input type="text" th:id="title" th:name="title" th:value="${secondhand.secondhand.title}" placeholder="제목을 입력하세요."/>
     </div>
     <div class="info">
-        <p id="info-title">판매정보</p>
-        <div id="info1">
+        <div id="head" class="info-header">
+            <p id="info-title">판매정보</p>
+            <div id="status" onclick="toggleStatus()" th:text="${secondhand.secondhand.status}">모집중</div>
+        </div>
+            <div id="info1">
             <div id="writeCategory">
                 <label id="name1" th:for="category">카테고리</label>
                 <select id="category" th:name="category">

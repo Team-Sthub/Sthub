@@ -3,8 +3,10 @@ package com.ssd.sthub.service;
 import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.Purchase;
 import com.ssd.sthub.domain.Secondhand;
+import com.ssd.sthub.dto.secondhand.SecondhandDTO;
 import com.ssd.sthub.repository.MemberRepository;
 import com.ssd.sthub.repository.PurchaseRepository;
+import com.ssd.sthub.repository.PurchaseRepositoryImpl;
 import com.ssd.sthub.repository.SecondhandRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -13,11 +15,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class PurchaseService {
     private final PurchaseRepository purchaseRepository;
+    private final PurchaseRepositoryImpl purchaseRepositoryImpl;
     private final MemberRepository memberRepository;
     private final SecondhandRepository secondhandRepository;
 
@@ -49,5 +55,13 @@ public class PurchaseService {
     public Page<Secondhand> getPurchaseSecondhands(Long memberId, int pageNum) {
         PageRequest pageRequest = PageRequest.of(pageNum, 10);
         return purchaseRepository.findAllSecondhandByMemberId(memberId, pageRequest);
+    }
+
+    // 구매 내역 상위 4개 조회
+    public List<SecondhandDTO.Top4ListResponse> getTop4Items(Long memberId) {
+        List<Secondhand> secondhands = purchaseRepositoryImpl.findTop4Secondhands(memberId);
+        return secondhands.stream()
+                .map(s->new SecondhandDTO.Top4ListResponse(s, s.getImageList()))
+                .collect(Collectors.toList());
     }
 }
