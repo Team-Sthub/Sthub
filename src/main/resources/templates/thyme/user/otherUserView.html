@@ -40,12 +40,13 @@
     </div>
     <br><br>
     <div class="categoryMenu">
-        <div class="menu" th:attr="data-target='selling'">판매 상품</div>
-        <div class="menu" th:attr="data-target='groupbuying'">공구 모집</div>
-        <div class="menu" th:attr="data-target='review'">후기 내역</div>
-        <div class="menu" th:attr="data-target='report'">신고 내역</div>
+        <div class="menu" id="selling" data-url="/secondhand/selling/top4List">판매 상품</div>
+        <div class="menu" id="groupbuying" data-url="/groupBuying/top4List">공구 모집</div>
+        <div class="menu" id="review" data-url="/review/list">후기 내역</div>
+        <div class="menu" id="complaints" data-url="/complaint/list">신고 내역</div>
     </div>
-    <div class="categoryContent">
+    <!-- 동적으로 정보 로드 -->
+    <div class="categoryContent" id="categoryContent">
 
     </div>
 </div>

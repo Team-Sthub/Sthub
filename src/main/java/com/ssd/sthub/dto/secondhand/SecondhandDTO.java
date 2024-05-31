@@ -73,4 +73,11 @@ public class SecondhandDTO {
         private int totalPage;
         private int currentPage;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class top4ListResponse {
+        private Secondhand secondhand;
+        private List<SImage> sImages;
+    }
 }

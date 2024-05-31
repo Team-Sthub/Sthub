@@ -156,11 +156,16 @@ function searchAddress() {
             });
 
             previousMarker = marker;
+            // Hidden input에 값 설정
+            const formattedAddress = results[0].formatted_address;
+
+            // '대한민국'을 제외한 나머지 주소 부분 추출
+            const addressWithoutCountry = formattedAddress.replace(/^대한민국\s*/, '');
 
             // Hidden input에 값 설정
             document.getElementById('latitude').value = pos.lat();
             document.getElementById('longitude').value = pos.lng();
-            document.getElementById('address').value = results[0].formatted_address;
+            document.getElementById('address').value = addressWithoutCountry;
         } else {
             console.error('Geocode was not successful for the following reason: ' + status);
         }

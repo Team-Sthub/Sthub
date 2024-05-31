@@ -1,31 +1,25 @@
 package com.ssd.sthub.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssd.sthub.domain.Secondhand;
 import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.dto.secondhand.SCommentDTO;
 import com.ssd.sthub.dto.secondhand.SecondhandDTO;
 import com.ssd.sthub.response.SuccessResponse;
 import com.ssd.sthub.service.*;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.matcher.StringMatcher;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Controller
@@ -152,5 +146,13 @@ public class SecondhandController {
     @GetMapping("/selling/list")
     public ResponseEntity<SuccessResponse<Page<Secondhand>>> getSellingSecondhands(@RequestHeader Long memberId, @RequestParam int pageNum) throws BadRequestException {
         return ResponseEntity.ok(SuccessResponse.create(secondhandService.getSellingSecondhands(memberId, pageNum)));
+    }
+
+    // 판매내역 상위 4개 조회
+    @GetMapping("/selling/top4List")
+    public String getSellingSecondhands(@SessionAttribute(name = "memberId") Long memberId, Model model) throws BadRequestException {
+        List<SecondhandDTO.top4ListResponse> secondhandList = secondhandService.getTop4Items(memberId);
+        model.addAttribute("secondhandList", secondhandList);
+        return "thyme/user/fragments/sellingFragments";
     }
 }
