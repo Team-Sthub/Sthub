@@ -33,8 +33,11 @@ public class GroupBuyingController {
 
     // 공동구매 전체 조회
     @GetMapping("/list/{category}")
-    public ResponseEntity<SuccessResponse<List<GroupBuyingListDTO.ListResponse>>> getAllGroupBuying(@PathVariable Category category, @RequestParam int pageNum) {
-        return ResponseEntity.ok(SuccessResponse.create(groupBuyingService.getAllGroupBuying(category, pageNum)));
+    public ModelAndView getAllGroupBuying(@PathVariable Category category, @RequestParam int pageNum) throws BadRequestException {
+        List<GroupBuyingListDTO.ListResponse> groupBuyingList = groupBuyingService.getAllGroupBuying(category, pageNum - 1);
+        ModelAndView modelAndView = new ModelAndView("thyme/groupBuying/list");
+        modelAndView.addObject("groupBuyingList", groupBuyingList);
+        return modelAndView;
     }
 
     // 공동구매 게시글(상세) 조회 (작성자 확인은 controller에서 하고 뷰 설정) 작성자 수락 여부 확인 후 링크 공개 및 미공개 해야함.
@@ -126,13 +129,21 @@ public class GroupBuyingController {
     @DeleteMapping("/delete")
     public ModelAndView updateGroupBuying(@SessionAttribute(name = "memberId") Long memberId, @RequestParam Long groupBuyingId) {
         String result = groupBuyingService.deleteGroupBuying(memberId, groupBuyingId);
-        // view 설정해야함
-        return new ModelAndView();
+        if(result.equals("delete success"))
+            return new ModelAndView("redirect:/groupBuying/list/ALL?pageNum=1");
+        else
+            return new ModelAndView("redirect:/groupBuying/detail?groupBuying=" + groupBuyingId, "result", "delete fail");
     }
 
-    // 마이페이지 - 공구 모집 조회
-    @GetMapping("/mylist")
-    public ResponseEntity<SuccessResponse<List<GroupBuyingListDTO.MyListResponse>>> getAllGroupBuyingByMemberId(@RequestHeader Long memberId, @RequestParam int pageNuM) {
+    // 마이페이지 - 공구 내역 (더보기)
+    @GetMapping("/mylist/all")
+    public ResponseEntity<SuccessResponse<List<GroupBuyingListDTO.MyAllListResponse>>> getAllGroupBuyingByMemberId(@SessionAttribute(name = "memberId") Long memberId, @RequestParam int pageNuM) {
         return ResponseEntity.ok(SuccessResponse.create(groupBuyingService.getAllGroupBuyingByMemberId(memberId, pageNuM)));
+    }
+
+    // 마이페이지 - 공구 내역 (4개)
+    @GetMapping("/mylist")
+    public ResponseEntity<SuccessResponse<List<GroupBuyingListDTO.MyListResponse>>> getGroupBuyingsByMemberId(@SessionAttribute(name = "memberId") Long memberId) {
+        return ResponseEntity.ok(SuccessResponse.create(groupBuyingService.getGroupBuyingsByMemberId(memberId)));
     }
 }

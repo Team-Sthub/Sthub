@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -120,12 +119,12 @@ public class GroupBuyingService {
         );
 
         groupBuyingRepository.deleteById(groupBuyingId);
-        return "삭제 완료되었습니다.";
+        return "delete success";
     }
 
     // 공동구매 전체 조회 (페이징 포함)
-    public List<GroupBuyingListDTO.ListResponse> getAllGroupBuying(Category category, int pageNum) {
-        PageRequest pageRequest = PageRequest.of(pageNum, 8);
+    public List<GroupBuyingListDTO.ListResponse> getAllGroupBuying(Category category, int pageNum) throws BadRequestException {
+        PageRequest pageRequest = PageRequest.of(pageNum, 10);
         Page<GroupBuying> groupBuyings;
 
         if (category == Category.ALL)
@@ -133,6 +132,9 @@ public class GroupBuyingService {
         else {
             groupBuyings = groupBuyingRepository.findAllByCategoryOrderByCreatedAtDesc(category, pageRequest);
         }
+
+        if(groupBuyings == null || groupBuyings.isEmpty())
+            throw new BadRequestException("작성된 게시글이 없습니다.");
 
         return groupBuyings.stream()
                 .map(g -> new GroupBuyingListDTO.ListResponse(g, g.getImageList(), category, groupBuyings.getTotalPages(), pageNum + 1))
@@ -150,17 +152,30 @@ public class GroupBuyingService {
         return new GroupBuyingDetailDTO.Response(groupBuying, groupBuying.getImageList(), groupBuying.getCommentList());
     }
 
-    // 마이페이지 - 공구 모집 조회 (페이징 포함)
-    public List<GroupBuyingListDTO.MyListResponse> getAllGroupBuyingByMemberId(Long memberId, int pageNum) {
+    // 마이페이지 - 공구 모집 전체 조회 (페이징 포함)
+    public List<GroupBuyingListDTO.MyAllListResponse> getAllGroupBuyingByMemberId(Long memberId, int pageNum) {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
         );
 
-        PageRequest pageRequest = PageRequest.of(pageNum, 8);
+        PageRequest pageRequest = PageRequest.of(pageNum, 10);
         Page<GroupBuying> groupBuyings = groupBuyingRepository.findAllByMemberId(memberId, pageRequest);
 
         return groupBuyings.stream()
-                .map(g -> new GroupBuyingListDTO.MyListResponse(g, g.getImageList(), groupBuyings.getTotalPages(), pageNum + 1))
+                .map(g -> new GroupBuyingListDTO.MyAllListResponse(g, g.getImageList(), groupBuyings.getTotalPages(), pageNum + 1))
+                .collect(Collectors.toList());
+    }
+
+    // 마이페이지 - 공구 모집 조회 (4개)
+    public List<GroupBuyingListDTO.MyListResponse> getGroupBuyingsByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
+        );
+
+        List<GroupBuying> groupBuyings = groupBuyingRepository.findTop4ByMemberIdOrderByCreatedAtDesc(memberId);
+
+        return groupBuyings.stream()
+                .map(g -> new GroupBuyingListDTO.MyListResponse(g, g.getImageList()))
                 .collect(Collectors.toList());
     }
 

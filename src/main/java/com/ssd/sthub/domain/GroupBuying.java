@@ -1,5 +1,6 @@
 package com.ssd.sthub.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingDetailDTO;
 import com.ssd.sthub.dto.groupBuying.PostGroupBuyingDTO;
@@ -56,6 +57,7 @@ public class GroupBuying extends BaseTime {
     @ColumnDefault("'모집중'")
     private String status; // 상태 : 모집중, 모집완료
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "memberId")
     private Member member;
