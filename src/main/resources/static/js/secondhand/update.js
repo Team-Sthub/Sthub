@@ -1,3 +1,5 @@
+var deleteImages = [];
+
 document.querySelector('.fa-image').onclick = function() {
     document.getElementById('file-upload').click();
 };
@@ -36,8 +38,6 @@ function toggleTransaction(type) {
     }
 }
 
-var deleteImages = [];
-
 function removeImage(button) {
     var imgPath = button.getAttribute('data-img-path');
     // 이미지 제거 로직 수행 (DOM에서 이미지 제거)
@@ -69,6 +69,7 @@ function validateUpdateForm(event) {
     const content = document.querySelector("textarea[name='content']").value;
     const delivery = document.getElementById('delivery');
     const direct = document.getElementById('direct');
+    const statusElement = document.getElementById('status');
     var type = document.getElementById('type');
 
     if (delivery.classList.contains('selected') && direct.classList.contains('selected')) {
@@ -96,7 +97,8 @@ function validateUpdateForm(event) {
         type: type.value,
         content: content,
         secondhandId: secondhandId,
-        deleteImages: deleteImages
+        deleteImages: deleteImages,
+        status : statusElement.innerText.trim()
     };
     formData.append('request', new Blob([JSON.stringify(requestData)], { type: 'application/json' }));
 
@@ -119,4 +121,25 @@ function validateUpdateForm(event) {
         console.error('Error:', error);
         alert('수정 중 오류가 발생했습니다.');
     });
+}
+
+
+function toggleStatus() {
+    const statusElement = document.getElementById('status');
+
+    // 기존 상태 값을 저장
+    let originalStatus = statusElement.innerText.trim();
+
+    if (statusElement) { // 요소가 존재하는지 확인
+        // 상태 변경
+        if (statusElement.innerText.trim() === '거래가능') {
+            statusElement.innerText = '예약중';
+        } else if (statusElement.innerText.trim() === '예약중') {
+            statusElement.innerText = '거래완료';
+        } else if (statusElement.innerText.trim() === '거래완료') {
+            statusElement.innerText = '거래가능';
+        }
+    } else {
+        console.log('Status element not found');
+    }
 }

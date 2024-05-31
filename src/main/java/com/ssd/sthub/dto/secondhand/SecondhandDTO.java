@@ -49,12 +49,23 @@ public class SecondhandDTO {
         @NotNull(message = "거래 방식을 넣어주세요.")
         private Transaction type; // 거래 방식
         private String place; // 장소
-        private String trackingNum; // 운송장 번호
         @NotEmpty(message = "내용을 넣어주세요.")
         private String content; // 내용
+        @NotEmpty(message = "거래 상태를 넣어주세요.")
+        private String status;
         private List<String> deleteImages; // 삭제하고 싶은 이미지들
     }
 
+    @Getter
+    @AllArgsConstructor
+    public static class CheckRequest {
+        @NotNull
+        private Long secondhandId;
+        @NotEmpty(message = "거래 방식을 넣어주세요.")
+        private Transaction type; // 거래 방식
+        private String trackingNum; // 운송장 번호
+        private String place; // 장소
+    }
     @Getter
     @AllArgsConstructor
     @ToString
@@ -76,7 +87,7 @@ public class SecondhandDTO {
 
     @Getter
     @AllArgsConstructor
-    public static class top4ListResponse {
+    public static class Top4ListResponse {
         private Secondhand secondhand;
         private List<SImage> sImages;
     }
