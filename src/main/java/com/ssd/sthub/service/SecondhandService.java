@@ -140,11 +140,11 @@ public class SecondhandService {
     }
 
     // 중고거래 상위4개 조회
-    public List<SecondhandDTO.top4ListResponse> getTop4Items(Long memberId) throws BadRequestException {
+    public List<SecondhandDTO.Top4ListResponse> getTop4Items(Long memberId) throws BadRequestException {
         List<Secondhand> allItems = secondhandRepository.findAllByMemberId(memberId);
         return allItems.stream()
                 .limit(4)
-                .map(s -> new SecondhandDTO.top4ListResponse(s, s.getImageList()))
+                .map(s -> new SecondhandDTO.Top4ListResponse(s, s.getImageList()))
                 .collect(Collectors.toList());
     }
 

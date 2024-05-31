@@ -78,7 +78,7 @@ public class SecondhandDTO {
 
     @Getter
     @AllArgsConstructor
-    public static class top4ListResponse {
+    public static class Top4ListResponse {
         private Secondhand secondhand;
         private List<SImage> sImages;
     }
