@@ -1,5 +1,6 @@
 package com.ssd.sthub.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,6 +25,7 @@ public class GImage {
     @Column(name = "path", nullable = false)
     private String path;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "groupBuyingId")
     private GroupBuying groupBuying;

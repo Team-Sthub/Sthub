@@ -4,14 +4,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
             return; // 사용자가 삭제를 취소하면 함수 종료
         }
 
-        fetch(`/delete?groupBuyingId=${groupBuyingId}`, {
+        fetch(`/groupBuying/delete?groupBuyingId=${groupBuyingId}`, {
             method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
         })
             .then(response => {
-                if (!response.ok) {
+                if (response.ok) {
+                    window.location.href = '/groupBuying/list/ALL?pageNum=1';
+                } else {
                     throw new Error('삭제 실패');
                 }
             })

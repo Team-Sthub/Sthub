@@ -29,11 +29,19 @@ public class GroupBuyingListDTO {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
-    public static class MyListResponse {
+    public static class MyAllListResponse {
         private GroupBuying groupBuying;
         private List<GImage> gImages;
         private int totalPage;
         private int currentPage;
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
+    public static class MyListResponse {
+        private GroupBuying groupBuying;
+        private List<GImage> gImages;
     }
 
 }
