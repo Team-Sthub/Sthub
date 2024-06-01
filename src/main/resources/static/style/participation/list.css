@@ -18,6 +18,7 @@ hr {
     height: 620px;
     margin: 20%;
     margin-top: 1%;
+    margin-bottom: 2%;
 }
 
 table {
@@ -99,4 +100,48 @@ td {
 .status-reject-pre {
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
+}
+
+/* 페이징 처리 관련 코드 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination button, .pagination a, .pagination span {
+    margin: 0 3px; /* 간격 조정 */
+    padding: 5px 10px; /* 간격 조정 */
+    text-decoration: none;
+    color: #333;
+    border: none; /* 테두리 제거 */
+    cursor: pointer;
+}
+
+.pagination button {
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+}
+
+.pagination button:hover, .pagination a:hover {
+    background-color: #ddd;
+}
+
+.pagination .current-page {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 50%;
+}
+
+.pagination a {
+    /* 선택하지 않은 페이지 버튼 스타일 */
+    border: none;
+    padding: 5px 10px; /* 간격 조정 */
+}
+
+.pagination button:disabled {
+    cursor: default;
+    background-color: #f4f4f4;
+    color: #ccc;
 }

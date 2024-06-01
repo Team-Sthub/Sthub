@@ -78,7 +78,8 @@ public class ParticipationController {
     // 참여 신청폼 리스트 조회
     @GetMapping("/list")
     public ModelAndView getParticipations(@RequestParam int pageNum, @SessionAttribute(name = "memberId") Long memberId, @RequestParam Long groupBuyingId) {
-        Page<Participation> participationList = participationService.getParticipationList(groupBuyingId, pageNum);
+        log.info("pageNum" + pageNum);
+        List<ParticipationResponseDto.ParticipationList> participationList = participationService.getParticipationList(groupBuyingId, pageNum);
         ModelAndView modelAndView;
         if (memberId != null && participationService.isGroupBuyingWriter(memberId, groupBuyingId)) {
             modelAndView = new ModelAndView("thyme/participation/writerlist");
@@ -108,7 +109,6 @@ public class ParticipationController {
         Participation participation = participationService.updateParticipation(memberId, participationId, request);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("participation", participation);
-        log.info(request.getContent());
         return new ModelAndView("redirect:/participation/detail?participationId=" + participation.getId());
     }
 
@@ -122,7 +122,7 @@ public class ParticipationController {
         Long groupBuyingId = request.getGroupBuyingId();
         participationService.accpetMember(memberId, participationId, request);
 
-        Page<Participation> participationList = participationService.getParticipationList(groupBuyingId, 0);
+        List<ParticipationResponseDto.ParticipationList> participationList = participationService.getParticipationList(groupBuyingId, 0);
         ModelAndView modelAndView = new ModelAndView("thyme/participation/writerlist");
         modelAndView.addObject("participationList", participationList);
         return modelAndView;
@@ -130,7 +130,7 @@ public class ParticipationController {
 
     //마이페이지 - 공구 참여 전체 조회
     @GetMapping("/mylist")
-    public ResponseEntity<SuccessResponse<Page<ParticipationResponseDto.ParticipationDto>>> getParticipationGroupBuyings(@RequestParam Long memberId, @RequestParam int pageNum) throws BadRequestException {
+    public ResponseEntity<SuccessResponse<List<ParticipationResponseDto.ParticipationList>>> getParticipationGroupBuyings(@RequestParam Long memberId, @RequestParam int pageNum) throws BadRequestException {
         return ResponseEntity.ok(SuccessResponse.create(participationService.getMyParticipationList(pageNum, memberId)));
     }
 

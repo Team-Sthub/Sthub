@@ -10,10 +10,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class ParticipationResponseDto {
-    private List<ParticipationResponseDto.ParticipationDto> participationListDto;
-    private int totalPages;
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,6 +27,15 @@ public class ParticipationResponseDto {
             this.content = participation.getContent();
             this.accept = participation.getAccept();
         }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
+    public static class ParticipationList {
+        private Participation participation;
+        private int totalPage;
+        private int currentPage;
     }
 }
 

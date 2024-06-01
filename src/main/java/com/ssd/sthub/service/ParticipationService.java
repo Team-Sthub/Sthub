@@ -5,7 +5,6 @@ import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.Participation;
 import com.ssd.sthub.dto.participation.ParticipationRequestDto;
 import com.ssd.sthub.dto.participation.ParticipationResponseDto;
-import com.ssd.sthub.dto.participation.ParticipationResponseDto.ParticipationDto;
 import com.ssd.sthub.repository.GroupBuyingRepository;
 import com.ssd.sthub.repository.MemberRepository;
 import com.ssd.sthub.repository.ParticipationRepository;
@@ -88,29 +87,32 @@ public class ParticipationService {
     }
 
     // 참여자 리스트 조회
-    public Page<Participation> getParticipationList(Long groupBuyingId, int pageNum) {
+    public List<ParticipationResponseDto.ParticipationList> getParticipationList(Long groupBuyingId, int pageNum) {
         PageRequest pageRequest = PageRequest.of(pageNum, 6);
         Page<Participation> participations = participationRepository.findAllByGroupBuyingId(groupBuyingId, pageRequest);
 
         GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingId)
                 .orElseThrow(() -> new EntityNotFoundException("공동구매 게시글 조회에 실패했습니다."));
 
-        return participations;
+        return participations.stream()
+                .map(p->new ParticipationResponseDto.ParticipationList(p, participations.getTotalPages(), pageNum + 1))
+                .collect(Collectors.toList());
     }
 
     // 내가 참여한 공동구매 리스트
-    public Page<ParticipationDto> getMyParticipationList(int pageNum, Long memberId) throws BadRequestException {
+    public List<ParticipationResponseDto.ParticipationList> getMyParticipationList(int pageNum, Long memberId) throws BadRequestException {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
 
         PageRequest pageRequest = PageRequest.of(pageNum, 10);
         Page<Participation> participations = participationRepository.findAllByMember(member, pageRequest);
-        log.info(participations.toString());
+
         if (participations == null || participations.isEmpty())
             throw new BadRequestException("공동구매에 참여하지 않았습니다.");
 
-        Page<ParticipationDto> participationDtos = participations.map(ParticipationDto::new);
-        return participationDtos;
+        return participations.stream()
+                .map(p -> new ParticipationResponseDto.ParticipationList(p, participations.getTotalPages(), pageNum))
+                .collect(Collectors.toList());
     }
 
     // 내가 참여한 공동구매 리스트 4개
