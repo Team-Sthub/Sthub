@@ -1,6 +1,7 @@
 package com.ssd.sthub.controller;
 
 
+import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingDetailDTO;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingListDTO;
@@ -15,6 +16,7 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -143,7 +145,9 @@ public class GroupBuyingController {
 
     // 마이페이지 - 공구 내역 (4개)
     @GetMapping("/mylist")
-    public ResponseEntity<SuccessResponse<List<GroupBuyingListDTO.MyListResponse>>> getGroupBuyingsByMemberId(@SessionAttribute(name = "memberId") Long memberId) {
-        return ResponseEntity.ok(SuccessResponse.create(groupBuyingService.getGroupBuyingsByMemberId(memberId)));
+    public String getGroupBuyingsByMemberId(@SessionAttribute(name = "memberId") Long memberId, Model model) {
+        List<GroupBuyingListDTO.MyListResponse> groupBuyingList = groupBuyingService.getGroupBuyingsByMemberId(memberId);
+        model.addAttribute("groupBuyingList", groupBuyingList);
+        return "thyme/user/fragments/groupbuyingFragments";
     }
 }
