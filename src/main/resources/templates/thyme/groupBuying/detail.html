@@ -74,8 +74,9 @@
         <a th:href="@{/groupBuying/list}" class="message">1:1 쪽지하기</a>
     </div>
     <div id="btn_application">
-        <a th:href="@{/groupBuying/list}" class="application">공동구매 신청하기</a>
+        <a th:href="@{/participation/moveToForm(groupBuyingId=${groupBuying.groupBuying.id})}" class="application">공동구매 신청하기</a>
     </div>
+
     <div id="btn_appList">
         <a th:href="@{|/participation/list?pageNum=0&groupBuyingId=${groupBuying.groupBuying.id}|}" class="appList">신청자 목록
             보기</a>

@@ -8,6 +8,7 @@ import com.ssd.sthub.service.GCommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,7 +23,7 @@ public class GCommentController {
 
     // 공동구매 게시글 댓글 작성
     @PostMapping("/detail/comment")
-    public ModelAndView createComment(@SessionAttribute Long memberId, @ModelAttribute GCommentRequestDto.request request) {
+    public ModelAndView createComment(@SessionAttribute Long memberId, @ModelAttribute @Validated GCommentRequestDto.request request) {
         GComment gComment = gCommentService.createGComment(memberId, request);
         return new ModelAndView("redirect:/groupBuying/detail?groupBuyingId=" + request.getGroupBuyingId());
     }
