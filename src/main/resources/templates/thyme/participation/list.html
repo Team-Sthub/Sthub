@@ -28,22 +28,45 @@
         </thead>
         <tbody>
         <tr th:each="participation, iterStat : ${participationList}"
-            th:onclick="|window.location.href='@{/participation/detail(participationId=${participation.id})}'|"
+            th:onclick="|window.location.href='@{/participation/detail(participationId=${participation.participation.id})}'|"
             style="cursor: pointer;">
             <td th:text="${iterStat.index + 1}" class="left-rounded">1</td>
-            <td th:text="${participation.member.nickname}">홍길동</td>
-            <td th:text="${participation.member.phone}">010-1234-5678</td>
-            <td th:text="${participation.content}">S사이즈</td>
-            <td th:text="${#temporals.format(participation.createdAt, 'yyyy-MM-dd')}">2024-05-19</td>
+            <td th:text="${participation.participation.member.nickname}">홍길동</td>
+            <td th:text="${participation.participation.member.phone}">010-1234-5678</td>
+            <td th:text="${participation.participation.content}">S사이즈</td>
+            <td th:text="${#temporals.format(participation.participation.createdAt, 'yyyy-MM-dd')}">2024-05-19</td>
             <td class="right-rounded">
-                <div th:classappend="${participation.accept == 1 ? 'status-accept' : (participation.accept == 2 ? 'status-reject' : 'status-pending')}"
-                     th:text="${participation.accept == 1 ? '수락' : (participation.accept == 2 ? '거절' : '대기')}"
+                <div th:classappend="${participation.participation.accept == 1 ? 'status-accept' : (participation.participation.accept == 2 ? 'status-reject' : 'status-pending')}"
+                     th:text="${participation.participation.accept == 1 ? '수락' : (participation.participation.accept == 2 ? '거절' : '대기')}"
                 >대기
                 </div>
             </td>
         </tr>
         </tbody>
     </table>
+</div>
+<!-- 페이지네이션 -->
+<div class="pagination">
+    <!-- 이전 버튼, currentPage가 11 이상일 때만 활성화 -->
+    <button th:if="${participationList[0].currentPage > 10}"
+            th:onclick="|window.location.href='@{/participation/list?pageNum=${participationList[0].currentPage - 10}&groupBuyingId=${participationList[0].participation.groupBuying.id})}'|">
+        &lt;
+    </button>
+
+    <!-- 페이지 번호 반복 출력 -->
+    <span th:each="pageNumber : ${#numbers.sequence((participationList[0].currentPage - 1) / 10 * 10 + 1, ((participationList[0].currentPage - 1) / 10 + 1) * 10)}">
+    <a th:if="${pageNumber <= participationList[0].totalPage} and ${pageNumber != participationList[0].currentPage}"
+       th:href="@{/participation/list(pageNum=${pageNumber - 1},groupBuyingId=${participationList[0].participation.groupBuying.id})}"
+       th:text="${pageNumber}" style="border: none;">Page</a>
+    <span th:if="${pageNumber <= participationList[0].totalPage} and ${pageNumber == participationList[0].currentPage}"
+          class="current-page" th:text="${pageNumber}"></span>
+    </span>
+
+    <!-- 다음 버튼, 총 페이지 수가 currentPage + 10 이상일 때만 활성화 -->
+    <button th:if="${participationList[0].totalPage > participationList[0].currentPage + 10}"
+            th:onclick="|window.location.href='@{/participation/list?pageNum=${participationList[0].currentPage + 10}&groupBuyingId=${participationList[0].participation.groupBuying.id})}'|">
+        &gt;
+    </button>
 </div>
 </body>
 </html>

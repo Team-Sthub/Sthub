@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,4 +18,5 @@ public interface ParticipationRepository extends JpaRepository<Participation, Lo
     Optional<Participation> findById(Long participationId);
     Page<Participation> findAllByGroupBuyingId(Long groupBuyingId, PageRequest pageRequest);
     Page<Participation> findAllByMember(Member member, PageRequest pageRequest);
+    List<Participation> findAllByMember(Member member);
 }
