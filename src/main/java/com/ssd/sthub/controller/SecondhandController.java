@@ -27,6 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecondhandController {
     private final SecondhandService secondhandService;
+    private final MemberService memberService;
     private final SCommentService sCommentService;
     private final AWSS3SService awss3SService;
 
@@ -112,12 +113,18 @@ public class SecondhandController {
         SecondhandDTO.DetailResponse secondhand = secondhandService.getSecondhand(secondhandId);
         Long writerId = secondhand.getSecondhand().getMember().getId();
 
+        String nickname = memberService.getMember(memberId).getNickname();
+        ModelAndView modelAndView = null;
+
         // 작성자일 때와 작성자가 아닐 때의 View가 다름
         if(String.valueOf(writerId).equals(String.valueOf(memberId))) {
-            return new ModelAndView("thyme/secondhand/writerDetail", "secondhand", secondhand);
+            modelAndView = new ModelAndView("thyme/secondhand/writerDetail", "secondhand", secondhand);
         }
         else
-            return new ModelAndView("thyme/secondhand/detail", "secondhand", secondhand);
+            modelAndView = new ModelAndView("thyme/secondhand/detail", "secondhand", secondhand);
+
+        modelAndView.addObject("nickname", nickname);
+        return modelAndView;
     }
 
     // 중고거래 게시글 전체 조회
