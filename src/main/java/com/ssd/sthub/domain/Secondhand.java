@@ -88,7 +88,10 @@ public class Secondhand extends BaseTime {
 
     public void checkTransaction(SecondhandDTO.CheckRequest request) {
         this.status = "예약중";
-        this.trackingNum = request.getTrackingNum() != null ? request.getTrackingNum() : this.trackingNum;
-        this.place = request.getPlace() != null ? request.getPlace() : this.place;
+
+        if(request.getType().equals(Transaction.DIRECT))
+            this.place = request.getTypeInfo() != null ? request.getTypeInfo() : this.place;
+        else if(request.getType().equals(Transaction.DELIVERY))
+            this.trackingNum = request.getTypeInfo() != null ? request.getTypeInfo() : this.trackingNum;
     }
 }

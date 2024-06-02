@@ -89,7 +89,7 @@ public class SecondhandController {
     // 중고거래 거래 최종 방식 수정
     @PostMapping("/check")
     public ModelAndView checkTransaction(@SessionAttribute Long memberId,
-                                         @ModelAttribute @Validated SecondhandDTO.CheckRequest request) throws BadRequestException {
+                                         @RequestBody @Validated SecondhandDTO.CheckRequest request) throws BadRequestException {
         SecondhandDTO.DetailResponse secondhand = secondhandService.checkSecondhand(memberId, request);
         Long secondhandId = request.getSecondhandId();
         return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + secondhandId);
