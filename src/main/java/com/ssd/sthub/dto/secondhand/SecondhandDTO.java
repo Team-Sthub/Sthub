@@ -61,11 +61,12 @@ public class SecondhandDTO {
     public static class CheckRequest {
         @NotNull
         private Long secondhandId;
-        @NotEmpty(message = "거래 방식을 넣어주세요.")
+        @NotNull(message = "거래 방식을 넣어주세요.")
         private Transaction type; // 거래 방식
-        private String trackingNum; // 운송장 번호
-        private String place; // 장소
+        @NotNull(message = "운송장 번호 또는 장소를 넣어주세요.")
+        private String typeInfo; // 운송장 번호 or 장소
     }
+
     @Getter
     @AllArgsConstructor
     @ToString

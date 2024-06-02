@@ -65,3 +65,71 @@ function close() {
     // display 속성을 none로 변경
     document.querySelector('.modal').style.display = 'none';
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const btnDelivery = document.getElementById('btn_delivery');
+    const btnDirect = document.getElementById('btn_direct');
+    const transactionInfo = document.querySelector('.transaction_info');
+    const typeInfo = document.querySelector('.type_info');
+    const close = document.querySelector('.close');
+    const submit = document.getElementById('submit');
+    var type = null;
+
+    // 택배 버튼 클릭 시
+    btnDelivery.addEventListener('click', function() {
+        btnDelivery.style.backgroundColor = 'white';
+        btnDirect.style.backgroundColor = '';
+        transactionInfo.textContent = '운송장번호';
+        typeInfo.placeholder = "'-'를 제외한 숫자만 입력해주세요.";
+        type = "DELIVERY";
+    });
+
+    // 직거래 버튼 클릭 시
+    btnDirect.addEventListener('click', function() {
+        btnDirect.style.backgroundColor = 'white';
+        btnDelivery.style.backgroundColor = '';
+        transactionInfo.textContent = '장소';
+        typeInfo.placeholder = "예시) 서울시 성북구 화랑로13길 60";
+        type = "DIRECT";
+    });
+
+    // 닫기 버튼 클릭 시
+    close.addEventListener('click', function() {
+        // display 속성을 none로 변경
+        document.querySelector('.modal').style.display = 'none';
+    });
+
+    // 전송 버튼 클릭 시
+    submit.addEventListener('click', function() {
+        if(type === "" || typeInfo.value === "") {
+            alert("모든 값을 입력해주세요.");
+            return false;
+        }
+
+        const secondhandId = document.querySelector('#secondhandId').value;
+        // JSON 데이터를 FormData에 추가
+        var formData = {
+            secondhandId: secondhandId,
+            type: type,
+            typeInfo: typeInfo.value
+        };
+
+        console.log(formData);
+        fetch("/secondhand/check", {
+            method: 'POST',
+            body: JSON.stringify(formData),
+            headers: {
+                'Content-type' : 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                window.location.href = `/secondhand/detail?secondhandId=` + secondhandId;
+            } else {
+                alert('수정 중 오류가 발생했습니다.');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+            alert('수정 중 오류가 발생했습니다.');
+        });
+    });
+});

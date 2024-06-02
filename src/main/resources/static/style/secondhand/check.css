@@ -39,7 +39,7 @@
 }
 
 #btn_delivery, #btn_direct {
-    background-color : white;
+    /*background-color : white;*/
     width: 50%;
     height: 30px;
     display: flex; /* flex 사용하여 자식 요소들을 같은 라인에 배치 */
@@ -70,3 +70,14 @@
 .modal_menu h3 {
     width: 90%;
 }
+
+.close {
+    cursor: pointer;
+    margin-block: 1em;
+}
+
+.fas fa-paper-plane {
+    width: 15%;
+    margin-block: 1em;
+}
+

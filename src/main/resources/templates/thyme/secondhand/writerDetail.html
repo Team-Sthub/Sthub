@@ -7,8 +7,6 @@
     <link rel="stylesheet" th:href="@{/style/secondhand/detail.css}">
     <link rel="stylesheet" th:href="@{/style/secondhand/check.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
-    <script th:src="@{/js/secondhand/detail.js}"></script>
-    <script th:src="@{/js/secondhand/check.js}"></script>
 </head>
 <body>
 <!-- header 삽입 -->
@@ -96,7 +94,7 @@
 <div id="comment">
     <form class="comment-form" th:action="@{/secondhand/detail/comment}" method="post">
         <div class="comment-area">
-            <input type="hidden" th:value="${secondhand.secondhand.id}"/>
+            <input type="hidden" id="secondhandId" th:value="${secondhand.secondhand.id}"/>
             <p id="comment-nickname" th:text="${secondhand.secondhand.member.nickname}">블러드234</p>
             <textarea th:name="content" placeholder="내용을 입력하세요"></textarea>
         </div>
@@ -117,6 +115,10 @@
     <div class="modal_popup">
         <div class="modal_menu">
             <h3>거래 최종 방식 선택</h3>
+            <i id="submit" class="fas fa-paper-plane" style="
+                margin-block: 1em;
+                width: 15%;
+                cursor: pointer;"></i>
             <span onclick="close()" class="close">&times;</span>
         </div>
         <p class="transaction_type">거래방식</p>
@@ -133,4 +135,5 @@
     </div>
 </div>
 </body>
+<script th:src="@{/js/secondhand/detail.js}"></script>
 </html>
