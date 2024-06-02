@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -21,8 +22,9 @@ public class PurchaseController {
 
     // 중고거래 결제 (구매)
     @PostMapping("")
-    public ResponseEntity<SuccessResponse<Boolean>> createPurchase(@RequestHeader Long memberId, @RequestParam Long secondhandId) {
-        return ResponseEntity.ok(SuccessResponse.create(purchaseService.createPurchase(memberId, secondhandId)));
+    public ModelAndView createPurchase(@SessionAttribute Long memberId, @RequestParam Long secondhandId) {
+        boolean result = purchaseService.createPurchase(memberId, secondhandId);
+        return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + secondhandId);
     }
 
     // 구매 내역 전체 조회
