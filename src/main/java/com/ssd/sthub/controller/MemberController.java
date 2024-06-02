@@ -85,8 +85,17 @@ public class MemberController {
 
     // 로그인
     @PostMapping("/login")
-    public ModelAndView login(HttpServletRequest httpServletRequest, @ModelAttribute LoginDTO loginDTO) {
+    public ModelAndView login(HttpServletRequest httpServletRequest,
+                              @Valid @ModelAttribute LoginDTO loginDTO,
+                              BindingResult bindingResult) {
         ModelAndView mav = new ModelAndView();
+
+        if (bindingResult.hasFieldErrors("nickname") || bindingResult.hasFieldErrors("password")) {
+            mav.addObject("nicknameError", bindingResult.getFieldError("nickname") != null ? bindingResult.getFieldError("nickname").getDefaultMessage() : "");
+            mav.addObject("passwordError", bindingResult.getFieldError("password") != null ? bindingResult.getFieldError("password").getDefaultMessage() : "");
+            mav.setViewName("thyme/user/login"); // 유효성 검사 오류가 발생한 경우, 다시 로그인 폼으로 이동
+            return mav;
+        }
         try {
             Member member = memberService.login(loginDTO);
 
