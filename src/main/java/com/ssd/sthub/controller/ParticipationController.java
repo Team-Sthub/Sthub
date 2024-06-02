@@ -3,6 +3,7 @@ package com.ssd.sthub.controller;
 import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.Participation;
+import com.ssd.sthub.dto.groupBuying.GroupBuyingListDTO;
 import com.ssd.sthub.dto.participation.ParticipationRequestDto;
 import com.ssd.sthub.dto.participation.ParticipationResponseDto;
 import com.ssd.sthub.repository.GroupBuyingRepository;
@@ -136,7 +137,9 @@ public class ParticipationController {
 
     //마이페이지 - 최신순 4개 조회
     @GetMapping("/mylist/top4List")
-    public ResponseEntity<SuccessResponse<List<ParticipationResponseDto.ParticipationDto>>> getParticipationList(@RequestParam Long memberId) throws BadRequestException {
-        return ResponseEntity.ok(SuccessResponse.create(participationService.getParticipationMylist(memberId)));
+    public String getParticipationList(@SessionAttribute(name = "memberId") Long memberId, Model model) throws BadRequestException {
+        List<GroupBuyingListDTO.MyListResponse> groupBuyingList = participationService.getParticipationMylist(memberId);
+        model.addAttribute("groupBuyingList", groupBuyingList);
+        return "thyme/user/fragments/participationFragments";
     }
 }

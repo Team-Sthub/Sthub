@@ -63,3 +63,9 @@ button, .menu a{
     order: 1;
     font-size: 14px;
 }
+
+div {
+    color: red;
+    font-size: 10px;
+    font-style: italic;
+}
