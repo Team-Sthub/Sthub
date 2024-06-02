@@ -5,8 +5,8 @@
     <title>Detail.html</title>
     <link rel="stylesheet" th:href="@{/style/header.css}">
     <link rel="stylesheet" th:href="@{/style/secondhand/detail.css}">
+    <link rel="stylesheet" th:href="@{/style/secondhand/purchase.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
-    <script th:src="@{/js/secondhand/detail.js}"></script>
 </head>
 <body>
 <!-- header 삽입 -->
@@ -85,7 +85,7 @@
         <a th:href="@{'#'}" th:onclick="'sendDeleteRequest(\'' + ${secondhand.secondhand.id} + '\')'" class="complaint">신고하기</a>
     </div>
     <div id="btn_purchase">
-        <a th:href="@{/secondhand/check(secondhandId=${secondhand.secondhand.id})}" class="purchase">구매하기</a>
+        <a class="purchase">구매하기</a>
     </div>
 </div>
 
@@ -94,8 +94,8 @@
 <div id="comment">
     <form class="comment-form" th:action="@{/secondhand/detail/comment}" method="post">
         <div class="comment-area">
-            <input type="hidden" th:name="secondhandId" th:value="${secondhand.secondhand.id}"/>
-            <p id="comment-nickname" th:text="${secondhand.secondhand.member.nickname}">블러드234</p>
+            <input type="hidden" id="secondhandId" th:name="secondhandId" th:value="${secondhand.secondhand.id}"/>
+            <p id="comment-nickname" th:text="${nickname}">블러드234</p>
             <textarea th:name="content" placeholder="내용을 입력하세요"></textarea>
         </div>
         <input id="createBtn" type="submit" value="등록"/>
@@ -109,5 +109,44 @@
         <div class="comment-content" th:text="${comment.content}"></div>
     </div>
 </div>
+
+<!-- 결제 정보 입력 모달창 -->
+<div class="modal1">
+    <div class="modal_popup1">
+        <div class="modal_menu1">
+            <h3>결제 정보 입력</h3>
+            <i id="submit_purchase" class="fas fa-paper-plane" style="
+                margin-block: 1em;
+                width: 15%;
+                cursor: pointer;"></i>
+            <span class="close1">&times;</span>
+        </div>
+        <!-- 카드번호 -->
+        <p class="cardNum">카드번호</p>
+        <div class="cardNum_area">
+            <input type="number" class="cardNum1" placeholder="1234"/>
+            <input type="number" class="cardNum2" placeholder="1234" />
+            <input type="number" class="cardNum3" placeholder="1234" />
+            <input type="number" class="cardNum4" placeholder="1234" />
+        </div>
+        <!-- 카드 유효기간 -->
+        <p class="cardExp">카드 유효기간</p>
+        <div class="cardExp_area">
+            <input type="number" class="cardExp_year" placeholder="2024" />
+            <input type="number" class="cardExp_month" placeholder="06" />
+        </div>
+        <!-- CVC -->
+        <p class="cvc">CVC</p>
+        <div class="cvc_area">
+            <input type="number" class="cvcNum" placeholder="000" />
+        </div>
+        <!-- 카드 비밀번호 -->
+        <p class="cardPWD">카드 비밀번호</p>
+        <div class="cardPWD_area">
+            <input type="number" class="cardPassword" placeholder="0000" />
+        </div>
+    </div>
+</div>
 </body>
+<script th:src="@{/js/secondhand/detail.js}"></script>
 </html>

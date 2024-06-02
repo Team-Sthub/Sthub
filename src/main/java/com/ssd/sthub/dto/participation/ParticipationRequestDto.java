@@ -22,7 +22,7 @@ public class ParticipationRequestDto {
     public static class PatchRequest {
         @NotNull
         private Long participationId;
-        @NotEmpty
+        @NotEmpty(message = "추가사항을 적어주세요. 없으면 '없음'으로 작성해주세요.")
         private String content;
     }
 

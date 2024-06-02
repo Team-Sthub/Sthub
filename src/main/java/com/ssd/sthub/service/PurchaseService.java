@@ -40,6 +40,8 @@ public class PurchaseService {
                     .member(member)
                     .build();
 
+        secondhand.updateStatus(); // 예약중으로 상태 변경
+        secondhandRepository.save(secondhand);
         purchaseRepository.save(purchase);
         return true;
     }

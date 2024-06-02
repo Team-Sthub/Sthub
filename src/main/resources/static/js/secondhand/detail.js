@@ -32,36 +32,56 @@ function toggleTransaction(type) {
     }
 }
 
-function sendDeleteRequest(secondhandId) {
-    alert(secondhandId);
-    var url = '/secondhand/delete?secondhandId=' + secondhandId;
+document.addEventListener('DOMContentLoaded', function() {
+    // 구매 관련
+    const cardNum1 = document.querySelector('.cardNum1');
+    const cardNum2 = document.querySelector('.cardNum2');
+    const cardNum3 = document.querySelector('.cardNum3');
+    const cardNum4 = document.querySelector('.cardNum4');
+    const cardExp_year = document.querySelector('.cardExp_year');
+    const cardExp_month = document.querySelector('.cardExp_month');
+    const cardPassword = document.querySelector('.cardPassword');
+    const cvcNum = document.querySelector('.cvcNum');
 
-    fetch(url, {
-        method: 'DELETE',
-    })
-        .then(response => {
+    const purchase = document.querySelector('.purchase');
+    const close1 = document.querySelector('.close1');
+    const submit_purchase = document.getElementById('submit_purchase');
+
+    // 구매하기 버튼 클릭 시
+    purchase.addEventListener('click', function() {
+        // display 속성을 block로 변경
+        document.querySelector('.modal1').style.display = 'block';
+    });
+
+    // 구매 닫기 버튼 클릭 시
+    close1.addEventListener('click', function() {
+        // display 속성을 none로 변경
+        document.querySelector('.modal1').style.display = 'none';
+    });
+
+    // 구매 전송 버튼 클릭 시
+    submit_purchase.addEventListener('click', function() {
+        // 모든 필드 다 입력했는지 검사
+        if(cardNum1.value === "" || cardNum2.value === "" || cardNum3.value === "" || cardNum4.value === "" ||
+            cardExp_month.value === "" || cardExp_year.value === "" || cardPassword.value === "" || cvcNum.value === "") {
+            console.log("cardNum1 : " + cardNum1.value);
+            alert("모든 값을 입력해주세요.")
+            return false;
+        }
+
+        const secondhandId = document.querySelector('#secondhandId').value;
+        fetch("/purchase?secondhandId=" + secondhandId, {
+            method: 'POST',
+        }).then(response => {
             if (response.ok) {
-                // 요청이 성공하면 원하는 작업 수행 (예: 페이지 리다이렉트)
-                window.location.href = '/secondhand/list/ALL?pageNum=1';
+                alert('구매에 성공했습니다.');
+                window.location.href = `/secondhand/detail?secondhandId=` + secondhandId;
             } else {
-                // 요청이 실패하면 에러 처리
-                alert('삭제에 실패했습니다.');
+                alert('구매 중 오류가 발생했습니다.');
             }
-        })
-        .catch(error => {
+        }).catch(error => {
             console.error('Error:', error);
-            alert('삭제 중 오류가 발생했습니다.');
+            alert('구매 중 오류가 발생했습니다.');
         });
-}
-
-// 거래 최종 방식 클릭 시 동작
-function check() {
-    // display 속성을 block로 변경
-    document.querySelector('.modal').style.display = 'block';
-}
-
-// 모달창 닫기 클릭 시 동작
-function close() {
-    // display 속성을 none로 변경
-    document.querySelector('.modal').style.display = 'none';
-}
+    });
+});

@@ -9,7 +9,7 @@
 </head>
 <body>
 <!-- 외부 js  -->
-<script th:src="@{/js/groupBuying/detail.js}"></script>
+<script th:src="@{/js/groupBuying/writerDetail.js}"></script>
 <!-- header 삽입 -->
 <div th:replace="thyme/frameHeader :: header"></div>
 
@@ -74,7 +74,7 @@
         <a th:href="@{/groupBuying/list}" class="message">1:1 쪽지하기</a>
     </div>
     <div id="btn_application">
-        <a th:href="@{/groupBuying/list}" class="application">공동구매 신청하기</a>
+        <a th:href="@{/participation/moveToForm(groupBuyingId=${groupBuying.groupBuying.id})}" class="application">공동구매 신청하기</a>
     </div>
     <div id="btn_appList">
         <a th:href="@{|/participation/list?pageNum=0&groupBuyingId=${groupBuying.groupBuying.id}|}" class="appList">신청자 목록
@@ -90,7 +90,7 @@
     <form class="comment-form" th:action="@{/groupBuying/detail/comment}" method="post">
         <div class="comment-area">
             <input type="hidden" th:name="groupBuyingId" th:value="${groupBuying.groupBuying.id}"/>
-            <p id="comment-nickname" th:text="${groupBuying.groupBuying.member.nickname}">블러드234</p>
+            <p id="comment-nickname" th:text="${memberNickname}">블러드234</p>
             <textarea th:name="content" placeholder="내용을 입력하세요"></textarea>
         </div>
         <input id="createBtn" type="submit" value="등록"/>
