@@ -58,7 +58,7 @@ public class ParticipationController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("participation", participation);
         modelAndView.addObject("member", member);
-        return new ModelAndView("redirect:/participation/detail?participationId=" + participation.getId());
+        return new ModelAndView("redirect:/participation/list?pageNum=0&groupBuyingId=" + groupBuyingId);
     }
 
     // 참여 신청폼 상세 조회
@@ -79,7 +79,7 @@ public class ParticipationController {
     // 참여 신청폼 리스트 조회
     @GetMapping("/list")
     public ModelAndView getParticipations(@RequestParam int pageNum, @SessionAttribute(name = "memberId") Long memberId, @RequestParam Long groupBuyingId) {
-        log.info("pageNum" + pageNum);
+
         List<ParticipationResponseDto.ParticipationList> participationList = participationService.getParticipationList(groupBuyingId, pageNum);
         ModelAndView modelAndView;
         if (memberId != null && participationService.isGroupBuyingWriter(memberId, groupBuyingId)) {
