@@ -70,11 +70,11 @@ public class MessageService {
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
         List<Message> messages = messageRepositoryImpl.findMessagesByMember(member, other);
 
-        if (messages.isEmpty())
+        if (messages.isEmpty()) {
             throw new EntityNotFoundException("대화내용을 찾을 수 없습니다.");
+        }
 
         return messages.stream()
-                //.map(m -> modelMapper.map(m, MessageDTO.Response.class))
                 .map(MessageDTO.Response::new)
                 .collect(Collectors.toList());
     }
