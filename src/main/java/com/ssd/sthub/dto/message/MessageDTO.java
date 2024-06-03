@@ -4,13 +4,14 @@ import com.ssd.sthub.domain.Message;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access =  AccessLevel.PROTECTED)
 public class MessageDTO {
-    @Getter
+    @Getter @Setter
     public static class Request {
         private Long receiverId;
         private String content;

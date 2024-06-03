@@ -1,10 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="UTF-8">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>1:1 쪽지</title>
+    <link rel="stylesheet" th:href="@{/style/header.css}">
+    <link rel="stylesheet" th:href="@{/style/message/detail.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
 </head>
 <body>
-
+    <div th:replace="~{thyme/frameHeader :: header}"></div>
+    <div id="msgBox">
+        <div id="msg">
+            <div id="nickname" th:text="${messageList[0].senderId == currentUserId ? messageList[0].receiverNickname : messageList[0].senderNickname} + ' 님과의 쪽지'"></div>
+            <div id="content" th:each="message : ${messageList}">
+                <div class="eachMsg" th:classappend="${message.senderId == currentUserId} ? ' sent' : ' received'">
+                    <div class="message-box" th:classappend="${message.senderId == currentUserId} ? ' sent' : ' received'">
+                        <p id="nick1" th:if="${message.senderId == currentUserId}" th:text="${message.senderNickname}"></p>
+                        <p id="nick2" th:unless="${message.senderId == currentUserId}" th:text="${message.senderNickname}"></p>
+                        <p id="title" th:text="${message.content}"><b>내용</b></p>
+                        <p id="time" th:text="${#temporals.format(message.createdAt, 'MM-dd HH:mm')}"><b>시간</b></p>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div id="inputMessage">
+                <form th:action="@{/message/send}" method="post">
+                    <input type="hidden" id="receiverIdInput" name="receiverId">
+                    <input type="text" name="content" placeholder="메시지를 입력하세요" required>
+                    <button type="submit">전송</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            var currentUrl = window.location.href;
+            console.log("현재 url은 " + currentUrl);
+            var url = new URL(currentUrl);
+            var receiverId = url.searchParams.get('receiverId');
+            console.log("receiverId 값은 " + receiverId);
+            document.getElementById('receiverIdInput').value = receiverId;
+        });
+    </script>
 </body>
 </html>
