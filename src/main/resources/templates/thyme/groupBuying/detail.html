@@ -71,7 +71,7 @@
 
 <div id="btn_list">
     <div id="btn_message">
-        <a th:href="@{/groupBuying/list}" class="message">1:1 쪽지하기</a>
+        <a th:href="@{|/message/detail?receiverId=${groupBuying.getGroupBuying().getMember().getId()}|}" class="message">1:1 쪽지하기</a>
     </div>
     <div id="btn_application">
         <a th:href="@{/participation/moveToForm(groupBuyingId=${groupBuying.groupBuying.id})}" class="application">공동구매 신청하기</a>
