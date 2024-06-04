@@ -5,6 +5,8 @@ import com.ssd.sthub.domain.enumerate.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,4 +21,7 @@ public interface GroupBuyingRepository extends JpaRepository<GroupBuying, Long> 
     Page<GroupBuying> findAllByOrderByCreatedAtDesc(PageRequest pageRequest);
 
     List<GroupBuying> findTop4ByMemberIdOrderByCreatedAtDesc(Long memberId);
+
+    // 공동구매 키워드 검색
+    List<GroupBuying> findAllByTitleContainingOrderByCreatedAtDesc(String title);
 }

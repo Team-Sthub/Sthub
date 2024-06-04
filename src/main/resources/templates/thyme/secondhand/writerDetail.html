@@ -94,8 +94,8 @@
 <div id="comment">
     <form class="comment-form" th:action="@{/secondhand/detail/comment}" method="post">
         <div class="comment-area">
-            <input type="hidden" id="secondhandId" th:value="${secondhand.secondhand.id}"/>
-            <p id="comment-nickname" th:text="${secondhand.secondhand.member.nickname}">블러드234</p>
+            <input type="hidden" id="secondhandId" th:name="secondhandId" th:value="${secondhand.secondhand.id}"/>
+            <p id="comment-nickname" th:text="${nickname}">블러드234</p>
             <textarea th:name="content" placeholder="내용을 입력하세요"></textarea>
         </div>
         <input id="createBtn" type="submit" value="등록"/>
