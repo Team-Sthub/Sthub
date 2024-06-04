@@ -108,6 +108,7 @@ td {
     justify-content: center;
     align-items: center;
     margin-top: 20px;
+    margin-left: 200px;
 }
 
 .pagination button, .pagination a, .pagination span {

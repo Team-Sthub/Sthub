@@ -3,6 +3,7 @@ package com.ssd.sthub.service;
 import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.Participation;
+import com.ssd.sthub.dto.groupBuying.GroupBuyingListDTO;
 import com.ssd.sthub.dto.participation.ParticipationRequestDto;
 import com.ssd.sthub.dto.participation.ParticipationResponseDto;
 import com.ssd.sthub.repository.GroupBuyingRepository;
@@ -17,8 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -116,18 +116,48 @@ public class ParticipationService {
     }
 
     // 내가 참여한 공동구매 리스트 4개
-    public List<ParticipationResponseDto.ParticipationDto> getParticipationMylist(Long memberId) throws BadRequestException {
+
+    public List<GroupBuyingListDTO.MyListResponse> getParticipationMylist(Long memberId) throws BadRequestException {
+        // 회원 조회
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
 
+        // 회원이 참여한 모든 공동구매 리스트 조회
         List<Participation> participations = participationRepository.findAllByMember(member);
-        participations.sort(Comparator.comparing(Participation::getCreatedAt).reversed());
 
-        return participations.stream()
-                .filter(participation -> participation.getAccept() == 1) // Filter for accept == 1
+        // accept가 1인 항목만 필터링하여 최신순으로 정렬 후 최대 4개 선택
+        List<Participation> acceptedParticipations = participations.stream()
+                .filter(participation -> participation.getAccept() == 1)
+                .sorted(Comparator.comparing(Participation::getCreatedAt).reversed())
                 .limit(4)
-                .map(ParticipationResponseDto.ParticipationDto::new)
                 .collect(Collectors.toList());
+
+        // 중복된 GroupBuying을 방지 위해 사용된 GroupBuyingId를 저장할 Set을 생성
+        Set<Long> usedGroupBuyingIds = new HashSet<>();
+
+        // 각 Participation에 해당하는 GroupBuying을 조회하여 MyListResponse로 변환
+        List<GroupBuyingListDTO.MyListResponse> groupBuyingList = new ArrayList<>();
+        for (Participation participation : acceptedParticipations) {
+            // 각 Participation에 해당하는 GroupBuying을 조회
+            GroupBuying groupBuying = participation.getGroupBuying();
+            if (groupBuying == null) {
+                throw new EntityNotFoundException("GroupBuying 조회에 실패했습니다.");
+            }
+
+            // 이미 사용된 GroupBuyingId인지 확인
+            Long groupBuyingId = groupBuying.getId();
+            if (usedGroupBuyingIds.contains(groupBuyingId)) {
+                // 이미 사용된 GroupBuyingId일 경우, 다음 Participation으로
+                continue;
+            }
+
+            // GroupBuyingId를 사용한 것으로 표시
+            usedGroupBuyingIds.add(groupBuyingId);
+
+            // 가져온 GroupBuying 객체를 사용하여 MyListResponse 생성
+            groupBuyingList.add(new GroupBuyingListDTO.MyListResponse(groupBuying, groupBuying.getImageList()));
+        }
+        return groupBuyingList;
     }
 
     //공동구매 작성자 확인

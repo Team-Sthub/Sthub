@@ -3,6 +3,7 @@ package com.ssd.sthub.controller;
 import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.Participation;
+import com.ssd.sthub.dto.groupBuying.GroupBuyingListDTO;
 import com.ssd.sthub.dto.participation.ParticipationRequestDto;
 import com.ssd.sthub.dto.participation.ParticipationResponseDto;
 import com.ssd.sthub.repository.GroupBuyingRepository;
@@ -57,7 +58,7 @@ public class ParticipationController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("participation", participation);
         modelAndView.addObject("member", member);
-        return new ModelAndView("redirect:/participation/detail?participationId=" + participation.getId());
+        return new ModelAndView("redirect:/participation/list?pageNum=0&groupBuyingId=" + groupBuyingId);
     }
 
     // 참여 신청폼 상세 조회
@@ -78,7 +79,7 @@ public class ParticipationController {
     // 참여 신청폼 리스트 조회
     @GetMapping("/list")
     public ModelAndView getParticipations(@RequestParam int pageNum, @SessionAttribute(name = "memberId") Long memberId, @RequestParam Long groupBuyingId) {
-        log.info("pageNum" + pageNum);
+
         List<ParticipationResponseDto.ParticipationList> participationList = participationService.getParticipationList(groupBuyingId, pageNum);
         ModelAndView modelAndView;
         if (memberId != null && participationService.isGroupBuyingWriter(memberId, groupBuyingId)) {
@@ -136,7 +137,9 @@ public class ParticipationController {
 
     //마이페이지 - 최신순 4개 조회
     @GetMapping("/mylist/top4List")
-    public ResponseEntity<SuccessResponse<List<ParticipationResponseDto.ParticipationDto>>> getParticipationList(@RequestParam Long memberId) throws BadRequestException {
-        return ResponseEntity.ok(SuccessResponse.create(participationService.getParticipationMylist(memberId)));
+    public String getParticipationList(@SessionAttribute(name = "memberId") Long memberId, Model model) throws BadRequestException {
+        List<GroupBuyingListDTO.MyListResponse> groupBuyingList = participationService.getParticipationMylist(memberId);
+        model.addAttribute("groupBuyingList", groupBuyingList);
+        return "thyme/user/fragments/participationFragments";
     }
 }

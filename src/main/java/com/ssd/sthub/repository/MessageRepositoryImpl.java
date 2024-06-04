@@ -12,6 +12,7 @@ import com.ssd.sthub.domain.QMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -113,13 +114,16 @@ public class MessageRepositoryImpl extends QuerydslRepositorySupport {
     }
 
     // 특정 사용자와의 쪽지 내역 전체 조회
+    @Transactional
     public List<Message> findMessagesByMember(Member member, Member other) {
-        QMessage qMessage = message;
+        QMessage qMessage = QMessage.message;
         QMember qSender = new QMember("sender");
         QMember qReceiver = new QMember("receiver");
 
-        BooleanExpression senderAndReceiver = qSender.eq(member).and(qReceiver.eq(other))
-                .or(qSender.eq(other).and(qReceiver.eq(member)));
+        BooleanExpression sentByMemberAndReceivedByOther = qMessage.sender.eq(member).and(qMessage.receiver.eq(other));
+        BooleanExpression sentByOtherAndReceivedByMember = qMessage.sender.eq(other).and(qMessage.receiver.eq(member));
+
+        BooleanExpression senderAndReceiver = sentByMemberAndReceivedByOther.or(sentByOtherAndReceivedByMember);
 
         return jpaQueryFactory
                 .selectFrom(qMessage)

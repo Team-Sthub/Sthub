@@ -23,8 +23,13 @@ public class MessageController {
 
     // 메세지 전송
     @PostMapping("/send")
-    public ResponseEntity<SuccessResponse<MessageDTO.Response>> sendMsg(@RequestHeader("memberId") Long senderId, @RequestBody MessageDTO.Request request) {
-        return ResponseEntity.ok(SuccessResponse.create(messageService.sendMsg(senderId, request)));
+    public String sendMsg(@SessionAttribute(name = "memberId") Long senderId,
+                          @RequestParam("receiverId") Long receiverId,
+                          @ModelAttribute MessageDTO.Request request) {
+        request.setReceiverId(receiverId);
+        System.out.println("받는 사람의 아이디는 " + request.getReceiverId());
+        messageService.sendMsg(senderId, request);
+        return "redirect:/message/detail?receiverId=" + receiverId;
     }
 
     // 모든 유저와의 쪽지 내역 조회
@@ -37,6 +42,9 @@ public class MessageController {
     @GetMapping("/detail")
     public ModelAndView getDetailMsgList(@SessionAttribute(name = "memberId") Long senderId, @RequestParam Long receiverId) {
         List<MessageDTO.Response> messageList = messageService.getPersonalMessage(senderId, receiverId);
-        return new ModelAndView("thyme/message/detail", "messageList", messageList);
+        ModelAndView modelAndView = new ModelAndView("thyme/message/detail");
+        modelAndView.addObject("messageList", messageList);
+        modelAndView.addObject("currentUserId", senderId);
+        return modelAndView;
     }
 }
