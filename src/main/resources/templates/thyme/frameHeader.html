@@ -61,9 +61,10 @@
         </div>
     </div>
     <div class="frame2">
-        <form id="search" th:action="@{/test}" method="GET">
+        <form id="search" th:action="@{/search}" method="GET">
             <!-- input type 추후 변경 -->
             <input type="search" name="searchValue" placeholder="상품명을 검색하세요"/>
+            <input type="hidden" th:name="pageNum" th:value="1" />
             <button type="submit">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>

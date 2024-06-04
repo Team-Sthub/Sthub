@@ -29,12 +29,6 @@ public interface SecondhandRepository extends JpaRepository<Secondhand, Long> {
     Page<Secondhand> findAllByCategoryOrderByCreatedAtDesc(Category category, PageRequest pageRequest);
     Page<Secondhand> findAllByOrderByCreatedAtDesc(PageRequest pageRequest);
 
-//    // 중고거래 키워드 검색
-//    @Query("SELECT s from Secondhand s WHERE s.title = :title ORDER BY s.createdAt desc")
-//    List<Secondhand> findAllByTitleOrderByCreatedAt(@Param("title") String title);
-//
-//    // 공동구매 키워드 검색
-//    @Query("SELECT g from GroupBuying g WHERE g.title = :title ORDER BY g.createdAt desc")
-//    List<GroupBuying> findAllByTitleOrderByCreatedAt(@Param("title") String title);
-
+    // 중고거래 키워드 검색
+    List<Secondhand> findAllByTitleContainingOrderByCreatedAtDesc(String title);
 }
