@@ -25,7 +25,7 @@ public class Review extends BaseTime {
 
     // 별점
     @Column(nullable = false)
-    private Integer rating;
+    private Double rating;
 
     // 조건 (각 항목은 노션에 정리되어 있음) 0,1로 구분 0-> 선택 안된 tag, 1-> 선택된 tag
     @NotEmpty
