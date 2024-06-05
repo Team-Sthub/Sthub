@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ser.Serializers;
 import com.ssd.sthub.domain.enumerate.Bank;
 import com.ssd.sthub.dto.member.MemberDTO;
 import com.ssd.sthub.dto.member.RegisterDTO;
+import com.ssd.sthub.dto.review.ReviewRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -93,5 +94,10 @@ public class Member extends BaseTime {
         this.latitude = memberDTO.getLatitude();
         this.email = memberDTO.getEmail();
         this.profile = memberDTO.getProfile();
+    }
+
+    public Member updateMannerGrade(ReviewRequestDTO.Request request) {
+        this.mannerGrade = (this.mannerGrade + request.getRating()) / 2;
+        return this;
     }
 }

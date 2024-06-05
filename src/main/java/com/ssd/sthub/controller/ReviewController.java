@@ -36,7 +36,7 @@ public class ReviewController {
         return "thyme/review/create";
     }
 
-    // 리뷰 전송
+    // 리뷰 작성
     @PostMapping(value = "/create")
     public ModelAndView createReview(@ModelAttribute @Validated ReviewRequestDTO.Request request) {
         Long purchaseId = request.getPurchaseId();
@@ -52,5 +52,4 @@ public class ReviewController {
     public ResponseEntity<SuccessResponse<List<Integer>>> getMyReview(@RequestHeader Long memberId) {
         return ResponseEntity.ok(SuccessResponse.create(reviewService.getTags(memberId)));
     }
-    // 농도 계산
 }

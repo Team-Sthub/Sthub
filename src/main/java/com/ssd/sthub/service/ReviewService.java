@@ -33,13 +33,20 @@ public class ReviewService {
         Secondhand secondhand = secondhandRepository.findById(purchase.getSecondhand().getId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 중고거래 게시글을 찾을 수 없습니다."));
 
+        // 거래후기 작성 중복 방지
+        if (reviewRepository.existsBySecondhandId(secondhand.getId())) {
+            throw new IllegalStateException("이미 리뷰가 작성된 구매 내역입니다.");
+        }
+
         Review review = new Review(request, secondhand);
+
+        //매너 농도 계산
+        Member member = secondhand.getMember();
+        member.updateMannerGrade(request);
+        memberRepository.save(member);
 
         return reviewRepository.save(review);
     }
-
-    // 매너 농도 계산
-
 
     // 후기 조회
     public List<Integer> getTags(Long memberId) {
@@ -49,6 +56,7 @@ public class ReviewService {
         List<Integer> trueIndexes = reviewRepository.findReviewRepoDTOByMemberId(memberId);
         return trueIndexes;
     }
+
     // 매너 농도 조회
 
 }
