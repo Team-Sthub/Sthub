@@ -150,4 +150,13 @@ public class GroupBuyingController {
         model.addAttribute("groupBuyingList", groupBuyingList);
         return "thyme/user/fragments/groupbuyingFragments";
     }
+
+    // 내 근처 공동구매 조회
+    @GetMapping("/around/{category}")
+    public ModelAndView getAllAroundGroupBuying(@SessionAttribute(name = "memberId") Long memberId, @PathVariable Category category, @RequestParam int pageNum) throws BadRequestException {
+        List<GroupBuyingListDTO.ListResponse> groupBuyingList = groupBuyingService.getAllAroundGroupBuying(memberId, category, pageNum - 1);
+        ModelAndView modelAndView = new ModelAndView("thyme/groupBuying/around");
+        modelAndView.addObject("groupBuyingList", groupBuyingList);
+        return modelAndView;
+    }
 }

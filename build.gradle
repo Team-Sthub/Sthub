@@ -56,6 +56,10 @@ dependencies {
     implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.7.5'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.15.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
+
+    // geocoding
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    implementation 'org.json:json:20210307'
 }
 
 tasks.named('test') {
