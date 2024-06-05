@@ -1,0 +1,107 @@
+.back {
+    width: 86%;
+    margin: 3%;
+    margin-left: 8%;
+    height: 750px;
+    background: rgba(76, 175, 80, 0.1);
+    border-radius: 5em;
+}
+
+h2 {
+    text-align: center;
+}
+h3 {
+    margin-top: 3%;
+    margin-left: 10%;
+}
+.title {
+    position: relative;
+    margin-top: 40px;
+    margin-right: 2%;
+}
+
+.complaint-form {
+    width: 93%;
+    margin: 3% auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.complaint-info {
+    padding: 8px 50px;
+    width: 75%;
+    height: 40px;
+    margin-left: 10%;
+    margin-top:1%;
+    text-align: left;
+    line-height: 40px;
+    border-radius:30px;
+    background-color: white;
+    font-weight: bold;
+}
+
+label {
+    font-weight: normal;
+    margin-left: 2%;
+}
+
+.tag-container {
+    width: 90%;
+    height: 250px;
+    background-color: white;
+    border-radius: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: auto;
+}
+
+.tag-box {
+    flex: 0 1 calc(30% - 20px); /* 한 줄에 3개씩 배치되도록 설정 */
+    background: rgba(76, 175, 80, 0.6);
+    line-height: 50px;
+    text-align: center;
+    border-radius: 5em;
+    margin: 10px;
+    white-space: nowrap;
+}
+
+.tag-box-non {
+    flex: 0 1 calc(30% - 20px); /* 한 줄에 3개씩 배치되도록 설정 */
+    background: rgba(0, 81, 0, 0.2);
+    line-height: 50px;
+    text-align: center;
+    border-radius: 5em;
+    margin: 10px;
+    white-space: nowrap;
+}
+
+.checkbox {
+    margin: 2%;
+    margin-left: 5%;
+}
+
+.btn1 {
+    background: white;
+    width: 27%;
+    height: 60px;
+    border-radius: 10px;
+    border: none;
+    text-align: center;
+    font-size: 20px;
+    line-height: normal;
+    margin-top: 15px;
+    margin-left: 25%;
+    margin-right: 42px;
+}
+
+.btn2 {
+    background: white;
+    width: 27%;
+    height: 60px;
+    border-radius: 10px;
+    border: none;
+    text-align: center;
+    font-size: 20px;
+}
