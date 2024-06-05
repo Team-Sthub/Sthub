@@ -14,12 +14,24 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.simple.JSONValue;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -201,4 +213,114 @@ public class GroupBuyingService {
             gImageRepository.deleteByPath(image);
         }
     }
+
+    // 내 근처 공동구매 전체 조회 (페이징 포함)
+    public List<GroupBuyingListDTO.ListResponse> getAllAroundGroupBuying(Long memberId, Category category, int pageNum) throws BadRequestException {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
+        );
+
+        PageRequest pageRequest = PageRequest.of(pageNum, 10);
+        Page<GroupBuying> groupBuyings;
+
+        // 지오코딩
+        List<GroupBuying> groupBuyingList = groupBuyingRepository.findAll();
+        log.info("========================");
+        for (GroupBuying groupBuying : groupBuyingList) {
+            log.info("meetingPlace: " + groupBuying.getMeetingPlace());
+            Map<String, String> address = getGeoDataByAddress(groupBuying.getMeetingPlace());
+            if(address != null) {
+                groupBuying.setLatitude(Double.valueOf(address.get("lat")));
+                groupBuying.setLongitude(Double.valueOf(address.get("lng")));
+                groupBuyingRepository.save(groupBuying);
+                log.info("GroupBuying: " + groupBuying);
+            }
+        }
+
+        log.info("========================");
+
+        // 2. 로그인한 회원의 위치를 기준으로 반경 5km 내에 있는 공동구매 데이터 검색
+        if (category == Category.ALL){
+            groupBuyings = groupBuyingRepository.findByLocationWithin5kmOrderByCreatedAtDesc(member.getLatitude(), member.getLongitude(), pageRequest);
+            log.info("groupBuyings: " + groupBuyings);
+        } else {
+            groupBuyings = groupBuyingRepository.findByLocationWithin5kmAndCategoryOrderByCreatedAtDesc(member.getLatitude(), member.getLongitude(), category, pageRequest);
+            log.info("groupBuyings: " + groupBuyings);
+        }
+
+        if(groupBuyings == null || groupBuyings.isEmpty())
+            throw new BadRequestException("작성된 게시글이 없습니다.");
+
+        return groupBuyings.stream()
+                .map(g -> new GroupBuyingListDTO.ListResponse(g, g.getImageList(), category, groupBuyings.getTotalPages(), pageNum + 1))
+                .collect(Collectors.toList());
+    }
+
+    private static Map<String, String> getGeoDataByAddress(String completeAddress) {
+        try {
+            String API_KEY = "AIzaSyBG0mcLkUd6Oz5Q4uCD_cXE-dGNaoAi-fg";
+            String surl = "https://maps.googleapis.com/maps/api/geocode/json?address="+URLEncoder.encode(completeAddress, "UTF-8")+"&key="+API_KEY;
+            URL url = new URL(surl);
+            InputStream is = url.openConnection().getInputStream();
+
+            BufferedReader streamReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            StringBuilder responseStrBuilder = new StringBuilder();
+
+            String inputStr;
+//            log.info(">>>>>>>>>> >>>>>>>>>> InputStream Start <<<<<<<<<< <<<<<<<<<<");
+            while ((inputStr = streamReader.readLine()) != null) {
+//                log.info(">>>>>>>>>>     "+inputStr);
+                responseStrBuilder.append(inputStr);
+            }
+//            log.info(">>>>>>>>>> >>>>>>>>>> InputStream End <<<<<<<<<< <<<<<<<<<<");
+
+            JSONObject jo = new JSONObject(responseStrBuilder.toString());
+
+            JSONArray results = jo.getJSONArray("results");
+            Map<String, String> ret = new HashMap<String, String>();
+
+            if(results.length() > 0) {
+                JSONObject jsonObject;
+                jsonObject = results.getJSONObject(0);
+
+                Double lat = jsonObject.getJSONObject("geometry").getJSONObject("location").getDouble("lat");
+                Double lng = jsonObject.getJSONObject("geometry").getJSONObject("location").getDouble("lng");
+
+                ret.put("lat", lat.toString());
+                ret.put("lng", lng.toString());
+
+                System.out.println("LAT:\t\t"+lat);
+                System.out.println("LNG:\t\t"+lng);
+                JSONArray ja = jsonObject.getJSONArray("address_components");
+
+                for(int l=0; l<ja.length(); l++) {
+                    JSONObject curjo = ja.getJSONObject(l);
+                    String type = curjo.getJSONArray("types").getString(0);
+                    String short_name = curjo.getString("short_name");
+
+                    if(type.equals("postal_code")) {
+                        log.info("POSTAL_CODE: "+short_name);
+                        ret.put("zip", short_name);
+                    }
+                    else if(type.equals("administrative_area_level_3")) {
+                        log.info("CITY: "+short_name);
+                        ret.put("city", short_name);
+                    }
+                    else if(type.equals("administrative_area_level_2")) {
+                        log.info("PROVINCE: "+short_name);
+                        ret.put("province", short_name);
+                    }
+                    else if(type.equals("administrative_area_level_1")) {
+                        log.info("REGION: "+short_name);
+                        ret.put("region", short_name);
+                    }
+                }
+                return ret;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

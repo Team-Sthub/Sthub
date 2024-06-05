@@ -13,7 +13,7 @@
 <!-- header 삽입 -->
 <div th:replace="thyme/frameHeader :: header"></div>
 
-<div><a th:href="@{/groupBuying/list}" class="btn_wrap">목록</a></div>
+<div><a th:href="@{/groupBuying/list/ALL(pageNum=1)}" class="btn_wrap">목록</a></div>
 
 <p id="detail-title" th:text="${groupBuying.getGroupBuying().title}">공학용 계산기 공동구매 하실 분</p>
 <p id="user-nickname" th:text="${groupBuying.getGroupBuying().getMember().nickname}">zzimnii</p>

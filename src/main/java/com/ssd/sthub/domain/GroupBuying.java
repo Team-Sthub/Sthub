@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -67,6 +68,11 @@ public class GroupBuying extends BaseTime {
 
     @OneToMany(mappedBy = "groupBuying", cascade = CascadeType.ALL)
     private List<GComment> commentList = new ArrayList<>();
+
+    @Setter
+    private Double latitude;
+    @Setter
+    private Double longitude;
 
     public GroupBuying(GroupBuyingDetailDTO.PatchRequest groupBuyingDetailDTO, Member member) {
         this.title = groupBuyingDetailDTO.getTitle();
