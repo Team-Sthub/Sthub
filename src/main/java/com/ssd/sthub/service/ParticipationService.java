@@ -4,8 +4,8 @@ import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.Participation;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingListDTO;
-import com.ssd.sthub.dto.participation.ParticipationRequestDto;
-import com.ssd.sthub.dto.participation.ParticipationResponseDto;
+import com.ssd.sthub.dto.participation.ParticipationRequestDTO;
+import com.ssd.sthub.dto.participation.ParticipationResponseDTO;
 import com.ssd.sthub.repository.GroupBuyingRepository;
 import com.ssd.sthub.repository.MemberRepository;
 import com.ssd.sthub.repository.ParticipationRepository;
@@ -31,7 +31,7 @@ public class ParticipationService {
     private final GroupBuyingRepository groupBuyingRepository;
 
     // 공동구매 신청서 작성
-    public Participation createParticipation(Long memberId, Long groupBuyingId, ParticipationRequestDto.Request request) throws NullPointerException{
+    public Participation createParticipation(Long memberId, Long groupBuyingId, ParticipationRequestDTO.Request request) throws NullPointerException{
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
         GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingId)
@@ -47,7 +47,7 @@ public class ParticipationService {
     }
 
     // 공동구매 신청자 수락/거절
-    public Participation accpetMember(Long memberId, Long participationId, ParticipationRequestDto.AcceptRequest request) throws BadRequestException {
+    public Participation accpetMember(Long memberId, Long participationId, ParticipationRequestDTO.AcceptRequest request) throws BadRequestException {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
 
@@ -76,7 +76,7 @@ public class ParticipationService {
     }
 
     // 신청폼 수정
-    public Participation updateParticipation(Long memberId, Long participationId, ParticipationRequestDto.PatchRequest request) throws BadRequestException{
+    public Participation updateParticipation(Long memberId, Long participationId, ParticipationRequestDTO.PatchRequest request) throws BadRequestException{
         Participation participation = participationRepository.findById(participationId)
                 .orElseThrow(() -> new EntityNotFoundException("신청서 조회에 실패했습니다."));
 
@@ -87,7 +87,7 @@ public class ParticipationService {
     }
 
     // 참여자 리스트 조회
-    public List<ParticipationResponseDto.ParticipationList> getParticipationList(Long groupBuyingId, int pageNum) {
+    public List<ParticipationResponseDTO.ParticipationList> getParticipationList(Long groupBuyingId, int pageNum) {
         PageRequest pageRequest = PageRequest.of(pageNum, 6);
         Page<Participation> participations = participationRepository.findAllByGroupBuyingId(groupBuyingId, pageRequest);
 
@@ -95,12 +95,12 @@ public class ParticipationService {
                 .orElseThrow(() -> new EntityNotFoundException("공동구매 게시글 조회에 실패했습니다."));
 
         return participations.stream()
-                .map(p->new ParticipationResponseDto.ParticipationList(p, participations.getTotalPages(), pageNum + 1))
+                .map(p->new ParticipationResponseDTO.ParticipationList(p, participations.getTotalPages(), pageNum + 1))
                 .collect(Collectors.toList());
     }
 
     // 내가 참여한 공동구매 리스트
-    public List<ParticipationResponseDto.ParticipationList> getMyParticipationList(int pageNum, Long memberId) throws BadRequestException {
+    public List<ParticipationResponseDTO.ParticipationList> getMyParticipationList(int pageNum, Long memberId) throws BadRequestException {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
 
@@ -111,12 +111,11 @@ public class ParticipationService {
             throw new BadRequestException("공동구매에 참여하지 않았습니다.");
 
         return participations.stream()
-                .map(p -> new ParticipationResponseDto.ParticipationList(p, participations.getTotalPages(), pageNum))
+                .map(p -> new ParticipationResponseDTO.ParticipationList(p, participations.getTotalPages(), pageNum))
                 .collect(Collectors.toList());
     }
 
     // 내가 참여한 공동구매 리스트 4개
-
     public List<GroupBuyingListDTO.MyListResponse> getParticipationMylist(Long memberId) throws BadRequestException {
         // 회원 조회
         Member member = memberRepository.findById(memberId)

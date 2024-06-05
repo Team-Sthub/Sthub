@@ -1,6 +1,6 @@
 package com.ssd.sthub.domain;
 
-import com.ssd.sthub.dto.participation.ParticipationRequestDto;
+import com.ssd.sthub.dto.participation.ParticipationRequestDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -37,19 +37,19 @@ public class Participation extends BaseTime {
     private Member member;
 
     @Builder
-    public Participation(Member member, GroupBuying groupBuying, ParticipationRequestDto.Request request) {
+    public Participation(Member member, GroupBuying groupBuying, ParticipationRequestDTO.Request request) {
         this.member = member;
         this.groupBuying = groupBuying;
         this.content = request.getContent();
         this.accept = 0;
     }
 
-    public Participation update(ParticipationRequestDto.PatchRequest request) {
+    public Participation update(ParticipationRequestDTO.PatchRequest request) {
         this.content = request.getContent();
         return this;
     }
 
-    public void accept(ParticipationRequestDto.AcceptRequest request) {
+    public void accept(ParticipationRequestDTO.AcceptRequest request) {
         this.accept = request.getAccept();
     }
 }
