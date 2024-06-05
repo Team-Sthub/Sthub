@@ -6,11 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ParticipationResponseDto {
+public class ParticipationResponseDTO {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)

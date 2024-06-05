@@ -4,8 +4,8 @@ import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.Participation;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingListDTO;
-import com.ssd.sthub.dto.participation.ParticipationRequestDto;
-import com.ssd.sthub.dto.participation.ParticipationResponseDto;
+import com.ssd.sthub.dto.participation.ParticipationRequestDTO;
+import com.ssd.sthub.dto.participation.ParticipationResponseDTO;
 import com.ssd.sthub.repository.GroupBuyingRepository;
 import com.ssd.sthub.repository.MemberRepository;
 import com.ssd.sthub.response.SuccessResponse;
@@ -14,7 +14,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,14 +42,14 @@ public class ParticipationController {
 
         model.addAttribute("member", member);
         model.addAttribute("groupBuying", groupBuying);
-        model.addAttribute("participationRequestDto", new ParticipationRequestDto.Request());
+        model.addAttribute("participationRequestDto", new ParticipationRequestDTO.Request());
 
         return "thyme/participation/create";
     }
 
     // 참여 신청폼 작성
     @PostMapping("/create")
-    public ModelAndView createParticipation(@SessionAttribute(name = "memberId") Long memberId, Long groupBuyingId, @ModelAttribute @Validated ParticipationRequestDto.Request request) {
+    public ModelAndView createParticipation(@SessionAttribute(name = "memberId") Long memberId, Long groupBuyingId, @ModelAttribute @Validated ParticipationRequestDTO.Request request) {
         Participation participation = participationService.createParticipation(memberId, groupBuyingId, request);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
@@ -80,7 +79,7 @@ public class ParticipationController {
     @GetMapping("/list")
     public ModelAndView getParticipations(@RequestParam int pageNum, @SessionAttribute(name = "memberId") Long memberId, @RequestParam Long groupBuyingId) {
 
-        List<ParticipationResponseDto.ParticipationList> participationList = participationService.getParticipationList(groupBuyingId, pageNum);
+        List<ParticipationResponseDTO.ParticipationList> participationList = participationService.getParticipationList(groupBuyingId, pageNum);
         ModelAndView modelAndView;
         if (memberId != null && participationService.isGroupBuyingWriter(memberId, groupBuyingId)) {
             modelAndView = new ModelAndView("thyme/participation/writerlist");
@@ -106,7 +105,7 @@ public class ParticipationController {
     @PostMapping("/update")
     public ModelAndView updateParticipation(
             @SessionAttribute(name = "memberId") Long memberId,
-            @RequestParam Long participationId, @RequestBody @Validated ParticipationRequestDto.PatchRequest request) throws BadRequestException {
+            @RequestParam Long participationId, @RequestBody @Validated ParticipationRequestDTO.PatchRequest request) throws BadRequestException {
         Participation participation = participationService.updateParticipation(memberId, participationId, request);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("participation", participation);
@@ -117,13 +116,13 @@ public class ParticipationController {
     @PatchMapping("/list")
     public ModelAndView patchParticipations(
             @SessionAttribute(name = "memberId") Long memberId,
-            @RequestBody @Validated ParticipationRequestDto.AcceptRequest request) throws BadRequestException {
+            @RequestBody @Validated ParticipationRequestDTO.AcceptRequest request) throws BadRequestException {
 
         Long participationId = request.getParticipationId();
         Long groupBuyingId = request.getGroupBuyingId();
         participationService.accpetMember(memberId, participationId, request);
 
-        List<ParticipationResponseDto.ParticipationList> participationList = participationService.getParticipationList(groupBuyingId, 0);
+        List<ParticipationResponseDTO.ParticipationList> participationList = participationService.getParticipationList(groupBuyingId, 0);
         ModelAndView modelAndView = new ModelAndView("thyme/participation/writerlist");
         modelAndView.addObject("participationList", participationList);
         return modelAndView;
@@ -131,7 +130,7 @@ public class ParticipationController {
 
     //마이페이지 - 공구 참여 전체 조회
     @GetMapping("/mylist")
-    public ResponseEntity<SuccessResponse<List<ParticipationResponseDto.ParticipationList>>> getParticipationGroupBuyings(@RequestParam Long memberId, @RequestParam int pageNum) throws BadRequestException {
+    public ResponseEntity<SuccessResponse<List<ParticipationResponseDTO.ParticipationList>>> getParticipationGroupBuyings(@RequestParam Long memberId, @RequestParam int pageNum) throws BadRequestException {
         return ResponseEntity.ok(SuccessResponse.create(participationService.getMyParticipationList(pageNum, memberId)));
     }
 
