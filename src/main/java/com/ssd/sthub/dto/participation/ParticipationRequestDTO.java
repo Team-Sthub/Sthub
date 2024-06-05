@@ -6,7 +6,7 @@ import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ParticipationRequestDto {
+public class ParticipationRequestDTO {
 
     @Data
     @Getter
