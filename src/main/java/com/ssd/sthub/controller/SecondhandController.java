@@ -163,4 +163,10 @@ public class SecondhandController {
         model.addAttribute("secondhandList", secondhandList);
         return "thyme/user/fragments/sellingFragments";
     }
+
+    // 배송조회 폼으로 이동
+    @GetMapping("tracker")
+    public ModelAndView moveToTrackerForm(@RequestParam Long secondhandId) {
+        return new ModelAndView("thyme/secondhand/tracker", "secondhandId", secondhandId);
+    }
 }

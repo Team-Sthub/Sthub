@@ -1,0 +1,51 @@
+#main-title {
+    width: 55%;
+    margin: 0 auto;
+    position: relative;
+    margin-top: 30px;
+    color: #000000;
+    font-size: 22px;
+}
+
+hr {
+    width: 60%;
+}
+
+#tracker {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.company, .tracking {
+    display: flex;
+    position: relative;
+    align-items: center;
+}
+
+.form-control {
+    margin-left: 1em;
+}
+
+.btn-default {
+    margin-left: 1em;
+    width: 60px;
+    height: 30px;
+    border-radius: 3px;
+    background-color: #EDF7ED;
+    border: 1px solid gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#t_invoice {
+    width: 250px;
+    text-align: center;
+}
+
+.trackerFrame {
+    width: 60%;
+    margin: 0 auto;
+    border: none;
+    display: flex;
+}
