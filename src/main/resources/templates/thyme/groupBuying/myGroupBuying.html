@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MyGroupBuying.html</title>
+    <link rel="stylesheet" th:href="@{/style/header.css}">
+    <link rel="stylesheet" th:href="@{/style/groupBuying/myGroupBuying.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
+</head>
+<body>
+<!-- header 삽입 -->
+<div th:replace="thyme/frameHeader :: header"></div>
+
+<p id="menu-title">공동구매 모집</p>
+<hr/>
+
+<!-- 공동구매 게시글 리스트 -->
+<div class="product-grid">
+    <div th:each="groupBuying : ${myGroupBuyingList}">
+        <a th:href="@{/groupBuying/detail(groupBuyingId=${groupBuying.getGroupBuying().id})}" class="product-box-link">
+            <div class="product-box">
+                <div class="box-top">
+                    <p id="date" th:text="${#strings.substring(groupBuying.getGroupBuying().createdAt, 0, 10)}"></p>
+                    <div class="status-box">
+                        <div id="status" th:text="${groupBuying.getGroupBuying().status}">모집중</div>
+                    </div>
+                </div>
+                <!-- 이미지가 있는 경우 가장 첫 번째 이미지를 썸네일로 사용-->
+                <div th:if="${groupBuying.getGImages() == null or groupBuying.getGImages().isEmpty()}">
+                    <img th:src="@{/images/no_img.jpg}" alt="No Image" />
+                </div>
+                <div th:if="${groupBuying.getGImages() != null and !groupBuying.getGImages().isEmpty()}">
+                    <img th:src="@{${groupBuying.getGImages[0].path}}" alt="Image"/>
+                </div>
+                <p id="title" th:text="${groupBuying.getGroupBuying().title}"><b>제목</b></p>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- 페이지네이션 -->
+<div class="pagination">
+    <!-- 이전 버튼, currentPage가 11 이상일 때만 활성화 -->
+    <button th:if="${myGroupBuyingList[0].currentPage > 10}"
+            th:onclick="|window.location.href='@{/groupBuying/mylist/all(pageNum=${myGroupBuyingList[0].currentPage - 10})}'|">&lt;</button>
+
+    <!-- 페이지 번호 반복 출력 -->
+    <span th:each="pageNumber : ${#numbers.sequence((myGroupBuyingList[0].currentPage - 1) / 10 * 10 + 1, ((myGroupBuyingList[0].currentPage - 1) / 10 + 1) * 10)}">
+        <a th:if="${pageNumber <= myGroupBuyingList[0].totalPage} and ${pageNumber != myGroupBuyingList[0].currentPage}"
+           th:href="@{/groupBuying/mylist/all(pageNum=${pageNumber})}"
+           th:text="${pageNumber}" style="border: none;">Page</a>
+        <span th:if="${pageNumber <= myGroupBuyingList[0].totalPage} and ${pageNumber == myGroupBuyingList[0].currentPage}"
+              class="current-page" th:text="${pageNumber}"></span>
+    </span>
+
+    <!-- 다음 버튼, 총 페이지 수가 currentPage + 10 이상일 때만 활성화 -->
+    <button th:if="${myGroupBuyingList[0].totalPage > myGroupBuyingList[0].currentPage + 10}"
+            th:onclick="|window.location.href='@{/groupBuying/mylist/all(pageNum=${myGroupBuyingList[0].currentPage + 10})}'|">&gt;</button>
+</div>
+
+</body>
+</html>

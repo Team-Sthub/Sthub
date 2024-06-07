@@ -1,12 +1,10 @@
 package com.ssd.sthub.controller;
 
 
-import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.domain.enumerate.Category;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingDetailDTO;
 import com.ssd.sthub.dto.groupBuying.GroupBuyingListDTO;
 import com.ssd.sthub.dto.groupBuying.PostGroupBuyingDTO;
-import com.ssd.sthub.response.SuccessResponse;
 import com.ssd.sthub.service.AWSS3SService;
 import com.ssd.sthub.service.GroupBuyingService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -139,8 +136,9 @@ public class GroupBuyingController {
 
     // 마이페이지 - 공구 내역 (더보기)
     @GetMapping("/mylist/all")
-    public ResponseEntity<SuccessResponse<List<GroupBuyingListDTO.MyAllListResponse>>> getAllGroupBuyingByMemberId(@SessionAttribute(name = "memberId") Long memberId, @RequestParam int pageNuM) {
-        return ResponseEntity.ok(SuccessResponse.create(groupBuyingService.getAllGroupBuyingByMemberId(memberId, pageNuM)));
+    public ModelAndView getAllGroupBuyingByMemberId(@SessionAttribute(name = "memberId") Long memberId, @RequestParam int pageNum) {
+        List<GroupBuyingListDTO.MyAllListResponse> myGroupBuyingList = groupBuyingService.getAllGroupBuyingByMemberId(memberId, pageNum - 1);
+        return new ModelAndView("thyme/groupBuying/myGroupBuying", "myGroupBuyingList", myGroupBuyingList);
     }
 
     // 마이페이지 - 공구 내역 (4개)
