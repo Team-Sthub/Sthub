@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -34,14 +35,25 @@ public class MessageController {
 
     // 모든 유저와의 쪽지 내역 조회
     @GetMapping("/list")
-    public ResponseEntity<SuccessResponse<MessageListDTO>> getMsgList(@RequestHeader("memberId") Long senderId, @RequestParam int pageNum) throws BadRequestException {
-        return ResponseEntity.ok(SuccessResponse.create(messageService.getAllMessage(pageNum, senderId)));
+    public ModelAndView getMsgList(@SessionAttribute(name = "memberId") Long senderId,
+                                   @RequestParam(defaultValue = "0") int pageNum) throws BadRequestException {
+        MessageListDTO messageListDTO = messageService.getAllMessage(pageNum, senderId);
+        ModelAndView modelAndView = new ModelAndView("thyme/message/list");
+        /*if (messageListDTO.getResult().isEmpty()) {
+            modelAndView.addObject("noMessage", "아직 쪽지를 주고받은 상대가 없습니다.");
+        }*/
+        modelAndView.addObject("messageList", messageListDTO);
+        modelAndView.addObject("currentUserId", senderId);
+        return modelAndView;
     }
 
     // 특정 유저와의 쪽지 내역 조회
     @GetMapping("/detail")
     public ModelAndView getDetailMsgList(@SessionAttribute(name = "memberId") Long senderId, @RequestParam Long receiverId) {
         List<MessageDTO.Response> messageList = messageService.getPersonalMessage(senderId, receiverId);
+        if (messageList == null) {
+            messageList = new ArrayList<>();
+        }
         ModelAndView modelAndView = new ModelAndView("thyme/message/detail");
         modelAndView.addObject("messageList", messageList);
         modelAndView.addObject("currentUserId", senderId);

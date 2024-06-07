@@ -1,0 +1,50 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+#msgBox {
+    display: flex;
+    flex-direction: column;
+    width: 65%;
+    margin: 20px auto;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    height: 530px; /* 원하는 높이로 설정 */
+    box-sizing: border-box;
+    position: relative;
+    align-items: center;
+}
+
+#contentBox {
+    width: 85%;
+}
+
+.conversation {
+    height: 100px;
+    background-color: #daf8cb;
+    padding: 7px;
+    margin-bottom: 10px;
+    border-radius: 9px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+a {
+    text-decoration: none;
+}
+
+.date {
+    text-align: right; /* 날짜를 오른쪽으로 정렬 */
+}
+
+.conversation h2 {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+.conversation p {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 3px;
+}
