@@ -170,7 +170,7 @@ public class GroupBuyingService {
                 () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
         );
 
-        PageRequest pageRequest = PageRequest.of(pageNum, 10);
+        PageRequest pageRequest = PageRequest.of(pageNum, 8);
         Page<GroupBuying> groupBuyings = groupBuyingRepository.findAllByMemberId(memberId, pageRequest);
 
         return groupBuyings.stream()
