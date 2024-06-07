@@ -52,8 +52,8 @@ public class MessageService {
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
         QueryResults<Message> messages = messageRepositoryImpl.findMessagesByAllMember(memberId, pageNum, 4);
 
-        if (messages.isEmpty())
-            throw new EntityNotFoundException("대화내용을 찾을 수 없습니다.");
+        /*if (messages.isEmpty())
+            throw new EntityNotFoundException("대화내용을 찾을 수 없습니다.");*/
 
         List<MessageDTO.Response> result = messages.getResults().stream()
                 .map(MessageDTO.Response::new)
@@ -70,9 +70,9 @@ public class MessageService {
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
         List<Message> messages = messageRepositoryImpl.findMessagesByMember(member, other);
 
-        if (messages.isEmpty()) {
+        /*if (messages.isEmpty()) {
             throw new EntityNotFoundException("대화내용을 찾을 수 없습니다.");
-        }
+        }*/
 
         return messages.stream()
                 .map(MessageDTO.Response::new)

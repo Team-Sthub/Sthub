@@ -9,26 +9,33 @@
 </head>
 <body>
     <div th:replace="~{thyme/frameHeader :: header}"></div>
-    <div id="msgBox">
-        <div id="msg">
-            <div id="nickname" th:text="${messageList[0].senderId == currentUserId ? messageList[0].receiverNickname : messageList[0].senderNickname} + ' 님과의 쪽지'"></div>
-            <div id="content" th:each="message : ${messageList}">
-                <div class="eachMsg" th:classappend="${message.senderId == currentUserId} ? ' sent' : ' received'">
-                    <div class="message-box" th:classappend="${message.senderId == currentUserId} ? ' sent' : ' received'">
-                        <p id="nick1" th:if="${message.senderId == currentUserId}" th:text="${message.senderNickname}"></p>
-                        <p id="nick2" th:unless="${message.senderId == currentUserId}" th:text="${message.senderNickname}"></p>
-                        <p id="title" th:text="${message.content}"><b>내용</b></p>
-                        <p id="time" th:text="${#temporals.format(message.createdAt, 'MM-dd HH:mm')}"><b>시간</b></p>
+    <div id="msgContainer">
+        <div id="msgBox">
+            <div id="msg">
+                <div th:if="${#lists.isEmpty(messageList)}">
+                    <div>대화 내역이 없습니다. 메시지를 보내세요!</div>
+                </div>
+                <div th:unless="${#lists.isEmpty(messageList)}">
+                    <div id="nickname" th:text="${messageList[0].senderId == currentUserId ? messageList[0].receiverNickname : messageList[0].senderNickname} + ' 님과의 쪽지'"></div>
+                    <div id="content" th:each="message : ${messageList}">
+                        <div class="eachMsg" th:classappend="${message.senderId == currentUserId} ? ' sent' : ' received'">
+                            <div class="message-box" th:classappend="${message.senderId == currentUserId} ? ' sent' : ' received'">
+                                <p id="nick1" th:if="${message.senderId == currentUserId}" th:text="${message.senderNickname}"></p>
+                                <p id="nick2" th:unless="${message.senderId == currentUserId}" th:text="${message.senderNickname}"></p>
+                                <p id="title" th:text="${message.content}"><b>내용</b></p>
+                                <p id="time" th:text="${#temporals.format(message.createdAt, 'MM-dd HH:mm')}"><b>시간</b></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <br>
-            <div id="inputMessage">
-                <form th:action="@{/message/send}" method="post">
-                    <input type="hidden" id="receiverIdInput" name="receiverId">
-                    <input type="text" name="content" placeholder="메시지를 입력하세요" required>
-                    <button type="submit">전송</button>
-                </form>
+                <br>
+                <div id="inputMessage">
+                    <form th:action="@{/message/send}" method="post">
+                        <input type="hidden" id="receiverIdInput" name="receiverId">
+                        <input type="text" name="content" placeholder="메시지를 입력하세요" required>
+                        <button type="submit">전송</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

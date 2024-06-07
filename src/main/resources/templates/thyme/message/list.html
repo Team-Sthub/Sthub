@@ -1,10 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="UTF-8">
 <head>
     <meta charset="UTF-8">
     <title>쪽지 내역</title>
+    <link rel="stylesheet" th:href="@{/style/header.css}">
+    <link rel="stylesheet" th:href="@{/style/message/list.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
 </head>
 <body>
-
+    <div th:replace="~{thyme/frameHeader :: header}"></div>
+    <div id="msgBox">
+        <div th:if="${#lists.isEmpty(messageList.result)}">
+            <p>대화 목록이 없습니다.</p>
+        </div>
+        <div id="contentBox" th:each="message : ${messageList.result}">
+            <div class="conversation">
+                <a th:href="@{'/message/detail?receiverId=' + ${message.senderId == currentUserId ? message.receiverId : message.senderId}}">
+                    <h2 th:if="${message.senderId == currentUserId}" th:text="${message.receiverNickname}"></h2>
+                    <h2 th:if="${message.receiverId == currentUserId}" th:text="${message.senderNickname}"></h2>
+                    <p th:text="${message.content}"></p>
+                    <p class="date" th:text="${#temporals.format(message.createdAt, 'yyyy-MM-dd HH:mm')}"></p>
+                </a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
