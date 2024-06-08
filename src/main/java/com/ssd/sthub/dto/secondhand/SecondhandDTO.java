@@ -86,6 +86,16 @@ public class SecondhandDTO {
         private int currentPage;
     }
 
+    @Getter @Setter
+    @AllArgsConstructor
+    public static class MyAllListResponse {
+        private Secondhand secondhand;
+        private Long purchaseId;
+        private List<SImage> sImages;
+        private int totalPage;
+        private int currentPage;
+    }
+
     @Getter
     @AllArgsConstructor
     public static class Top4ListResponse {

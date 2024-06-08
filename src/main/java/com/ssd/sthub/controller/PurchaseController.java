@@ -8,13 +8,14 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/purchase")
 @RequiredArgsConstructor
 public class PurchaseController {
@@ -27,15 +28,21 @@ public class PurchaseController {
         return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + secondhandId);
     }
 
-    // 구매 내역 전체 조회
+    // 마이페이지 - 구매 내역 (더보기)
     @GetMapping("/list")
-    public ResponseEntity<SuccessResponse<Page<Secondhand>>> getPurchaseSecondhands(@RequestHeader Long memberId, @RequestParam int pageNum) throws BadRequestException {
-        return ResponseEntity.ok(SuccessResponse.create(purchaseService.getPurchaseSecondhands(memberId, pageNum)));
+    public ModelAndView getPurchaseSecondhands(@SessionAttribute(name = "memberId") Long memberId, @RequestParam int pageNum) throws BadRequestException {
+        List<SecondhandDTO.MyAllListResponse> myPurchaseList = purchaseService.getPurchaseSecondhands(memberId, pageNum - 1);
+        // Purchase 객체를 조회하여 Purchase ID를 가져오고, 뷰에 전달
+        for (SecondhandDTO.MyAllListResponse item : myPurchaseList) {
+            purchaseService.findPurchaseBySecondhandId(item.getPurchaseId())
+                    .ifPresent(purchase -> item.setPurchaseId(purchase.getId()));
+        }
+        return new ModelAndView("thyme/purchase/myPurchase", "myPurchaseList", myPurchaseList);
     }
 
-    // 구매내역 상위 4개 조회
+    // 마이페이지 - 구매 내역 (4개)
     @GetMapping("/list/top4List")
-    public String getPurchaseSecondhands(@SessionAttribute(name = "memberId") Long memberId, Model model) throws BadRequestException {
+    public String getPurchaseSecondhands(@SessionAttribute(name = "memberId") Long memberId, Model model) {
         List<SecondhandDTO.Top4ListResponse> secondhandList = purchaseService.getTop4Items(memberId);
         model.addAttribute("secondhandList", secondhandList);
         return "thyme/user/fragments/purchaseFragments";

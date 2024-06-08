@@ -16,6 +16,8 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
 
     Purchase save(Purchase purchase);
 
+    Optional<Purchase> findBySecondhandId(Long secondhandId);
+
     Page<Secondhand> findAllSecondhandByMemberId(Long memberId, PageRequest pageRequest);
 
     List<Secondhand> findTop4SecondhandByMemberIdOrderByCreatedAtDesc(Long memberId);
