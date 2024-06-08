@@ -83,31 +83,7 @@ public class MessageRepositoryImpl extends QuerydslRepositorySupport {
                 .limit(size)
                 .fetch();
 
-        long totalCount = jpaQueryFactory
-                .selectFrom(message)
-                .where(
-                        message.sender.id.eq(memberId).or(message.receiver.id.eq(memberId)),
-                        message.id.in(
-                                JPAExpressions
-                                        .select(message.id.max())
-                                        .from(message)
-                                        .where(
-                                                message.sender.id.eq(memberId).or(message.receiver.id.eq(memberId)),
-                                                message.sender.id.eq(memberId).or(message.receiver.id.eq(memberId))
-                                        )
-                                        .groupBy(
-                                                new CaseBuilder()
-                                                        .when(message.sender.id.lt(message.receiver.id)).then(message.sender.id)
-                                                        .otherwise(message.receiver.id),
-                                                new CaseBuilder()
-                                                        .when(message.sender.id.lt(message.receiver.id)).then(message.receiver.id)
-                                                        .otherwise(message.sender.id)
-                                        )
-                        )
-                )
-                .offset((long) (pageNum - 1) * size)
-                .limit(size)
-                .fetchCount();
+        long totalCount = results.size();
         long totalPage = totalCount == 0 ? 0 : (totalCount / size) + (totalCount % size == 0 ? 0 : 1);
 
         return new QueryResults<>(results, (long) size, (long) pageNum * size, totalPage);
