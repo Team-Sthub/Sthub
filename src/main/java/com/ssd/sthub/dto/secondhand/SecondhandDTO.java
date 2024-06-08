@@ -4,6 +4,7 @@ import com.ssd.sthub.domain.SComment;
 import com.ssd.sthub.domain.SImage;
 import com.ssd.sthub.domain.Secondhand;
 import com.ssd.sthub.domain.enumerate.Category;
+import com.ssd.sthub.domain.enumerate.Parcel;
 import com.ssd.sthub.domain.enumerate.Transaction;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -65,6 +66,8 @@ public class SecondhandDTO {
         private Transaction type; // 거래 방식
         @NotNull(message = "운송장 번호 또는 장소를 넣어주세요.")
         private String typeInfo; // 운송장 번호 or 장소
+        @NotNull
+        private Parcel parcel; // 택배사
     }
 
     @Getter
