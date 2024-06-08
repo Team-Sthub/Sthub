@@ -3,6 +3,7 @@ package com.ssd.sthub.service;
 import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.Purchase;
 import com.ssd.sthub.domain.Secondhand;
+import com.ssd.sthub.dto.groupBuying.GroupBuyingListDTO;
 import com.ssd.sthub.dto.secondhand.SecondhandDTO;
 import com.ssd.sthub.repository.MemberRepository;
 import com.ssd.sthub.repository.PurchaseRepository;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,17 +48,25 @@ public class PurchaseService {
         return true;
     }
 
-
     // 구매 상세 조회
     public Purchase getPurchase(Long purchaseId) {
         return purchaseRepository.findById(purchaseId)
                 .orElseThrow(() -> new EntityNotFoundException("구매 내역 조회에 실패했습니다."));
     }
 
-    // 구매 내역 전체 조회
-    public Page<Secondhand> getPurchaseSecondhands(Long memberId, int pageNum) {
-        PageRequest pageRequest = PageRequest.of(pageNum, 10);
-        return purchaseRepository.findAllSecondhandByMemberId(memberId, pageRequest);
+    // 마이페이지 - 구매 내역 전체 조회 (페이징 포함)
+    public List<SecondhandDTO.MyAllListResponse> getPurchaseSecondhands(Long memberId, int pageNum) {
+        PageRequest pageRequest = PageRequest.of(pageNum, 8);
+        Page<Secondhand> purchases = purchaseRepositoryImpl.findSecondhandsByMemberId(memberId, pageRequest);
+
+        return purchases.stream()
+                .map(g -> new SecondhandDTO.MyAllListResponse(g, g.getId(), g.getImageList(), purchases.getTotalPages(), pageNum + 1))
+                .collect(Collectors.toList());
+    }
+
+    // 마이페이지 - 구매 내역에서 후기 조회
+    public Optional<Purchase> findPurchaseBySecondhandId(Long secondhandId) {
+        return purchaseRepository.findBySecondhandId(secondhandId);
     }
 
     // 구매 내역 상위 4개 조회
