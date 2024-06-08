@@ -50,6 +50,4 @@ public class PurchaseController {
         model.addAttribute("secondhandList", secondhandList);
         return "thyme/user/fragments/purchaseFragments";
     }
-
-    // 구매내역 배송조회 (open api 사용 예정)
 }

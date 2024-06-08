@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MyGroupBuying.html</title>
+    <link rel="stylesheet" th:href="@{/style/header.css}">
+    <link rel="stylesheet" th:href="@{/style/secondhand/mySelling.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
+</head>
+<body>
+<!-- header 삽입 -->
+<div th:replace="thyme/frameHeader :: header"></div>
+
+<!-- 서버에서 전달한 에러 메시지 표시 -->
+<div id="errorMessage" th:if="${secondhandList.size() == 0}" style="display: none;"></div>
+
+<p id="menu-title">중고거래 판매 내역</p>
+<hr/>
+<!-- 버튼들을 감싸는 div 추가 -->
+<div class="button-group">
+    <!-- 전체 -->
+    <div class="button-container">
+        <a th:href="@{/secondhand/selling/list/ALL?pageNum=1}" class="button">전체</a>
+    </div>
+    <!-- 거래완료  -->
+    <div class="button-container">
+        <a th:href="@{/secondhand/selling/list/COMPLETE?pageNum=1}" class="button">거래완료</a>
+    </div>
+    <!-- 거래중 -->
+    <div class="button-container">
+        <a th:href="@{/secondhand/selling/list/ING?pageNum=1}" class="button">거래중</a>
+    </div>
+</div>
+
+<!-- 중고거래 게시글 리스트 -->
+<div class="product-grid">
+    <div th:each="secondhand : ${secondhandList}">
+        <a th:href="@{/secondhand/detail(secondhandId=${secondhand.secondhand.id})}" class="product-box-link">
+            <div class="product-box">
+                <div class="box-top">
+                    <p id="date" th:text="${#strings.substring(secondhand.secondhand.createdAt, 0, 10)}"></p>
+                    <div class="status-box">
+                        <div id="status" th:text="${secondhand.getSecondhand.status}">모집중</div>
+                    </div>
+                </div>
+                <!-- 이미지가 있는 경우 가장 첫 번째 이미지를 썸네일로 사용-->
+                <div th:if="${secondhand.SImages == null or secondhand.SImages.isEmpty()}">
+                    <img th:src="@{/images/no_img.jpg}" alt="No Image" />
+                </div>
+                <div th:if="${secondhand.SImages != null and !secondhand.SImages.isEmpty()}">
+                    <img th:src="@{${secondhand.SImages[0].path}}" alt="Image"/>
+                </div>
+                <p id="title" th:text="${secondhand.secondhand.title}"><b>제목</b></p>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- 페이지네이션 -->
+<div class="pagination" th:if="${secondhandList != null && !secondhandList.isEmpty()}">
+    <!-- 이전 버튼, currentPage가 11 이상일 때만 활성화 -->
+    <button th:if="${secondhandList[0].currentPage > 10}"
+            th:onclick="|window.location.href='@{/secondhand/selling/list/{status}(status=${status}, pageNum=${secondhandList[0].currentPage - 10})}'|">&lt;</button>
+
+    <!-- 페이지 번호 반복 출력 -->
+    <span th:each="pageNumber : ${#numbers.sequence((secondhandList[0].currentPage - 1) / 10 * 10 + 1, ((secondhandList[0].currentPage - 1) / 10 + 1) * 10)}">
+        <a th:if="${pageNumber <= secondhandList[0].totalPage} and ${pageNumber != secondhandList[0].currentPage}"
+           th:href="@{/secondhand/selling/list/{category}(category=${status}, pageNum=${pageNumber})}"
+           th:text="${pageNumber}" style="border: none;">Page</a>
+        <span th:if="${pageNumber <= secondhandList[0].totalPage} and ${pageNumber == secondhandList[0].currentPage}"
+              class="current-page" th:text="${pageNumber}"></span>
+    </span>
+
+    <!-- 다음 버튼, 총 페이지 수가 currentPage + 10 이상일 때만 활성화 -->
+    <button th:if="${secondhandList[0].totalPage > secondhandList[0].currentPage + 10}"
+            th:onclick="|window.location.href='@{/secondhand/selling/list/{category}(category=${status}, pageNum=${secondhandList[0].currentPage + 10})}'|">&gt;</button>
+</div>
+
+<script th:src="@{/js/secondhand/mySelling.js}"></script>
+</body>
+</html>

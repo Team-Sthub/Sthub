@@ -151,9 +151,13 @@ public class SecondhandController {
     }
 
     // 판매내역 전체 조회
-    @GetMapping("/selling/list")
-    public ResponseEntity<SuccessResponse<Page<Secondhand>>> getSellingSecondhands(@RequestHeader Long memberId, @RequestParam int pageNum) throws BadRequestException {
-        return ResponseEntity.ok(SuccessResponse.create(secondhandService.getSellingSecondhands(memberId, pageNum)));
+    @GetMapping("/selling/list/{status}")
+    public ModelAndView getSellingSecondhands(@PathVariable String status, @SessionAttribute Long memberId, @RequestParam int pageNum) throws BadRequestException {
+        List<SecondhandDTO.ListResponse> secondhandList = secondhandService.getSellingSecondhands(status, memberId, pageNum - 1);
+        ModelAndView modelAndView = new ModelAndView("thyme/secondhand/mySelling");
+        modelAndView.addObject("secondhandList", secondhandList);
+        modelAndView.addObject("status", status);
+        return modelAndView;
     }
 
     // 판매내역 상위 4개 조회
