@@ -24,7 +24,8 @@ public interface SecondhandRepository extends JpaRepository<Secondhand, Long> {
     List<Secondhand> findAllByMemberId(Long memberId);
     List<Secondhand> findTop4ByMemberIdOrderByCreatedAtDesc(Long memberId);
 
-    Page<Secondhand> findAllByMember(Member member, PageRequest pageRequest);
+    Page<Secondhand> findAllByMemberId(Long memberId, PageRequest pageRequest);
+    Page<Secondhand> findAllByMemberIdAndStatus(Long memberId, String status, PageRequest pageRequest);
 
     Page<Secondhand> findAllByCategoryOrderByCreatedAtDesc(Category category, PageRequest pageRequest);
     Page<Secondhand> findAllByOrderByCreatedAtDesc(PageRequest pageRequest);

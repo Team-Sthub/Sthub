@@ -141,16 +141,20 @@ public class SecondhandService {
     }
 
     // 중고거래 판매내역 조회
-    public Page<Secondhand> getSellingSecondhands(Long memberId, int pageNum) throws BadRequestException {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
-
+    public List<SecondhandDTO.ListResponse> getSellingSecondhands(String status, Long memberId, int pageNum) throws BadRequestException {
         PageRequest pageRequest = PageRequest.of(pageNum, 10);
-        Page<Secondhand> secondhands = secondhandRepository.findAllByMember(member, pageRequest);
+        Page<Secondhand> secondhands;
 
-        if(secondhands == null || secondhands.isEmpty())
-            throw new BadRequestException("작성된 게시글이 없습니다.");
-        return secondhands;
+        if(status.equals("ALL")) {
+            secondhands = secondhandRepository.findAllByMemberId(memberId, pageRequest);
+        } else {
+            status = (status.equals("COMPLETE")) ? "거래완료" : "예약중";
+            secondhands = secondhandRepository.findAllByMemberIdAndStatus(memberId, status, pageRequest);
+        }
+
+        return secondhands.stream()
+                .map(s -> new SecondhandDTO.ListResponse(s, s.getImageList(), s.getCategory(), secondhands.getTotalPages(), pageNum + 1))
+                .collect(Collectors.toList());
     }
 
     // 중고거래 상위4개 조회

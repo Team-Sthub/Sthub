@@ -3,6 +3,7 @@ package com.ssd.sthub.controller;
 import com.ssd.sthub.domain.Secondhand;
 import com.ssd.sthub.dto.secondhand.SecondhandDTO;
 import com.ssd.sthub.response.SuccessResponse;
+import com.ssd.sthub.service.MemberService;
 import com.ssd.sthub.service.PurchaseService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PurchaseController {
     private final PurchaseService purchaseService;
+    private final MemberService memberService;
 
     // 중고거래 결제 (구매)
     @PostMapping("")
@@ -45,11 +47,11 @@ public class PurchaseController {
 
     // 마이페이지 - 구매 내역 (4개)
     @GetMapping("/list/top4List")
-    public String getPurchaseSecondhands(@SessionAttribute(name = "memberId") Long memberId, Model model) {
+    public String getPurchaseSecondhands(@SessionAttribute(name = "memberId") Long memberId, @RequestParam(required = false) String nickname, Model model) {
+        if(nickname != null)
+            memberId = memberService.getMemberByNickname(nickname).getId();
         List<SecondhandDTO.Top4ListResponse> secondhandList = purchaseService.getTop4Items(memberId);
         model.addAttribute("secondhandList", secondhandList);
         return "thyme/user/fragments/purchaseFragments";
     }
-
-    // 구매내역 배송조회 (open api 사용 예정)
 }
