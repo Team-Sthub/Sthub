@@ -1,6 +1,7 @@
 package com.ssd.sthub.domain;
 
 import com.ssd.sthub.domain.enumerate.Category;
+import com.ssd.sthub.domain.enumerate.Parcel;
 import com.ssd.sthub.domain.enumerate.Transaction;
 import com.ssd.sthub.dto.secondhand.SecondhandDTO;
 import jakarta.persistence.*;
@@ -47,6 +48,8 @@ public class Secondhand extends BaseTime {
     @Column(nullable = false)
     private String content; //내용
 
+    @Enumerated(EnumType.STRING)
+    private Parcel parcel; // 택배사
     private String trackingNum; // 운송장 번호
 
     @Column(nullable = false)
@@ -88,11 +91,14 @@ public class Secondhand extends BaseTime {
 
     public void checkTransaction(SecondhandDTO.CheckRequest request) {
         this.status = "거래완료";
+        this.type = request.getType();
 
         if(request.getType().equals(Transaction.DIRECT))
             this.place = request.getTypeInfo() != null ? request.getTypeInfo() : this.place;
-        else if(request.getType().equals(Transaction.DELIVERY))
+        else if(request.getType().equals(Transaction.DELIVERY)) {
             this.trackingNum = request.getTypeInfo() != null ? request.getTypeInfo() : this.trackingNum;
+            this.parcel = request.getParcel();
+        }
     }
 
     public void updateStatus() {

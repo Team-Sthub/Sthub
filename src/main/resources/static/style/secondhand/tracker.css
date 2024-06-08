@@ -45,6 +45,7 @@ hr {
 
 .trackerFrame {
     width: 60%;
+    height: 500px;
     margin: 0 auto;
     border: none;
     display: flex;

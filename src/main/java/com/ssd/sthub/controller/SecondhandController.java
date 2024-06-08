@@ -167,6 +167,11 @@ public class SecondhandController {
     // 배송조회 폼으로 이동
     @GetMapping("tracker")
     public ModelAndView moveToTrackerForm(@RequestParam Long secondhandId) {
-        return new ModelAndView("thyme/secondhand/tracker", "secondhandId", secondhandId);
+        SecondhandDTO.DetailResponse secondhand = secondhandService.getSecondhand(secondhandId);
+        String trackingNum = secondhand.getSecondhand().getTrackingNum();
+
+        if(trackingNum != null)
+            return new ModelAndView("thyme/secondhand/tracker", "secondhand", secondhand);
+        return new ModelAndView("redirect:/purchase/list?pageNum=1", "errorMessage", "운송장번호가 등록되지 않았습니다.");
     }
 }

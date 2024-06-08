@@ -64,7 +64,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // 거래 최종 방식 선택 관련
     const btnDelivery = document.getElementById('btn_delivery');
     const btnDirect = document.getElementById('btn_direct');
-    const transactionInfo = document.querySelector('.transaction_info');
+    const transactionInfo1 = document.querySelector('.transaction_info1');
+    const parcel = document.querySelector('.parcel');
+    const transactionInfo2 = document.querySelector('.transaction_info2');
     const typeInfo = document.querySelector('.type_info');
     const close = document.querySelector('.close');
     const submit_transaction = document.getElementById('submit_transaction');
@@ -74,18 +76,26 @@ document.addEventListener('DOMContentLoaded', function() {
     btnDelivery.addEventListener('click', function() {
         btnDelivery.style.backgroundColor = 'white';
         btnDirect.style.backgroundColor = '';
-        transactionInfo.textContent = '운송장번호';
+        transactionInfo2.textContent = '운송장번호';
         typeInfo.placeholder = "'-'를 제외한 숫자만 입력해주세요.";
         type = "DELIVERY";
+
+        // 택배 관련 항목 보이도록 수정
+        transactionInfo1.style.display = 'flex';
+        parcel.style.display = 'flex';
     });
 
     // 직거래 버튼 클릭 시
     btnDirect.addEventListener('click', function() {
         btnDirect.style.backgroundColor = 'white';
         btnDelivery.style.backgroundColor = '';
-        transactionInfo.textContent = '장소';
+        transactionInfo2.textContent = '장소';
         typeInfo.placeholder = "예시) 서울시 성북구 화랑로13길 60";
         type = "DIRECT";
+
+        // 택배 관련 항목 보이지 않도록 수정
+        transactionInfo1.style.display = 'none';
+        parcel.style.display = 'none';
     });
 
     // 거래 최종 방식 닫기 버튼 클릭 시
@@ -106,7 +116,8 @@ document.addEventListener('DOMContentLoaded', function() {
         var formData = {
             secondhandId: secondhandId,
             type: type,
-            typeInfo: typeInfo.value
+            typeInfo: typeInfo.value,
+            parcel: parcel.value
         };
 
         console.log(formData);
