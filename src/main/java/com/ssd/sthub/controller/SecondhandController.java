@@ -162,7 +162,10 @@ public class SecondhandController {
 
     // 판매내역 상위 4개 조회
     @GetMapping("/selling/top4List")
-    public String getSellingSecondhands(@SessionAttribute(name = "memberId") Long memberId, Model model) throws BadRequestException {
+    public String getSellingSecondhands(@SessionAttribute(name = "memberId") Long memberId, @RequestParam(required = false) String nickname, Model model) throws BadRequestException {
+        if(nickname != null)
+            memberId = memberService.getMemberByNickname(nickname).getId();
+
         List<SecondhandDTO.Top4ListResponse> secondhandList = secondhandService.getTop4Items(memberId);
         model.addAttribute("secondhandList", secondhandList);
         return "thyme/user/fragments/sellingFragments";

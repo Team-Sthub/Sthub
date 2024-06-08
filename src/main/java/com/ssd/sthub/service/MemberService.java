@@ -24,7 +24,7 @@ public class MemberService {
     public Member register(String imgUrl, RegisterDTO registerDTO) {
         Optional<Member> isMember = memberRepository.findByNickname(registerDTO.getNickname());
         if(isMember.isPresent()) {
-            new EntityNotFoundException("이미 있는 사용자입니다.");
+            throw new EntityNotFoundException("이미 있는 사용자입니다.");
         }
         Member newMember = new Member(registerDTO);
         if (imgUrl != null) {
@@ -54,7 +54,7 @@ public class MemberService {
     public UserViewDTO getMember(Long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
         if (member.isEmpty()) {
-            new EntityNotFoundException("회원 조회에 실패했습니다.");
+            throw new EntityNotFoundException("회원 조회에 실패했습니다.");
         }
         Member foundMember = member.get();
         return new UserViewDTO(memberId, foundMember.getNickname(), foundMember.getProfile(), foundMember.getMannerGrade(), foundMember.getAddress());
@@ -63,8 +63,8 @@ public class MemberService {
     // 프로필 상세 조회
     public MemberDTO.MemberResDTO getMemberDetail(Long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
-        if (member == null) {
-            new EntityNotFoundException("회원 조회에 실패했습니다.");
+        if (member.isEmpty()) {
+            throw new EntityNotFoundException("회원 조회에 실패했습니다.");
         }
         return new MemberDTO.MemberResDTO(memberId, member.get().getNickname(), member.get().getPassword(), member.get().getPhone(), member.get().getBank(), member.get().getAccount(),
                 member.get().getAddress(), member.get().getLatitude(), member.get().getLongitude(), member.get().getEmail(), member.get().getProfile(), member.get().getMannerGrade());
@@ -74,5 +74,14 @@ public class MemberService {
     public Member updateMember(Member existingMember) {
         // 이미 변경된 필드를 가지고 있는 existingMember 객체를 활용하여 업데이트
         return memberRepository.save(existingMember);
+    }
+
+    // 닉네임으로 사용자 조회
+    public Member getMemberByNickname(String nickname) {
+        Optional<Member> member = memberRepository.findByNickname(nickname);
+        if (member.isEmpty()) {
+            throw new EntityNotFoundException("회원 조회에 실패했습니다.");
+        }
+        return member.get();
     }
 }
