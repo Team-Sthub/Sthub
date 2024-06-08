@@ -30,14 +30,17 @@ public class PurchaseController {
 
     // 마이페이지 - 구매 내역 (더보기)
     @GetMapping("/list")
-    public ModelAndView getPurchaseSecondhands(@SessionAttribute(name = "memberId") Long memberId, @RequestParam int pageNum) throws BadRequestException {
+    public ModelAndView getPurchaseSecondhands(@SessionAttribute(name = "memberId") Long memberId, @RequestParam int pageNum, @RequestParam(required = false) String errorMessage) {
         List<SecondhandDTO.MyAllListResponse> myPurchaseList = purchaseService.getPurchaseSecondhands(memberId, pageNum - 1);
         // Purchase 객체를 조회하여 Purchase ID를 가져오고, 뷰에 전달
         for (SecondhandDTO.MyAllListResponse item : myPurchaseList) {
             purchaseService.findPurchaseBySecondhandId(item.getPurchaseId())
                     .ifPresent(purchase -> item.setPurchaseId(purchase.getId()));
         }
-        return new ModelAndView("thyme/purchase/myPurchase", "myPurchaseList", myPurchaseList);
+        ModelAndView modelAndView = new ModelAndView("thyme/purchase/myPurchase");
+        modelAndView.addObject("myPurchaseList",myPurchaseList);
+        modelAndView.addObject("errorMessage", errorMessage);
+        return modelAndView;
     }
 
     // 마이페이지 - 구매 내역 (4개)

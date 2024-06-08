@@ -15,31 +15,31 @@
     <p id="main-title">배송 조회</p>
     <hr/>
 
-    <div class="col-sm-6" style="padding-bottom: 50px;">
-        <form id="tracker" action="https://info.sweettracker.co.kr/tracking/3" method="post" target="trackerFrame">
+    <div class="col-sm-6" style="padding-bottom: 50px;" th:if="${errorMessage == null}">
+        <form id="tracker" th:action="@{https://info.sweettracker.co.kr/tracking/3}" th:method="post" target="trackerFrame">
+            <!-- 내용 -->
             <div class="form-group">
                 <input type="hidden" class="form-control" id="t_key" name="t_key" value="t72SgNjd9LrilEED7bnYtg" required="">
             </div>
             <div class="company">
                 <label for="t_code">택배사 코드</label>
                 <select class="form-control" name="t_code" id="t_code">
-                    <option value="04">CJ 대한통운</option>
-                    <option value="01">우체국택배</option>
-                    <option value="05">한진택배</option>
-                    <option value="06">로젠택배</option>
-                    <option value="08">롯데택배</option>
-                    <option value="46">CU편의점택배</option>
+                    <option th:value="${secondhand.secondhand.parcel.CJ.code}" th:selected="${secondhand.secondhand.parcel eq 'CJ'}">CJ 대한통운</option>
+                    <option th:value="${secondhand.secondhand.parcel.POSTOFFICE.code}" th:selected="${secondhand.secondhand.parcel eq 'POSTOFFICE'}">우체국택배</option>
+                    <option th:value="${secondhand.secondhand.parcel.HANJIN.code}" th:selected="${secondhand.secondhand.parcel eq 'HANJIN'}">한진택배</option>
+                    <option th:value="${secondhand.secondhand.parcel.ROZEN.code}" th:selected="${secondhand.secondhand.parcel eq 'ROZEN'}">로젠택배</option>
+                    <option th:value="${secondhand.secondhand.parcel.LOTTE.code}" th:selected="${secondhand.secondhand.parcel eq 'LOTTE'}">롯데택배</option>
+                    <option th:value="${secondhand.secondhand.parcel.CU.code}" th:selected="${secondhand.secondhand.parcel eq 'CU'}">CU편의점택배</option>
                 </select>
             </div>
             <div class="tracking">
                 <label for="t_invoice">운송장 번호</label>
-                <input type="text" class="form-control" name="t_invoice" id="t_invoice" placeholder="'-'을 제외한 숫자만 입력해주세요." required="">
+                <input type="text" class="form-control" name="t_invoice" id="t_invoice" th:value="${secondhand.secondhand.trackingNum}" placeholder="'-'을 제외한 숫자만 입력해주세요." required="">
                 <button type="submit" class="btn btn-default">조회</button>
             </div>
         </form>
     </div>
 
     <iframe class="trackerFrame" name="trackerFrame"></iframe>
-
 </body>
 </html>
