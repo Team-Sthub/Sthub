@@ -14,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,23 +101,49 @@ public class ParticipationService {
                 .collect(Collectors.toList());
     }
 
-    // 내가 참여한 공동구매 리스트
-    public List<ParticipationResponseDTO.ParticipationList> getMyParticipationList(int pageNum, Long memberId) throws BadRequestException {
+    // 마이페이지 - 내가 참여한 공동구매 리스트 (페이징 포함)
+    public List<GroupBuyingListDTO.MyAllListResponse> getMyParticipationList(int pageNum, Long memberId) throws BadRequestException {
+        // 회원 조회
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
 
-        PageRequest pageRequest = PageRequest.of(pageNum, 10);
-        Page<Participation> participations = participationRepository.findAllByMember(member, pageRequest);
+        PageRequest pageRequest = PageRequest.of(pageNum, 8);
+        // 회원이 참여한 모든 공동구매 리스트 조회
+        Page<Participation> participationPage = participationRepository.findAllByMember(member, pageRequest);
 
-        if (participations == null || participations.isEmpty())
-            throw new BadRequestException("공동구매에 참여하지 않았습니다.");
-
-        return participations.stream()
-                .map(p -> new ParticipationResponseDTO.ParticipationList(p, participations.getTotalPages(), pageNum))
+        // accept가 1인 항목만 필터링하여 최신순으로 정렬
+        List<Participation> acceptedParticipations = participationPage.getContent().stream()
+                .filter(participation -> participation.getAccept() == 1)
+                .sorted(Comparator.comparing(Participation::getCreatedAt).reversed())
                 .collect(Collectors.toList());
+
+        // 중복된 GroupBuying과 Member 조합을 방지하기 위한 Set 생성
+        Set<String> processedGroupBuyingMemberCombination = new HashSet<>();
+
+        // 각 Participation에 해당하는 GroupBuying을 조회하여 MyAllListResponse로 변환
+        List<GroupBuyingListDTO.MyAllListResponse> groupBuyingList = new ArrayList<>();
+        for (Participation participation : acceptedParticipations) {
+            GroupBuying groupBuying = participation.getGroupBuying();
+            if (groupBuying == null) {
+                throw new EntityNotFoundException("GroupBuying 조회에 실패했습니다.");
+            }
+
+            Long groupBuyingId = groupBuying.getId();
+            Long memId = participation.getMember().getId();
+            String combination = groupBuyingId + "-" + memId; // GroupBuyingId와 MemberId의 조합 생성
+
+            if (processedGroupBuyingMemberCombination.contains(combination)) {
+                continue; // 이미 해당 그룹과 회원의 조합이 처리되었으면 건너뜀
+            }
+
+            processedGroupBuyingMemberCombination.add(combination);
+            groupBuyingList.add(new GroupBuyingListDTO.MyAllListResponse(groupBuying, groupBuying.getImageList(), participationPage.getTotalPages(), pageNum + 1));
+        }
+
+        return groupBuyingList;
     }
 
-    // 내가 참여한 공동구매 리스트 4개
+    // 마이페이지 - 내가 참여한 공동구매 리스트 4개
     public List<GroupBuyingListDTO.MyListResponse> getParticipationMylist(Long memberId) throws BadRequestException {
         // 회원 조회
         Member member = memberRepository.findById(memberId)
