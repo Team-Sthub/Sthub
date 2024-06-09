@@ -14,27 +14,25 @@
     <div class="userInfo">
         <div class="userProfileBox">
             <div class="userProfile">
-                <i class="fa-solid fa-user" title="Insert image" id="image-icon"></i>
-                <input type="file" id="file-input" name="profile" style="display: none;" />
-                <!-- <img th:src="${user.profile}" class="profile" alt="프로필 이미지" /> -->
+                <!-- user.profile이 null이 아닌 경우 이미지를 표시 -->
+                <img th:if="${user.profile != null}" th:src="${user.profile}" class="profile" alt="프로필 이미지" />
+                <!-- user.profile이 null인 경우 아이콘을 표시 -->
+                <i th:unless="${user.profile != null}" class="fa-solid fa-user" title="Insert image" id="image-icon"></i>
                 <br>
             </div>
-            <span>사용자 닉네임</span>
-            <!-- <span th:text="${user.nickname}"></span> -->
+            <span th:text="${user.nickname}"></span>
         </div>
         <div class="vertical-line"></div>
         <div class="userBox">
             <div class="manner">
-                <div class="rectangle">닉네임의 매너 등급</div>
-                <!-- <div class="rectangle" th:text="${user.nickname} + '의 매너 등급'"></div> -->
+                <div class="rectangle" th:text="${user.nickname} + '의 매너 등급'"></div>
                 <!-- 별점 표시.. -->
 
             </div>
             <br>
             <div class="location">
-                <div class="rectangle">닉네임의 동네</div>
-                <!-- <div class="rectangle" th:text="${user.nickname} + '의 동네'"></div> -->
-                <!-- <span th:text="${user.address}"></span> -->
+                <div class="rectangle" th:text="${user.nickname} + '의 동네'"></div>
+                <span th:text="${user.address}"></span>
             </div>
         </div>
     </div>
@@ -50,7 +48,7 @@
 
     </div>
 </div>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script th:src="@{/js/user/otherUserView.js}"></script>
 </body>
 </html>
