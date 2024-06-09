@@ -128,10 +128,11 @@ public class ParticipationController {
         return modelAndView;
     }
 
-    //마이페이지 - 공구 참여 전체 조회
+    //마이페이지 - 공구 참여 전체 조회 (더보기)
     @GetMapping("/mylist")
-    public ResponseEntity<SuccessResponse<List<ParticipationResponseDTO.ParticipationList>>> getParticipationGroupBuyings(@RequestParam Long memberId, @RequestParam int pageNum) throws BadRequestException {
-        return ResponseEntity.ok(SuccessResponse.create(participationService.getMyParticipationList(pageNum, memberId)));
+    public ModelAndView getParticipationGroupBuyings(@SessionAttribute(name = "memberId") Long memberId, @RequestParam int pageNum) throws BadRequestException {
+        List<GroupBuyingListDTO.MyAllListResponse> myGroupBuyingList = participationService.getMyParticipationList(pageNum - 1, memberId);
+        return new ModelAndView("thyme/participation/myParticipation", "myGroupBuyingList", myGroupBuyingList);
     }
 
     //마이페이지 - 최신순 4개 조회
