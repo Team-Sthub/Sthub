@@ -15,8 +15,14 @@ import java.util.Optional;
 public interface ParticipationRepository extends JpaRepository<Participation, Long> {
 
     Participation save(Participation participation);
+
     Optional<Participation> findById(Long participationId);
+
     Page<Participation> findAllByGroupBuyingId(Long groupBuyingId, PageRequest pageRequest);
-    Page<Participation> findAllByMember(Member member, PageRequest pageRequest);
-    List<Participation> findAllByMember(Member member);
+
+    Page<Participation> findAllByMemberAndAccept(Member member, int accept, PageRequest pageRequest);
+
+    List<Participation> findAllByMemberAndAccept(Member member, int accept);
+
+    boolean existsByMemberIdAndGroupBuyingId(Long memberId, Long groupBuyingId);
 }

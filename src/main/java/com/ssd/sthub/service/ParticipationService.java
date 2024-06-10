@@ -11,19 +11,15 @@ import com.ssd.sthub.repository.MemberRepository;
 import com.ssd.sthub.repository.ParticipationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -33,7 +29,12 @@ public class ParticipationService {
     private final GroupBuyingRepository groupBuyingRepository;
 
     // 공동구매 신청서 작성
-    public Participation createParticipation(Long memberId, Long groupBuyingId, ParticipationRequestDTO.Request request) throws NullPointerException{
+    public Participation createParticipation(Long memberId, Long groupBuyingId, ParticipationRequestDTO.Request request) throws NullPointerException {
+        // 중복 참여 여부 확인
+        if (participationRepository.existsByMemberIdAndGroupBuyingId(memberId, groupBuyingId)) {
+            throw new IllegalArgumentException("이미 이 공동구매에 참여하셨습니다.");
+        }
+
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
         GroupBuying groupBuying = groupBuyingRepository.findById(groupBuyingId)
@@ -59,7 +60,7 @@ public class ParticipationService {
         Participation participation = participationRepository.findById(participationId)
                 .orElseThrow(() -> new EntityNotFoundException("공동구매 신청서 조회에 실패했습니다."));
 
-        if(!groupBuying.getMember().getId().equals(memberId))
+        if (!groupBuying.getMember().getId().equals(memberId))
             throw new BadRequestException("작성자만 수락/거절 할 수 있습니다.");
 
         if (request.getAccept() == 1 || request.getAccept() == 2) {
@@ -78,11 +79,11 @@ public class ParticipationService {
     }
 
     // 신청폼 수정
-    public Participation updateParticipation(Long memberId, Long participationId, ParticipationRequestDTO.PatchRequest request) throws BadRequestException{
+    public Participation updateParticipation(Long memberId, Long participationId, ParticipationRequestDTO.PatchRequest request) throws BadRequestException {
         Participation participation = participationRepository.findById(participationId)
                 .orElseThrow(() -> new EntityNotFoundException("신청서 조회에 실패했습니다."));
 
-        if(!participation.getMember().getId().equals(memberId))
+        if (!participation.getMember().getId().equals(memberId))
             throw new BadRequestException("작성자만 수정할 수 있습니다.");
         participation.update(request);
         return participationRepository.save(participation);
@@ -97,7 +98,7 @@ public class ParticipationService {
                 .orElseThrow(() -> new EntityNotFoundException("공동구매 게시글 조회에 실패했습니다."));
 
         return participations.stream()
-                .map(p->new ParticipationResponseDTO.ParticipationList(p, participations.getTotalPages(), pageNum + 1))
+                .map(p -> new ParticipationResponseDTO.ParticipationList(p, participations.getTotalPages(), pageNum + 1))
                 .collect(Collectors.toList());
     }
 
@@ -108,37 +109,20 @@ public class ParticipationService {
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
 
         PageRequest pageRequest = PageRequest.of(pageNum, 8);
-        // 회원이 참여한 모든 공동구매 리스트 조회
-        Page<Participation> participationPage = participationRepository.findAllByMember(member, pageRequest);
-
-        // accept가 1인 항목만 필터링하여 최신순으로 정렬
-        List<Participation> acceptedParticipations = participationPage.getContent().stream()
-                .filter(participation -> participation.getAccept() == 1)
-                .sorted(Comparator.comparing(Participation::getCreatedAt).reversed())
-                .collect(Collectors.toList());
-
-        // 중복된 GroupBuying과 Member 조합을 방지하기 위한 Set 생성
-        Set<String> processedGroupBuyingMemberCombination = new HashSet<>();
+        // 회원이 참여한 모든 공동구매 리스트 중 accept가 1인 항목만 조회
+        Page<Participation> participationPage = participationRepository.findAllByMemberAndAccept(member, 1, pageRequest);
 
         // 각 Participation에 해당하는 GroupBuying을 조회하여 MyAllListResponse로 변환
-        List<GroupBuyingListDTO.MyAllListResponse> groupBuyingList = new ArrayList<>();
-        for (Participation participation : acceptedParticipations) {
-            GroupBuying groupBuying = participation.getGroupBuying();
-            if (groupBuying == null) {
-                throw new EntityNotFoundException("GroupBuying 조회에 실패했습니다.");
-            }
-
-            Long groupBuyingId = groupBuying.getId();
-            Long memId = participation.getMember().getId();
-            String combination = groupBuyingId + "-" + memId; // GroupBuyingId와 MemberId의 조합 생성
-
-            if (processedGroupBuyingMemberCombination.contains(combination)) {
-                continue; // 이미 해당 그룹과 회원의 조합이 처리되었으면 건너뜀
-            }
-
-            processedGroupBuyingMemberCombination.add(combination);
-            groupBuyingList.add(new GroupBuyingListDTO.MyAllListResponse(groupBuying, groupBuying.getImageList(), participationPage.getTotalPages(), pageNum + 1));
-        }
+        List<GroupBuyingListDTO.MyAllListResponse> groupBuyingList = participationPage.getContent().stream()
+                .sorted(Comparator.comparing(Participation::getCreatedAt).reversed())
+                .map(participation -> {
+                    GroupBuying groupBuying = participation.getGroupBuying();
+                    if (groupBuying == null) {
+                        throw new EntityNotFoundException("GroupBuying 조회에 실패했습니다.");
+                    }
+                    return new GroupBuyingListDTO.MyAllListResponse(groupBuying, groupBuying.getImageList(), participationPage.getTotalPages(), pageNum + 1);
+                })
+                .collect(Collectors.toList());
 
         return groupBuyingList;
     }
@@ -149,41 +133,22 @@ public class ParticipationService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
 
-        // 회원이 참여한 모든 공동구매 리스트 조회
-        List<Participation> participations = participationRepository.findAllByMember(member);
+        // 회원이 참여한 모든 공동구매 리스트 중 accept가 1인 항목만 조회
+        List<Participation> acceptedParticipations = participationRepository.findAllByMemberAndAccept(member, 1);
 
-        // accept가 1인 항목만 필터링하여 최신순으로 정렬 후 최대 4개 선택
-        List<Participation> acceptedParticipations = participations.stream()
-                .filter(participation -> participation.getAccept() == 1)
+        // 최신순으로 정렬 후 최대 4개 선택
+        List<GroupBuyingListDTO.MyListResponse> groupBuyingList = acceptedParticipations.stream()
                 .sorted(Comparator.comparing(Participation::getCreatedAt).reversed())
                 .limit(4)
+                .map(participation -> {
+                    GroupBuying groupBuying = participation.getGroupBuying();
+                    if (groupBuying == null) {
+                        throw new EntityNotFoundException("GroupBuying 조회에 실패했습니다.");
+                    }
+                    return new GroupBuyingListDTO.MyListResponse(groupBuying, groupBuying.getImageList());
+                })
                 .collect(Collectors.toList());
 
-        // 중복된 GroupBuying을 방지 위해 사용된 GroupBuyingId를 저장할 Set을 생성
-        Set<Long> usedGroupBuyingIds = new HashSet<>();
-
-        // 각 Participation에 해당하는 GroupBuying을 조회하여 MyListResponse로 변환
-        List<GroupBuyingListDTO.MyListResponse> groupBuyingList = new ArrayList<>();
-        for (Participation participation : acceptedParticipations) {
-            // 각 Participation에 해당하는 GroupBuying을 조회
-            GroupBuying groupBuying = participation.getGroupBuying();
-            if (groupBuying == null) {
-                throw new EntityNotFoundException("GroupBuying 조회에 실패했습니다.");
-            }
-
-            // 이미 사용된 GroupBuyingId인지 확인
-            Long groupBuyingId = groupBuying.getId();
-            if (usedGroupBuyingIds.contains(groupBuyingId)) {
-                // 이미 사용된 GroupBuyingId일 경우, 다음 Participation으로
-                continue;
-            }
-
-            // GroupBuyingId를 사용한 것으로 표시
-            usedGroupBuyingIds.add(groupBuyingId);
-
-            // 가져온 GroupBuying 객체를 사용하여 MyListResponse 생성
-            groupBuyingList.add(new GroupBuyingListDTO.MyListResponse(groupBuying, groupBuying.getImageList()));
-        }
         return groupBuyingList;
     }
 

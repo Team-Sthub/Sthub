@@ -54,7 +54,7 @@
     </table>
 </div>
 <!-- 페이지네이션 -->
-<div class="pagination">
+<div class="pagination" th:if="${not #lists.isEmpty(participationList)}">
     <!-- 이전 버튼, currentPage가 11 이상일 때만 활성화 -->
     <button th:if="${participationList[0].currentPage > 10}"
             th:onclick="|window.location.href='@{/participation/list?pageNum=${participationList[0].currentPage - 10}&groupBuyingId=${participationList[0].participation.groupBuying.id})}'|">
