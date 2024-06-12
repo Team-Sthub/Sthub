@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "complaint")
-public class Complaint {
+public class Complaint extends BaseTime {
 
     // 신고 식별값
     @Id
@@ -40,11 +41,11 @@ public class Complaint {
     private GroupBuying groupBuying;
 
     // 중고거래 조인
-    @ManyToOne(fetch = FetchType.LAZY, optional = true, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY,optional = true,  cascade = CascadeType.PERSIST)
     @JoinColumn(name = "secondhandId", nullable = true)
     private Secondhand secondhand;
 
-    public Complaint(ComplaintDTO request, Secondhand secondhand) {
+    public Complaint(ComplaintDTO.Request request, Optional<Secondhand> secondhandOptional, Optional<GroupBuying> groupBuyingOptional) {
         this.tags = List.of(
                 request.getTag1(),
                 request.getTag2(),
@@ -56,21 +57,11 @@ public class Complaint {
                 request.getTag8(),
                 request.getTag9()
         );
-        this.secondhand = secondhand;
-    }
 
-    public Complaint(ComplaintDTO request, GroupBuying groupBuying) {
-        this.tags = List.of(
-                request.getTag1(),
-                request.getTag2(),
-                request.getTag3(),
-                request.getTag4(),
-                request.getTag5(),
-                request.getTag6(),
-                request.getTag7(),
-                request.getTag8(),
-                request.getTag9()
-        );
-        this.groupBuying = groupBuying;
+        if (secondhandOptional.isPresent()) {
+            this.secondhand = secondhandOptional.get();
+        } else if (groupBuyingOptional.isPresent()) {
+            this.groupBuying = groupBuyingOptional.get();
+        }
     }
 }

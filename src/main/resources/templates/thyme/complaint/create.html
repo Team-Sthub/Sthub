@@ -12,29 +12,30 @@
 <!-- header 삽입 -->
 <div th:insert="~{thyme/frameHeader :: header}"></div>
 <div th:class="back" class="back">
-    <form class="complaint-form" th:action="@{/review/create}" onsubmit="return validateCreateForm()">
+    <form class="complaint-form" method="post"
+          th:action="@{(${secondhand != null} ? '/complaint/secondhand/' + ${secondhand.id} : '/complaint/groupBuying/' + ${groupBuying.id})}"
+          onsubmit="return submitComplaintForm(event)">
         <h2 id="title">신고하기</h2>
-        <div class="complaint-info">제목: <label>게시글 제목 불러오기</label></div>
-        <div class="complaint-info">신고할 닉네임: <label>신고 게시글 작성자 닉네임</label></div>
-        <!--        <div class="box1"><label for="title"></label><input class="form-input" id="name"-->
-        <!--                                                          th:value="${member.nickname}" readonly></div>-->
-        <!--        <div class="box1"><label for="nickname"></label><input class="form-input" id="phone"-->
-        <!--                                                           th:value="${member.phone}" readonly></div>-->
+        <div class="complaint-info">제목: <label
+                th:text="${secondhand != null} ? ${secondhand.title} : ${groupBuying.title}">게시글 제목 불러오기</label></div>
+        <div class="complaint-info">신고할 닉네임: <label
+                th:text="${secondhand != null} ? ${secondhand.member.nickname} : ${groupBuying.member.nickname}">신고 게시글
+            작성자 닉네임</label></div>
         <h3>신고사유</h3>
         <div class="tag-container">
-            <span class="tag-box">광고성 콘텐츠예요</span>
-            <span class="tag-box-non">상품 정보 부정확</span>
-            <span class="tag-box-non">상품 설명과 일치하지 않아요</span>
-            <span class="tag-box-non">안전거래를 거부해요</span>
-            <span class="tag-box-non">사기가 의심돼요</span>
-            <span class="tag-box-non">거래금지 품목으로 판단 돼요</span>
-            <span class="tag-box-non">전문업자 같아요</span>
-            <span class="tag-box-non">거래 중 분쟁이 발생했어요</span>
-            <span class="tag-box-non">연락이 잘 안돼요</span>
+            <span class="tag-box-non" data-tag="tag1">광고성 콘텐츠예요</span>
+            <span class="tag-box-non" data-tag="tag2">상품 정보 부정확</span>
+            <span class="tag-box-non" data-tag="tag3">상품 설명과 일치하지 않아요</span>
+            <span class="tag-box-non" data-tag="tag4">안전거래를 거부해요</span>
+            <span class="tag-box-non" data-tag="tag5">사기가 의심돼요</span>
+            <span class="tag-box-non" data-tag="tag6">거래금지 품목으로 판단 돼요</span>
+            <span class="tag-box-non" data-tag="tag7">전문업자 같아요</span>
+            <span class="tag-box-non" data-tag="tag8">거래 중 분쟁이 발생했어요</span>
+            <span class="tag-box-non" data-tag="tag9">연락이 잘 안돼요</span>
         </div>
         <label>
-            <input type="checkbox" id="my_checkbox" class="checkbox" onclick="is_checked()"> 게시글 신고 누적5회면 게시글이 삭제되니 신중하게
-            신고해주세요.
+            <input type="checkbox" id="my_checkbox" class="checkbox" onclick="is_checked()"> 게시글 신고 누적 5회면 게시글이 삭제되니
+            신중하게 신고해주세요.
         </label>
         <div>
             <input class="btn1" type="submit" value="신고하기">
