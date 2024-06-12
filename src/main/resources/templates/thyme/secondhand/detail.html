@@ -82,7 +82,7 @@
         <a th:href="@{/message/detail(receiverId=${secondhand.secondhand.member.id})}" class="message">1:1 쪽지하기</a>
     </div>
     <div id="btn_complaint">
-        <a th:href="@{'#'}" th:onclick="'sendDeleteRequest(\'' + ${secondhand.secondhand.id} + '\')'" class="complaint">신고하기</a>
+        <a th:href="@{|/complaint/moveToForm?secondhandId=${secondhand.secondhand.id}|}" th:onclick="'sendDeleteRequest(\'' + ${secondhand.secondhand.id} + '\')'" class="complaint">신고하기</a>
     </div>
     <div id="btn_purchase">
         <a class="purchase">구매하기</a>

@@ -81,7 +81,7 @@
             보기</a>
     </div>
     <div id="btn_complaint">
-        <a th:href="@{/groupBuying/list}" class="complaint">신고하기</a>
+        <a th:href="@{|/complaint/moveToForm?groupBuyingId=${groupBuying.groupBuying.id}|}" class="complaint">신고하기</a>
     </div>
 </div>
 <!-- 댓글 섹션 -->
