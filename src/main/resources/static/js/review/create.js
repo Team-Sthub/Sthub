@@ -11,6 +11,10 @@ function submitReviewForm(event) {
     }
 
     const selectedTags = document.querySelectorAll('.tag-container .tag-box');
+    if (selectedTags.length === 0) {
+        alert('태그를 하나 이상 선택해주세요.');
+        return false;
+    }
     const tags = {
         tag1: 0,
         tag2: 0,
