@@ -7,6 +7,7 @@ import com.ssd.sthub.dto.groupBuying.GroupBuyingListDTO;
 import com.ssd.sthub.dto.groupBuying.PostGroupBuyingDTO;
 import com.ssd.sthub.service.AWSS3SService;
 import com.ssd.sthub.service.GroupBuyingService;
+import com.ssd.sthub.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ public class GroupBuyingController {
     private final GroupBuyingService groupBuyingService;
     private final AWSS3SService awss3SService;
     private final HttpServletRequest httpServletRequest;
+    private final MemberService memberService;
 
     // 공동구매 전체 조회
     @GetMapping("/list/{category}")
@@ -143,7 +145,10 @@ public class GroupBuyingController {
 
     // 마이페이지 - 공구 내역 (4개)
     @GetMapping("/mylist")
-    public String getGroupBuyingsByMemberId(@SessionAttribute(name = "memberId") Long memberId, Model model) {
+    public String getGroupBuyingsByMemberId(@SessionAttribute(name = "memberId") Long memberId, @RequestParam(required = false) String nickname, Model model) {
+        if(nickname != null)
+            memberId = memberService.getMemberByNickname(nickname).getId();
+
         List<GroupBuyingListDTO.MyListResponse> groupBuyingList = groupBuyingService.getGroupBuyingsByMemberId(memberId);
         model.addAttribute("groupBuyingList", groupBuyingList);
         return "thyme/user/fragments/groupbuyingFragments";
