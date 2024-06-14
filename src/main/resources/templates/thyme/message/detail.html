@@ -14,7 +14,7 @@
 <div id="msgContainer">
     <div id="msgBox">
         <div id="msg">
-            <div th:if="${#lists.isEmpty(messageList)}">
+            <div id="noMessages" th:if="${#lists.isEmpty(messageList)}">
                 <div>대화 내역이 없습니다. 메시지를 보내세요!</div>
             </div>
             <div th:unless="${#lists.isEmpty(messageList)}">
@@ -94,6 +94,9 @@
                 } else {
                     console.log('Received new message: ', messages);
                     updateMessageList(messages);
+                    if (!isHistoryFetched) {
+                        chatHistory.push(messages);
+                    }
                 }
             });
 
@@ -113,9 +116,18 @@
             console.log('Updating message: ', message); // 메시지 업데이트 확인
             var contentBox = document.getElementById('content');
 
+            // 대화 내역이 없는 경우, 새로운 메시지 박스를 생성
             if (!contentBox) {
-                console.error("contentBox 요소를 찾을 수 없습니다.");
-                return;
+                var msgBox = document.getElementById('msg');
+                var noMessages = document.getElementById('noMessages');
+
+                if (noMessages) {
+                    noMessages.remove();
+                }
+
+                contentBox = document.createElement('div');
+                contentBox.id = 'content';
+                msgBox.insertBefore(contentBox, document.getElementById('inputMessage'));
             }
 
             var conversation = document.createElement('div');
