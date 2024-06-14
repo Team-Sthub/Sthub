@@ -1,5 +1,6 @@
 package com.ssd.sthub.dto.message;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssd.sthub.domain.Message;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,7 +18,7 @@ public class MessageDTO {
         private String content;
     }
 
-    @Getter
+    @Getter @Setter
     public static class Response {
         private Long senderId;
         private String senderNickname;
@@ -27,6 +28,11 @@ public class MessageDTO {
         private String receiverProfile;
         private String content;
         private LocalDateTime createdAt;
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        public LocalDateTime getCreatedAt() {
+            return createdAt;
+        }
 
         public Response(Message message) {
             this.senderId = message.getSender().getId();

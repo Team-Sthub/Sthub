@@ -1,53 +1,185 @@
 <!DOCTYPE html>
-<html lang="UTF-8">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>1:1 쪽지</title>
     <link rel="stylesheet" th:href="@{/style/header.css}">
     <link rel="stylesheet" th:href="@{/style/message/detail.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 </head>
 <body>
-    <div th:replace="~{thyme/frameHeader :: header}"></div>
-    <div id="msgContainer">
-        <div id="msgBox">
-            <div id="msg">
-                <div th:if="${#lists.isEmpty(messageList)}">
-                    <div>대화 내역이 없습니다. 메시지를 보내세요!</div>
+<div th:replace="~{thyme/frameHeader :: header}"></div>
+<div id="msgContainer">
+    <div id="msgBox">
+        <div id="msg">
+            <div th:if="${#lists.isEmpty(messageList)}">
+                <div>대화 내역이 없습니다. 메시지를 보내세요!</div>
+            </div>
+            <div th:unless="${#lists.isEmpty(messageList)}">
+                <div id="nickname" th:text="${messageList[0].senderId == currentUserId ? messageList[0].receiverNickname : messageList[0].senderNickname} + ' 님과의 쪽지'"></div>
+                <div id="content" th:each="message : ${messageList}">
+                    <!-- 메시지 내용이 여기에 추가됩니다. -->
                 </div>
-                <div th:unless="${#lists.isEmpty(messageList)}">
-                    <div id="nickname" th:text="${messageList[0].senderId == currentUserId ? messageList[0].receiverNickname : messageList[0].senderNickname} + ' 님과의 쪽지'"></div>
-                    <div id="content" th:each="message : ${messageList}">
-                        <div class="eachMsg" th:classappend="${message.senderId == currentUserId} ? ' sent' : ' received'">
-                            <div class="message-box" th:classappend="${message.senderId == currentUserId} ? ' sent' : ' received'">
-                                <p id="nick1" th:if="${message.senderId == currentUserId}" th:text="${message.senderNickname}"></p>
-                                <p id="nick2" th:unless="${message.senderId == currentUserId}" th:text="${message.senderNickname}"></p>
-                                <p id="title" th:text="${message.content}"><b>내용</b></p>
-                                <p id="time" th:text="${#temporals.format(message.createdAt, 'MM-dd HH:mm')}"><b>시간</b></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div id="inputMessage">
-                    <form th:action="@{/message/send}" method="post">
-                        <input type="hidden" id="receiverIdInput" name="receiverId">
-                        <input type="text" name="content" placeholder="메시지를 입력하세요" required>
-                        <button type="submit">전송</button>
-                    </form>
-                </div>
+            </div>
+            <br>
+            <div id="inputMessage">
+                <form id="messageForm">
+                    <input type="hidden" id="receiverIdInput" name="receiverId">
+                    <input type="text" id="messageInput" name="content" placeholder="메시지를 입력하세요" required>
+                    <button type="submit">전송</button>
+                </form>
             </div>
         </div>
     </div>
-    <script th:inline="javascript">
-        document.addEventListener("DOMContentLoaded", function() {
-            var currentUrl = window.location.href;
-            console.log("현재 url은 " + currentUrl);
-            var url = new URL(currentUrl);
-            var receiverId = url.searchParams.get('receiverId');
-            console.log("receiverId 값은 " + receiverId);
-            document.getElementById('receiverIdInput').value = receiverId;
+</div>
+<!--<script th:src="@{/js/message/detail.js}"></script>-->
+<script th:inline="javascript">
+    var receiverId;
+    var stompClient;
+    var currentUserId;
+    var lastMessageId = 0; // 마지막으로 받은 메시지의 ID를 기록
+    var chatHistory = [];
+    var isHistoryFetched = false;
+
+    document.addEventListener("DOMContentLoaded", function() {
+        currentUserId = [[${currentUserId}]];
+
+        var currentUrl = window.location.href;
+        console.log("현재 url은 " + currentUrl);
+        var url = new URL(currentUrl);
+        receiverId = url.searchParams.get('receiverId');
+        console.log("receiverId 값은 " + receiverId);
+        if (!receiverId) {
+            console.error("receiverId가 URL에 없습니다.");
+            return;
+        }
+        receiverId = parseInt(receiverId, 10);
+        if (isNaN(receiverId)) {
+            console.error("receiverId가 유효한 숫자가 아닙니다.");
+            return;
+        }
+        document.getElementById('receiverIdInput').value = receiverId;
+
+        var memberId = currentUserId; // 이 값을 실제 사용자 ID로 설정해야 합니다.
+        console.log("세션 멤버 아이디는 " + memberId);
+        var socket = new SockJS('http://localhost:8080/ws');
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function(frame) {
+            console.log('Connected: ' + frame);
+
+            var queryParams = {
+                senderId: currentUserId,
+                receiverId: receiverId
+            };
+
+            var conversationId = currentUserId < receiverId ? currentUserId + '-' + receiverId : receiverId + '-' + currentUserId;
+
+            stompClient.subscribe('/sub/messages/' + conversationId, function(response) {
+                var messages = JSON.parse(response.body);
+
+                if (Array.isArray(messages)) {
+                    if (!isHistoryFetched) {
+                        console.log('Received previous messages: ', messages);
+                        messages.forEach(function(message) {
+                            updateMessageList(message);
+                        });
+                        chatHistory = messages;
+                        isHistoryFetched = true;
+                    } else {
+                        console.log('History already fetched, ignoring previous messages');
+                    }
+                } else {
+                    console.log('Received new message: ', messages);
+                    updateMessageList(messages);
+                }
+            });
+
+            if (!isHistoryFetched) {
+                console.log('Requesting initial messages');
+                stompClient.send("/app/requestMessages", {}, JSON.stringify(queryParams));
+            } else {
+                console.log('Using existing chat history');
+                chatHistory.forEach(function(message) {
+                    updateMessageList(message);
+                });
+            }
         });
-    </script>
+
+        // 메시지 업데이트 함수
+        function updateMessageList(message) {
+            console.log('Updating message: ', message); // 메시지 업데이트 확인
+            var contentBox = document.getElementById('content');
+
+            if (!contentBox) {
+                console.error("contentBox 요소를 찾을 수 없습니다.");
+                return;
+            }
+
+            var conversation = document.createElement('div');
+            conversation.className = 'eachMsg ' + (message.senderId == currentUserId ? 'sent' : 'received');
+
+            var messageBox = document.createElement('div');
+            messageBox.className = 'message-box ' + (message.senderId == currentUserId ? 'sent' : 'received');
+
+            var nick = document.createElement('p');
+            nick.className = 'nick' + (message.senderId == currentUserId ? '1' : '2');
+            nick.textContent = message.senderId == currentUserId ? 'Me' : 'Other'; // 수정된 부분
+
+            var title = document.createElement('p');
+            title.className = 'title';
+            title.textContent = message.content;
+
+            var time = document.createElement('p');
+            time.className = 'time';
+
+            // 'createdAt'에서 'T' 문자를 공백으로 대체하고, Date 객체로 변환합니다.
+            var messageDate = new Date(message.createdAt.replace('T', ' '));
+
+            // 변환된 날짜를 원하는 형식으로 출력합니다.
+            var formattedTime = messageDate.toLocaleString('ko-KR');
+
+            time.textContent = formattedTime;
+
+            messageBox.appendChild(nick);
+            messageBox.appendChild(title);
+            messageBox.appendChild(time);
+            conversation.appendChild(messageBox);
+            contentBox.appendChild(conversation);
+
+            // DOM 업데이트가 완료된 후 스크롤을 아래로 이동
+            setTimeout(function () {
+                contentBox.scrollTop = contentBox.scrollHeight;
+            }, 0);
+
+            console.log('Message updated: ', conversation); // 메시지 업데이트 확인
+        }
+
+        document.getElementById('messageForm').addEventListener('submit', function(event) {
+            console.log("메세지 전송하겠음");
+            event.preventDefault();
+            var messageInput = document.getElementById('messageInput');
+            var content = messageInput.value; // 메시지 입력란의 값
+            var message = {
+                receiverId: receiverId, // 수정된 부분
+                content: content
+            };
+            if (content.trim() === '') {
+                console.log("메세지 값이 비어있습니다.");
+                return;
+            }
+            var headers = {
+                'memberId': currentUserId // 사용자 ID를 여기에 설정합니다.
+            };
+            console.log("메세지 값은 " + content);
+            console.log("receiverId는 " + receiverId);
+            stompClient.send("/app/sendMessage", headers, JSON.stringify(message));
+            messageInput.value = '';
+        });
+    });
+
+</script>
 </body>
 </html>

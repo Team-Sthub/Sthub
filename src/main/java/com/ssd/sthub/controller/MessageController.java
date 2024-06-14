@@ -21,6 +21,7 @@ import java.util.List;
 @RequestMapping("/message")
 public class MessageController {
     private final MessageService messageService;
+    private final ChatController chatController; // ChatController를 주입받음
 
     // 메세지 전송
     @PostMapping("/send")
@@ -29,6 +30,8 @@ public class MessageController {
                           @ModelAttribute MessageDTO.Request request) {
         request.setReceiverId(receiverId);
         System.out.println("받는 사람의 아이디는 " + request.getReceiverId());
+        //chatController.sendMessage(senderId, receiverId, request); // WebSocket을 통해 sendMessage() 메소드 호출
+        System.out.println("메세지 전송 완료");
         messageService.sendMsg(senderId, request);
         return "redirect:/message/detail?receiverId=" + receiverId;
     }
@@ -39,9 +42,9 @@ public class MessageController {
                                    @RequestParam(defaultValue = "0") int pageNum) throws BadRequestException {
         MessageListDTO messageListDTO = messageService.getAllMessage(pageNum, senderId);
         ModelAndView modelAndView = new ModelAndView("thyme/message/list");
-        /*if (messageListDTO.getResult().isEmpty()) {
+        if (messageListDTO.getResult().isEmpty()) {
             modelAndView.addObject("noMessage", "아직 쪽지를 주고받은 상대가 없습니다.");
-        }*/
+        }
         modelAndView.addObject("messageList", messageListDTO);
         modelAndView.addObject("currentUserId", senderId);
         return modelAndView;
