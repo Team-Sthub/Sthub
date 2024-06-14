@@ -10,7 +10,9 @@ import com.ssd.sthub.domain.Message;
 import com.ssd.sthub.domain.QMember;
 import com.ssd.sthub.domain.QMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -104,6 +106,25 @@ public class MessageRepositoryImpl extends QuerydslRepositorySupport {
         return jpaQueryFactory
                 .selectFrom(qMessage)
                 .where(senderAndReceiver)
+                .orderBy(qMessage.createdAt.asc())
+                .fetch();
+    }
+
+    @Transactional
+    public List<Message> findNewMessages(Member member, Member other, Long lastMessageId) {
+        QMessage qMessage = QMessage.message;
+        QMember qSender = new QMember("sender");
+        QMember qReceiver = new QMember("receiver");
+
+        BooleanExpression sentByMemberAndReceivedByOther = qMessage.sender.eq(member).and(qMessage.receiver.eq(other));
+        BooleanExpression sentByOtherAndReceivedByMember = qMessage.sender.eq(other).and(qMessage.receiver.eq(member));
+
+        BooleanExpression senderAndReceiver = sentByMemberAndReceivedByOther.or(sentByOtherAndReceivedByMember);
+        BooleanExpression newMessages = qMessage.id.gt(lastMessageId);
+
+        return jpaQueryFactory
+                .selectFrom(qMessage)
+                .where(senderAndReceiver.and(newMessages))
                 .orderBy(qMessage.createdAt.asc())
                 .fetch();
     }

@@ -42,7 +42,6 @@ public class MessageService {
                 .content(request.getContent())
                 .build();
 
-        // return modelMapper.map(messageRepository.save(msg), MessageDTO.Response.class);
         return new MessageDTO.Response(messageRepository.save(msg));
     }
 
@@ -52,14 +51,20 @@ public class MessageService {
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
         QueryResults<Message> messages = messageRepositoryImpl.findMessagesByAllMember(memberId, pageNum, 4);
 
-        /*if (messages.isEmpty())
-            throw new EntityNotFoundException("대화내용을 찾을 수 없습니다.");*/
-
         List<MessageDTO.Response> result = messages.getResults().stream()
                 .map(MessageDTO.Response::new)
                 .collect(Collectors.toList());
 
         return new MessageListDTO(result, messages.getTotal());
+    }
+
+    // 기존에 있던 메시지 가져오는 로직을 서비스로 이동
+    public List<MessageDTO.Response> getMessages(Long senderId, Long receiverId, Long lastMessageId) {
+        if (lastMessageId == 0) {
+            return getPersonalMessage(senderId, receiverId);
+        } else {
+            return getNewMessages(senderId, receiverId, lastMessageId);
+        }
     }
 
     // 특정 유저와의 쪽지 내역 불러오기
@@ -70,10 +75,17 @@ public class MessageService {
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
         List<Message> messages = messageRepositoryImpl.findMessagesByMember(member, other);
 
-        /*if (messages.isEmpty()) {
-            throw new EntityNotFoundException("대화내용을 찾을 수 없습니다.");
-        }*/
+        return messages.stream()
+                .map(MessageDTO.Response::new)
+                .collect(Collectors.toList());
+    }
 
+    public List<MessageDTO.Response> getNewMessages(Long memberId, Long otherId, Long messageId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
+        Member other = memberRepository.findById(otherId)
+                .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
+        List<Message> messages = messageRepositoryImpl.findNewMessages(member, other, messageId);
         return messages.stream()
                 .map(MessageDTO.Response::new)
                 .collect(Collectors.toList());

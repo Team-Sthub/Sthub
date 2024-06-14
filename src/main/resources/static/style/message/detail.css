@@ -29,6 +29,7 @@ body {
 }
 
 #content {
+    overflow-y: auto; /* 수직 스크롤이 필요할 때만 스크롤바를 표시합니다. */
     display: flex;
     flex-direction: column;
     justify-content: flex-end; /* sent 메시지가 content의 오른쪽에서 시작하도록 설정 */
