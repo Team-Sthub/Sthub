@@ -130,6 +130,15 @@ public class MemberController {
         return mav;
     }
 
+    // 타유저 프로필 조회
+    @GetMapping("/otherUserPage")
+    public ModelAndView getOtherMember(@RequestParam Long memberId) {
+        UserViewDTO user = memberService.getMember(memberId);
+        ModelAndView mav = new ModelAndView("thyme/user/otherUserView");
+        mav.addObject("user", user);
+        return mav;
+    }
+
     // 프로필 상세 조회
     @GetMapping("/myPage/detail")
     public ModelAndView getMemberDetail(@SessionAttribute(name = "memberId") Long memberId) {

@@ -7,22 +7,17 @@
     <link rel="stylesheet" th:href="@{/style/groupBuying/detail.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
 </head>
-<!-- 타 유저 프로필 이동 (아직 미완성) -->
-<script type="text/javascript">
-    function redirectToMyPage() {
-        window.location.href = "/user/myPage";
-    }
-</script>
 <body>
-<!-- 외부 js  -->
-<script th:src="@{/js/groupBuying/writerDetail.js}"></script>
+<!--<script th:src="@{/js/groupBuying/writerDetail.js}"></script>-->
 <!-- header 삽입 -->
 <div th:replace="thyme/frameHeader :: header"></div>
 
 <div><a th:href="@{/groupBuying/list/ALL(pageNum=1)}" class="btn_wrap">목록</a></div>
 
 <p id="detail-title" th:text="${groupBuying.getGroupBuying().title}">공학용 계산기 공동구매 하실 분</p>
-<p id="user-nickname" th:text="${groupBuying.getGroupBuying().getMember().nickname}" onclick="redirectToMyPage()">zzimnii</p>
+<a th:href="@{/user/otherUserPage(memberId=${groupBuying.getGroupBuying().getMember().id})}">
+    <p id="user-nickname" th:text="${groupBuying.getGroupBuying().getMember().nickname}">test</p>
+</a>
 <hr/>
 
 <div class="info">

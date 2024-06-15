@@ -9,9 +9,13 @@
 <body>
 <div id="sellingFragments" th:fragment="sellingFragments">
     <div th:if="${secondhandList != null and !secondhandList.isEmpty()}">
-        <div class="editBtn2">
-            <!-- 판매내역 전체 조회 -->
+        <div th:if="${sessionMemberId == secondhandList.get(0).secondhand.member.id}" class="editBtn2">
+            <!-- 나의 판매내역 전체 조회 -->
             <a th:href="@{/secondhand/selling/list/ALL?pageNum=1}" class="edit-button2">더보기</a>
+        </div>
+        <div th:if="${sessionMemberId != secondhandList.get(0).secondhand.member.id}" class="editBtn2">
+            <!-- 타유저 판매내역 전체 조회 -->
+            <a th:href="@{/secondhand/selling/list/ALL(pageNum=1, memberId=${secondhandList.get(0).secondhand.member.id})}" class="edit-button2">더보기</a>
         </div>
         <div class="product-grid">
             <div th:each="secondhand : ${secondhandList}">

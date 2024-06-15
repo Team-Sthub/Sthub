@@ -138,19 +138,29 @@ public class GroupBuyingController {
 
     // 마이페이지 - 공구 내역 (더보기)
     @GetMapping("/mylist/all")
-    public ModelAndView getAllGroupBuyingByMemberId(@SessionAttribute(name = "memberId") Long memberId, @RequestParam int pageNum) {
+    public ModelAndView getAllGroupBuyingByMemberId(@RequestParam(required = false) Long memberId,
+                                                    @SessionAttribute(name = "memberId", required = false) Long sessionMemberId,
+                                                    @RequestParam int pageNum) {
+        // URL 파라미터로 memberId가 전달되지 않은 경우 세션의 memberId를 사용
+        if (memberId == null) {
+            memberId = sessionMemberId;
+        }
         List<GroupBuyingListDTO.MyAllListResponse> myGroupBuyingList = groupBuyingService.getAllGroupBuyingByMemberId(memberId, pageNum - 1);
         return new ModelAndView("thyme/groupBuying/myGroupBuying", "myGroupBuyingList", myGroupBuyingList);
     }
 
     // 마이페이지 - 공구 내역 (4개)
     @GetMapping("/mylist")
-    public String getGroupBuyingsByMemberId(@SessionAttribute(name = "memberId") Long memberId, @RequestParam(required = false) String nickname, Model model) {
-        if(nickname != null)
-            memberId = memberService.getMemberByNickname(nickname).getId();
-
+    public String getGroupBuyingsByMemberId(@RequestParam(required = false) Long memberId,
+                                            @SessionAttribute(name = "memberId", required = false) Long sessionMemberId,
+                                            Model model) {
+        // URL 파라미터로 memberId가 전달되지 않은 경우 세션의 memberId를 사용
+        if (memberId == null) {
+            memberId = sessionMemberId;
+        }
         List<GroupBuyingListDTO.MyListResponse> groupBuyingList = groupBuyingService.getGroupBuyingsByMemberId(memberId);
         model.addAttribute("groupBuyingList", groupBuyingList);
+        model.addAttribute("sessionMemberId", sessionMemberId); // 세션의 memberId 추가
         return "thyme/user/fragments/groupbuyingFragments";
     }
 

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -152,9 +154,26 @@ public class SecondhandController {
 
     // 판매내역 전체 조회
     @GetMapping("/selling/list/{status}")
-    public ModelAndView getSellingSecondhands(@PathVariable String status, @SessionAttribute Long memberId, @RequestParam int pageNum) throws BadRequestException {
+    public ModelAndView getSellingSecondhands(@PathVariable String status,
+                                              @RequestParam(required = false) Long memberId,
+                                              @SessionAttribute(name = "memberId", required = false) Long sessionMemberId,
+                                              @RequestParam int pageNum) throws BadRequestException {
+        // URL 파라미터로 memberId가 전달되지 않은 경우 세션의 memberId를 사용
+        if (memberId == null) {
+            memberId = sessionMemberId;
+        }
         List<SecondhandDTO.ListResponse> secondhandList = secondhandService.getSellingSecondhands(status, memberId, pageNum - 1);
-        ModelAndView modelAndView = new ModelAndView("thyme/secondhand/mySelling");
+
+        // memberId가 있을 경우 "otherSelling" 뷰로, 없을 경우 "mySelling" 뷰로 이동
+        ModelAndView modelAndView;
+        if (memberId.equals(sessionMemberId)) {
+            modelAndView = new ModelAndView("thyme/secondhand/mySelling");
+        } else {
+            modelAndView = new ModelAndView("thyme/secondhand/otherSelling");
+            if (secondhandList == null || secondhandList.size() == 0) {
+                secondhandList = Collections.emptyList();
+            }
+        }
         modelAndView.addObject("secondhandList", secondhandList);
         modelAndView.addObject("status", status);
         return modelAndView;
@@ -162,12 +181,17 @@ public class SecondhandController {
 
     // 판매내역 상위 4개 조회
     @GetMapping("/selling/top4List")
-    public String getSellingSecondhands(@SessionAttribute(name = "memberId") Long memberId, @RequestParam(required = false) String nickname, Model model) throws BadRequestException {
-        if(nickname != null)
-            memberId = memberService.getMemberByNickname(nickname).getId();
+    public String getSellingSecondhands(@RequestParam(required = false) Long memberId,
+                                        @SessionAttribute(name = "memberId", required = false) Long sessionMemberId,
+                                        Model model) throws BadRequestException {
+        // URL 파라미터로 memberId가 전달되지 않은 경우 세션의 memberId를 사용
+        if (memberId == null) {
+            memberId = sessionMemberId;
+        }
 
         List<SecondhandDTO.Top4ListResponse> secondhandList = secondhandService.getTop4Items(memberId);
         model.addAttribute("secondhandList", secondhandList);
+        model.addAttribute("sessionMemberId", sessionMemberId); // 세션의 memberId 추가
         return "thyme/user/fragments/sellingFragments";
     }
 
