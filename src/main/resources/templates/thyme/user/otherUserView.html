@@ -32,16 +32,16 @@
             <br>
             <div class="location">
                 <div class="rectangle" th:text="${user.nickname} + '의 동네'"></div>
-                <span th:text="${user.address}"></span>
+                <span th:inline="text">&nbsp;&nbsp;[[${user.address}]]</span>
             </div>
         </div>
     </div>
     <br><br>
     <div class="categoryMenu">
-        <div class="menu" id="selling" data-url="/secondhand/selling/top4List">판매 상품</div>
-        <div class="menu" id="groupbuying" data-url="/groupBuying/top4List">공구 모집</div>
-        <div class="menu" id="review" data-url="/review/list">후기 내역</div>
-        <div class="menu" id="complaints" data-url="/complaint/list">신고 내역</div>
+        <div class="menu" id="selling" th:attr="data-url=@{/secondhand/selling/top4List(memberId=${user.id})}">판매 상품</div>
+        <div class="menu" id="groupbuying" th:attr="data-url=@{/groupBuying/mylist(memberId=${user.id})}">공구 모집</div>
+        <div class="menu" id="review" th:attr="data-url=@{/review/list(memberId=${user.id})}">후기 내역</div>
+        <div class="menu" id="complaints" th:attr="data-url=@{/complaint/list(memberId=${user.id})}">신고 내역</div>
     </div>
     <!-- 동적으로 정보 로드 -->
     <div class="categoryContent" id="categoryContent">

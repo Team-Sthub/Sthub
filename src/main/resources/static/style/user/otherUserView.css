@@ -32,6 +32,13 @@ div.userInfo {
     width: 100px;
 }
 
+.profile {
+    margin-left: 3%;
+    margin-top: 20%;
+    width: 60px;
+    height: 60px;
+}
+
 #image-icon {
     margin-left: 3%;
     margin-top: 20%;
