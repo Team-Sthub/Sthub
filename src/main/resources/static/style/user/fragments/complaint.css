@@ -1,0 +1,32 @@
+#complaintFragments {
+    background: rgba(76, 175, 80, 0.15);
+    width: 90%;
+    height: 72%;
+    border-radius: 2em;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.tag-box {
+    background: white;
+    flex: 0 1 calc(30% - 20px); /* 각 태그의 너비를 계산하고, 필요에 따라 grow와 shrink 비율을 설정합니다. */
+    height: 30px;
+    border-radius: 5em;
+    margin-bottom: 10px;
+    text-align: center;
+    line-height: 30px;
+    box-sizing: border-box; /* 요소의 padding과 border가 요소의 width와 height를 더하도록 만듭니다. */
+}
+
+.tag-left, .tag-right {
+    width: calc(30% - 20px); /* 각 태그의 너비를 계산하고, 필요에 따라 grow와 shrink 비율을 설정합니다. */
+}
