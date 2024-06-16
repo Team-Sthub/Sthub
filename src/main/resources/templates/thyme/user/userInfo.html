@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>마이페이지 수정</title>
-    <script async defer th:src="'https://maps.googleapis.com/maps/api/js?key=' + AIzaSyBG0mcLkUd6Oz5Q4uCD_cXE-dGNaoAi-fg + '&callback=initMap'"></script>
+    <script async defer th:src="'https://maps.googleapis.com/maps/api/js?key=' + ${@environment.getProperty('google.map-api.secret-key')} + '&callback=initMap'"></script>
     <link rel="stylesheet" th:href="@{/style/header.css}">
     <link rel="stylesheet" th:href="@{/style/user/userInfo.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
