@@ -6,6 +6,14 @@
     <link rel="stylesheet" th:href="@{/style/header.css}">
     <link rel="stylesheet" th:href="@{/style/groupBuying/list.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var errorMessage = /*[[${errorMessage}]]*/ '';
+        if (errorMessage) {
+            alert(errorMessage);
+        }
+        /*]]>*/
+    </script>
 </head>
 <body>
     <!-- header 삽입 -->
@@ -25,8 +33,12 @@
     </div>
     <hr/>
 
+    <div th:if="${#lists.isEmpty(groupBuyingList)}">
+        <p th:value="noList"></p>
+    </div>
+
     <!-- 중고거래 게시글 리스트 -->
-    <div class="product-grid">
+    <div class="product-grid" th:if="${not#lists.isEmpty(groupBuyingList)}">
         <div th:each="groupBuying : ${groupBuyingList}">
             <a th:href="@{/groupBuying/detail(groupBuyingId=${groupBuying.getGroupBuying().id})}" class="product-box-link">
                 <div class="product-box">
@@ -50,7 +62,7 @@
     <button id="create" type="button" th:onclick="|window.location.href='@{/groupBuying/moveToForm}'|">글 작성하기</button>
 
     <!-- 페이지네이션 -->
-    <div class="pagination">
+    <div class="pagination" th:if="${not#lists.isEmpty(groupBuyingList)}">
         <!-- 이전 버튼, currentPage가 11 이상일 때만 활성화 -->
         <button th:if="${groupBuyingList[0].currentPage > 10}"
                 th:onclick="|window.location.href='@{/groupBuying/list/{category}(category=${groupBuyingList[0].category}, pageNum=${groupBuyingList[0].currentPage - 10})}'|">&lt;</button>

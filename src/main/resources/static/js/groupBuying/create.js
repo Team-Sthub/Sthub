@@ -9,8 +9,9 @@ function validateForm() {
     var deadline = document.getElementById("deadline").value;
     var chatLink = document.getElementById("chatLink").value;
     var meetingPlace = document.getElementById("meetingPlace").value;
+    var content = document.getElementById("content").value;
 
-    if (title === "" || category === "" || product === "" || price === "" || deadline == "" || chatLink == "" || meetingPlace == "") {
+    if (title === "" || category === "" || product === "" || price === "" || deadline == "" || chatLink == "" || meetingPlace == "" || content == "") {
         alert("모든 필수 입력란을 작성해주세요.");
         return false;
     }

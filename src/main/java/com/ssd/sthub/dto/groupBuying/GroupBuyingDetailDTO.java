@@ -4,6 +4,8 @@ import com.ssd.sthub.domain.GComment;
 import com.ssd.sthub.domain.GImage;
 import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.domain.enumerate.Category;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +22,7 @@ public class GroupBuyingDetailDTO {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     public static class PatchRequest {
+        @NotNull
         private Long groupBuyingId;
         private String title; // 제목
         private Category category; // 카테고리

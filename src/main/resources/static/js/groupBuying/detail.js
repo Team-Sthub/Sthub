@@ -39,19 +39,34 @@ document.addEventListener('DOMContentLoaded', (event) => {
     updateBtn.addEventListener('click', (event) => {
         event.preventDefault(); // 기본 이벤트 제거 (페이지 새로고침 방지)
 
+        const groupBuyingId = document.getElementById('groupBuyingId').value;
+        const title = document.getElementById("title").value;
+        const category = document.getElementById("category").value;
+        const product = document.getElementById("product").value;
+        const price = document.getElementById("price").value;
+        const deadline = document.getElementById('deadline').value;
+        const chatLink = document.getElementById('chatLink').value;
+        const meetingPlace = document.getElementById('meetingPlace').value;
+        const content = document.querySelector("textarea[name='content']").value;
+
         const formData = new FormData();
         var requestData = {
-            groupBuyingId : document.getElementById('groupBuyingId').value,
-            title: document.getElementById('title').value,
-            category : document.getElementById('category').value,
-            product : document.getElementById('product').value,
-            price: document.getElementById('price').value,
-            deadline : document.getElementById('deadline').value,
-            chatLink : document.getElementById('chatLink').value,
-            meetingPlace : document.getElementById('meetingPlace').value,
-            content : document.getElementById('content').value,
+            groupBuyingId : groupBuyingId,
+            title: title,
+            category : category,
+            product : product,
+            price: price,
+            deadline : deadline,
+            chatLink : chatLink,
+            meetingPlace : meetingPlace,
+            content : content,
             status : statusElement.innerText.trim(),
             deleteImages: deleteImages
+        }
+
+        if (title === "" || category === "" || product === "" || price === "" || deadline == "" || chatLink == "" || meetingPlace == "" || content == "") {
+            alert("모든 필수 입력란을 작성해주세요.");
+            return false;
         }
 
         formData.append('request', new Blob([JSON.stringify(requestData)], { type: 'application/json' }));
