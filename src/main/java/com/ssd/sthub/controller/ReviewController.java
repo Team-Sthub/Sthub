@@ -47,9 +47,19 @@ public class ReviewController {
 
     // 리뷰 조회
     @GetMapping("/mypage")
-    public String getMyReview(@SessionAttribute Long memberId, Model model) {
+    public String getMyReview(@RequestParam(required = false) Long memberId,
+                              @SessionAttribute(name = "memberId", required = false) Long sessionMemberId,
+                              Model model) {
+        // URL 파라미터로 memberId가 전달되지 않은 경우 세션의 memberId를 사용
+        if (memberId == null) {
+            memberId = sessionMemberId;
+        }
+
         List<String> tags = reviewService.getTags(memberId);
         model.addAttribute("tags", tags);
+        model.addAttribute("sessionMemberId", sessionMemberId); // 세션의 memberId 추가
+        model.addAttribute("memberId", memberId); // memberId를 모델에 추가
+
         return "thyme/user/fragments/reviewFragments";
     }
 }
