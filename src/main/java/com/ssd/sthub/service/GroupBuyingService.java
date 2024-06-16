@@ -10,8 +10,10 @@ import com.ssd.sthub.dto.groupBuying.PostGroupBuyingDTO;
 import com.ssd.sthub.repository.GImageRepository;
 import com.ssd.sthub.repository.GroupBuyingRepository;
 import com.ssd.sthub.repository.MemberRepository;
+import com.ssd.sthub.util.GoogleMapUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.json.JSONArray;
@@ -44,6 +46,7 @@ public class GroupBuyingService {
     public final MemberRepository memberRepository;
     public final GImageRepository gImageRepository;
     private final AWSS3SService awss3SService;
+    private final GoogleMapUtil googleMapUtil;
 
     // 공동구매 게시글 작성
     public PostGroupBuyingDTO.Response postGroupBuying(Long memberId, List<String> imgUrls, PostGroupBuyingDTO.Request postGroupBuyingDTO) {
@@ -225,10 +228,9 @@ public class GroupBuyingService {
 
         // 지오코딩
         List<GroupBuying> groupBuyingList = groupBuyingRepository.findAll();
-        log.info("========================");
         for (GroupBuying groupBuying : groupBuyingList) {
             log.info("meetingPlace: " + groupBuying.getMeetingPlace());
-            Map<String, String> address = getGeoDataByAddress(groupBuying.getMeetingPlace());
+            Map<String, String> address = googleMapUtil.getGeoDataByAddress(groupBuying.getMeetingPlace());
             if(address != null) {
                 groupBuying.setLatitude(Double.valueOf(address.get("lat")));
                 groupBuying.setLongitude(Double.valueOf(address.get("lng")));
@@ -236,8 +238,6 @@ public class GroupBuyingService {
                 log.info("GroupBuying: " + groupBuying);
             }
         }
-
-        log.info("========================");
 
         // 2. 로그인한 회원의 위치를 기준으로 반경 5km 내에 있는 공동구매 데이터 검색
         if (category == Category.ALL){
@@ -255,72 +255,4 @@ public class GroupBuyingService {
                 .map(g -> new GroupBuyingListDTO.ListResponse(g, g.getImageList(), category, groupBuyings.getTotalPages(), pageNum + 1))
                 .collect(Collectors.toList());
     }
-
-    private static Map<String, String> getGeoDataByAddress(String completeAddress) {
-        try {
-            String API_KEY = "AIzaSyBG0mcLkUd6Oz5Q4uCD_cXE-dGNaoAi-fg";
-            String surl = "https://maps.googleapis.com/maps/api/geocode/json?address="+URLEncoder.encode(completeAddress, "UTF-8")+"&key="+API_KEY;
-            URL url = new URL(surl);
-            InputStream is = url.openConnection().getInputStream();
-
-            BufferedReader streamReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-            StringBuilder responseStrBuilder = new StringBuilder();
-
-            String inputStr;
-//            log.info(">>>>>>>>>> >>>>>>>>>> InputStream Start <<<<<<<<<< <<<<<<<<<<");
-            while ((inputStr = streamReader.readLine()) != null) {
-//                log.info(">>>>>>>>>>     "+inputStr);
-                responseStrBuilder.append(inputStr);
-            }
-//            log.info(">>>>>>>>>> >>>>>>>>>> InputStream End <<<<<<<<<< <<<<<<<<<<");
-
-            JSONObject jo = new JSONObject(responseStrBuilder.toString());
-
-            JSONArray results = jo.getJSONArray("results");
-            Map<String, String> ret = new HashMap<String, String>();
-
-            if(results.length() > 0) {
-                JSONObject jsonObject;
-                jsonObject = results.getJSONObject(0);
-
-                Double lat = jsonObject.getJSONObject("geometry").getJSONObject("location").getDouble("lat");
-                Double lng = jsonObject.getJSONObject("geometry").getJSONObject("location").getDouble("lng");
-
-                ret.put("lat", lat.toString());
-                ret.put("lng", lng.toString());
-
-                System.out.println("LAT:\t\t"+lat);
-                System.out.println("LNG:\t\t"+lng);
-                JSONArray ja = jsonObject.getJSONArray("address_components");
-
-                for(int l=0; l<ja.length(); l++) {
-                    JSONObject curjo = ja.getJSONObject(l);
-                    String type = curjo.getJSONArray("types").getString(0);
-                    String short_name = curjo.getString("short_name");
-
-                    if(type.equals("postal_code")) {
-                        log.info("POSTAL_CODE: "+short_name);
-                        ret.put("zip", short_name);
-                    }
-                    else if(type.equals("administrative_area_level_3")) {
-                        log.info("CITY: "+short_name);
-                        ret.put("city", short_name);
-                    }
-                    else if(type.equals("administrative_area_level_2")) {
-                        log.info("PROVINCE: "+short_name);
-                        ret.put("province", short_name);
-                    }
-                    else if(type.equals("administrative_area_level_1")) {
-                        log.info("REGION: "+short_name);
-                        ret.put("region", short_name);
-                    }
-                }
-                return ret;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 }

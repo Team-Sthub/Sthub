@@ -133,3 +133,70 @@ icon-wrapper.fa-regular fa-user
 .icon span {
     font-size: 11px; /* 문구 크기 조정 */
 }
+
+/* 내 근처 서브메뉴 관련 스타일 */
+.headerMenu nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.headerMenu nav ul li {
+    position: relative;
+}
+
+.headerMenu nav ul li a {
+    text-decoration: none;
+    padding: 10px;
+    display: block;
+}
+
+.headerMenu nav ul .submenu {
+    display: none; /* 초기에는 서브메뉴를 숨김 */
+    position: absolute;
+    left: 0;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: inherit; /* 서브메뉴의 배경색을 상위 요소와 동일하게 설정 */
+    box-shadow: none; /* 서브메뉴의 그림자 제거 */
+    z-index: 1000; /* 서브메뉴가 다른 요소 위에 나타나도록 z-index 설정 */
+    width: max-content; /* 서브메뉴가 컨텐츠에 맞게 넓어지도록 설정 */
+    white-space: nowrap; /* 서브메뉴 항목이 한 줄로 표시되도록 설정 */
+}
+
+.headerMenu nav ul .submenu li {
+    display: inline-block; /* 서브메뉴 항목을 가로로 표시 */
+}
+
+.headerMenu nav ul .submenu li:first-child {
+    margin-left: -25px;
+}
+
+.headerMenu nav ul .submenu li:last-child {
+    margin-left: -75px;
+    margin-right: 0; /* 마지막 서브메뉴 항목의 오른쪽 마진 제거 */
+}
+
+/* 선택된 메뉴의 스타일 */
+.selected {
+    font-weight: bold; /* 선택된 메뉴의 텍스트를 bold로 설정 */
+}
+
+.headerMenu nav ul .submenu li a {
+    text-decoration: none;
+    padding: 10px;
+    display: block;
+    color: inherit; /* 서브메뉴 항목의 텍스트 색상을 상위 요소와 동일하게 설정 */
+    font-size: 11px; /* 서브메뉴의 글자 크기 설정 */
+}
+
+.headerMenu nav ul .submenu li a:hover {
+    background-color: inherit; /* 서브메뉴 항목에 마우스를 올렸을 때 배경색을 상위 요소와 동일하게 설정 */
+    font-weight: bold; /* 마우스를 올렸을 때 텍스트를 bold로 설정 */
+}
+
+.headerMenu nav ul li:hover .submenu {
+    display: block; /* 부모 요소에 마우스를 올렸을 때 서브메뉴를 표시 */
+}
