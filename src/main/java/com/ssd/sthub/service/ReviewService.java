@@ -14,7 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -48,13 +51,41 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
-    // 후기 조회
-    public List<Integer> getTags(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
+    // 후기 조회 - 중복 제거
+    public List<String> getTags(Long memberId) {
+        List<Review> reviews = reviewRepository.findReviewBySecondhand_MemberId(memberId);
+        Set<String> uniqueTags = new HashSet<>();
 
-        List<Integer> trueIndexes = reviewRepository.findReviewRepoDTOByMemberId(memberId);
-        return trueIndexes;
+        for (Review review : reviews) {
+            List<Integer> reviewTags = review.getTags();
+            for (int i = 0; i < reviewTags.size(); i++) {
+                if (reviewTags.get(i) == 1) {
+                    uniqueTags.add(convertIndexToTag(i));
+                }
+            }
+        }
+
+        return new ArrayList<>(uniqueTags);
+    }
+
+    private String convertIndexToTag(int index) {
+        switch (index) {
+            case 0:
+                return "# 연락이 빨라요 📞";
+            case 1:
+                return "# 친절하고 매너가 좋아요 😄";
+            case 2:
+                return "# 좋은 물건을 저렴하게 판매해요☺️";
+            case 3:
+                return "# 시간 약속을 잘 지켜요 🫰🏻";
+            case 4:
+                return "# 물건 설명이 자세해요 📝";
+            case 5:
+                return "# 물건 상태가 설명과 같아요 🔧";
+            // 필요한 경우 더 많은 태그를 추가
+            default:
+                return "# 알 수 없는 태그";
+        }
     }
 
     // 매너 농도 조회

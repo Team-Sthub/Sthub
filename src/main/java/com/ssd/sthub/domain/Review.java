@@ -42,10 +42,6 @@ public class Review extends BaseTime {
     @JoinColumn(name = "secondhandId")
     private Secondhand secondhand;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "receiverId")
-    private Member receiver;
-
     public Review(ReviewRequestDTO.Request request, Secondhand secondhand) {
         this.rating = request.getRating();
         this.tags = List.of(
@@ -57,6 +53,5 @@ public class Review extends BaseTime {
                 request.getTag6()
         );
         this.secondhand = secondhand;
-        this.receiver = secondhand.getMember();
     }
 }
