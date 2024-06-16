@@ -6,11 +6,9 @@ import com.ssd.sthub.domain.Secondhand;
 import com.ssd.sthub.dto.complaint.ComplaintDTO;
 import com.ssd.sthub.repository.GroupBuyingRepository;
 import com.ssd.sthub.repository.SecondhandRepository;
-import com.ssd.sthub.response.SuccessResponse;
 import com.ssd.sthub.service.ComplaintService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -71,10 +69,13 @@ public class ComplaintController {
 
     // 신고 조회
     @GetMapping("/mypage")
-    public ResponseEntity<SuccessResponse<List<Integer>>> getMyComplaint(@RequestHeader Long memberId) {
-        return ResponseEntity.ok(SuccessResponse.create(complaintService.getTags(memberId)));
+    public String getComplaintsByMemberId(@SessionAttribute Long memberId, Model model) {
+        List<Complaint> complaints = complaintService.getComplaintsByMemberId(memberId);
+        List<String> tags = complaintService.getTags(memberId);
+        model.addAttribute("complaints", complaints);
+        model.addAttribute("tags", tags);
+        return "thyme/user/fragments/complaintFragments";
     }
-
 
     // 신고 카운트
 }

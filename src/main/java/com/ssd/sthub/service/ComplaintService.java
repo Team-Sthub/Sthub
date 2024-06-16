@@ -1,9 +1,6 @@
 package com.ssd.sthub.service;
 
-import com.ssd.sthub.domain.Complaint;
-import com.ssd.sthub.domain.GroupBuying;
-import com.ssd.sthub.domain.Member;
-import com.ssd.sthub.domain.Secondhand;
+import com.ssd.sthub.domain.*;
 import com.ssd.sthub.dto.complaint.ComplaintDTO;
 import com.ssd.sthub.repository.ComplaintRepository;
 import com.ssd.sthub.repository.GroupBuyingRepository;
@@ -15,8 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -54,14 +50,51 @@ public class ComplaintService {
 
 
     // 신고 내역 조회
-    public List<Integer> getTags(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
-
-        List<Integer> trueIndexes = complaintRepository.findComplaintRepoDTOByMemberId(memberId);
-        return trueIndexes;
+    public List<Complaint> getComplaintsByMemberId(Long memberId) {
+        return complaintRepository.findBySecondhand_Member_IdOrGroupBuying_Member_Id(memberId, memberId);
     }
 
+    public List<String> getTags(Long memberId) {
+        List<Complaint> complaints = getComplaintsByMemberId(memberId);
+        Set<String> uniqueTags = new HashSet<>();
+
+        for (Complaint complaint : complaints) {
+            List<Integer> complaintTags = complaint.getTags();
+            for (int i = 0; i < complaintTags.size(); i++) {
+                if (complaintTags.get(i) == 1) {
+                    uniqueTags.add(convertIndexToTag(i));
+                }
+            }
+        }
+
+        return new ArrayList<>(uniqueTags);
+    }
+
+    private String convertIndexToTag(int index) {
+        switch (index) {
+            case 0:
+                return "# 광고성 콘텐츠예요 ❌";
+            case 1:
+                return "# 상품 정보 부정확 🔗";
+            case 2:
+                return "# 상품 설명과 일치하지 않아요 💣";
+            case 3:
+                return "# 안전거래를 거부해요 🚫";
+            case 4:
+                return "# 사기가 의심돼요 🤑";
+            case 5:
+                return "# 거래금지 품목으로 판단 돼요 🚬";
+            case 6:
+                return "# 전문업자 같아요 🫵";
+            case 7:
+                return "# 거래 중 분쟁이 발생했어요 😡";
+            case 8:
+                return "# 연락이 잘 안돼요 🙅";
+            // 필요한 경우 더 많은 태그를 추가
+            default:
+                return "#알 수 없는 태그";
+        }
+    }
 
     // 신고 내역 카운트
     /*
