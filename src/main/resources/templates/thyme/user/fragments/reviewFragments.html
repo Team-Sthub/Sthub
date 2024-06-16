@@ -5,10 +5,16 @@
     <title>후기 내역</title>
     <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
     <link rel="stylesheet" th:href="@{/style/user/fragments/review.css}">
+    <script th:src="@{/js/review/list.js}"></script>
 </head>
 <body>
-<div id="category" th:fragment="category">
-
+<div id="reviewFragments">
+    <div id="review-tags">
+        <div th:each="tag, iterStat : ${tags}"
+             th:class="${iterStat.index % 2 == 0} ? 'tag-left' : 'tag-right'"
+             th:text="${tag}">
+        </div>
+    </div>
 </div>
 </body>
 </html>

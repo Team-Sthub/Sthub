@@ -9,8 +9,8 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    // 거래 후기 내역 조회(키워드 조회)
-    List<Integer> findReviewRepoDTOByMemberId(Long memberId);
+    // 거래 후기 내역 조회
+    List<Review> findReviewBySecondhand_MemberId(Long memberId);
 
     // 거래 후기 중복 방지(중고거래 작성ID)
     boolean existsBySecondhandId(Long secondhandId);

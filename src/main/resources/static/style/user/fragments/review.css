@@ -1,0 +1,28 @@
+#reviewFragments {
+    background: rgba(76, 175, 80, 0.15);
+    width: 90%;
+    height: 90%;
+    border-radius: 2em;
+}
+
+.tag-left {
+    background: white;
+    width: 30%;
+    height: 30px;
+    border-radius: 5em;
+    margin-left: 7%;
+    margin-top: 0.5%;
+    text-align: center;
+    line-height: 30px;
+}
+
+.tag-right {
+    background: white;
+    width: 30%;
+    height: 30px;
+    border-radius: 5em;
+    margin-left: 65%;
+    margin-top: 0.5%;
+    text-align: center;
+    line-height: 30px;
+}

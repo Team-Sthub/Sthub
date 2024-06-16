@@ -4,17 +4,17 @@ import com.ssd.sthub.domain.Purchase;
 import com.ssd.sthub.domain.Review;
 import com.ssd.sthub.dto.review.ReviewRequestDTO;
 import com.ssd.sthub.repository.PurchaseRepository;
-import com.ssd.sthub.response.SuccessResponse;
 import com.ssd.sthub.service.ReviewService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
@@ -38,18 +38,18 @@ public class ReviewController {
 
     // 리뷰 작성
     @PostMapping(value = "/create")
-    public ModelAndView createReview(@ModelAttribute @Validated ReviewRequestDTO.Request request) {
+    public RedirectView createReview(@ModelAttribute @Validated ReviewRequestDTO.Request request, RedirectAttributes redirectAttributes) {
         Long purchaseId = request.getPurchaseId();
         Review review = reviewService.createReview(purchaseId, request);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("review", review);
-        modelAndView.setViewName("thyme/user/login"); // 구매 내역으로 다시 가게 해야됨!
-        return modelAndView;
+        redirectAttributes.addFlashAttribute("review", review);
+        return new RedirectView("/purchase/list?pageNum=1"); // 중고거래 구매 내역 리스트 페이지로 이동
     }
 
     // 리뷰 조회
     @GetMapping("/mypage")
-    public ResponseEntity<SuccessResponse<List<Integer>>> getMyReview(@RequestHeader Long memberId) {
-        return ResponseEntity.ok(SuccessResponse.create(reviewService.getTags(memberId)));
+    public String getMyReview(@SessionAttribute Long memberId, Model model) {
+        List<String> tags = reviewService.getTags(memberId);
+        model.addAttribute("tags", tags);
+        return "thyme/user/fragments/reviewFragments";
     }
 }
