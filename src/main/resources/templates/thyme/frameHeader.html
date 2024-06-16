@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/style/header.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
     <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
-   <script>
+    <script>
         $(document).ready(function() {
             $('.icon-wrapper').on('click', function() {
                 $.ajax({
@@ -31,14 +31,20 @@
                 <img th:src="@{/images/logo.png}" alt="로고"/>
             </a>
 
-<!--            <a href="#"><img src="../../static/images/logo.png"/></a>-->
+            <!--            <a href="#"><img src="../../static/images/logo.png"/></a>-->
         </div>
         <div class="headerMenu">
             <nav>
                 <ul>
                     <li><a th:href="@{/secondhand/list/ALL(pageNum=1)}"><b>중고거래</b></a></li>
                     <li><a th:href="@{/groupBuying/list/ALL(pageNum=1)}"><b>공동구매</b></a></li>
-                    <li><a th:href="@{/groupBuying/around/ALL(pageNum=1)}"><b>내근처</b></a></li>
+                    <li>
+                        <a href="#"><b>내근처</b></a>
+                        <ul class="submenu">
+                            <li><a th:href="@{/secondhand/around/ALL(pageNum=1)}">중고거래&nbsp;|</a></li>
+                            <li><a th:href="@{/groupBuying/around/ALL(pageNum=1)}">공동구매</a></li>
+                        </ul>
+                    </li>
                     <li><a th:href="@{/user/myPage}"><b>마이페이지</b></a></li>
                     <li>
                         <a th:href="@{/message/list(pageNum=1)}">
@@ -50,8 +56,10 @@
                     </li>
                     <li>
                         <a th:href="@{/user/login}" class="icon-wrapper">
-                            <i class="fa-regular fa-user"></i>
-                            <span>로그아웃</span>
+                            <div class="icon">
+                                <i class="fa-regular fa-user"></i>
+                                <span>로그아웃</span>
+                            </div>
                         </a>
                     </li>
                 </ul>

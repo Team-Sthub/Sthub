@@ -41,3 +41,7 @@ cloud:
       auto: false
     stack:
       auto: false
+
+google:
+  map-api:
+    secret-key: AIzaSyBG0mcLkUd6Oz5Q4uCD_cXE-dGNaoAi-fg
