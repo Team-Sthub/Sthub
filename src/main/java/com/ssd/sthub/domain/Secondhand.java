@@ -54,7 +54,7 @@ public class Secondhand extends BaseTime {
 
     @Column(nullable = false)
     @ColumnDefault("'거래가능'")
-    private String status; // 거래가능, 예약중, 거래완료
+    private String status; // 거래가능, 예약중, 거래완료, 신고누적
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "memberId")
@@ -65,6 +65,9 @@ public class Secondhand extends BaseTime {
 
     @OneToMany(mappedBy = "secondhand", cascade = CascadeType.ALL)
     private List<SComment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "secondhand", cascade = CascadeType.ALL)
+    private List<Complaint> complaintList = new ArrayList<>();
 
     @Builder
     public Secondhand(Member member, SecondhandDTO.PostRequest request) {
@@ -101,7 +104,13 @@ public class Secondhand extends BaseTime {
         }
     }
 
-    public void updateStatus() {
-        this.status = "예약중";
+    public void updateStatus(String status) {
+        if(status.equals("예약중")) {
+            this.status = status;
+        }
+
+        if(complaintList.size() >= 5) {
+            this.status = "신고 누적";
+        }
     }
 }

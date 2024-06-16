@@ -32,4 +32,6 @@ public interface SecondhandRepository extends JpaRepository<Secondhand, Long> {
 
     // 중고거래 키워드 검색
     List<Secondhand> findAllByTitleContainingOrderByCreatedAtDesc(String title);
+
+    void deleteAllByStatus(String status);
 }

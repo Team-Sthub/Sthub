@@ -6,6 +6,9 @@ spring:
         - local
       prod-env:
         - prod
+  batch:
+    jdbc:
+      initialize-schema: always
 
 servlet:
   multipart:

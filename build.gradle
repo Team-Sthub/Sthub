@@ -61,8 +61,12 @@ dependencies {
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     implementation 'org.json:json:20210307'
 
-    //WebSocket
+    // WebSocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    // Batch
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+    implementation 'org.springframework:spring-context-support'
 }
 
 tasks.named('test') {

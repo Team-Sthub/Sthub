@@ -48,4 +48,6 @@ public interface GroupBuyingRepository extends JpaRepository<GroupBuying, Long> 
                                                                              @Param("longitude") double longitude,
                                                                              @Param("category") Category category, PageRequest pageRequest);
 
+    void deleteAllByStatus(String status);
+
 }
