@@ -5,10 +5,16 @@
     <title>신고 내역</title>
     <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
     <link rel="stylesheet" th:href="@{/style/user/fragments/complaint.css}">
+    <script th:src="@{/js/complaint/list.js}"></script>
 </head>
 <body>
-<div id="category" th:fragment="category">
-
+<div id="complaintFragments">
+    <div class="tag-container">
+        <div th:each="tag, iterStat : ${tags}"
+             th:class="${iterStat.index % 3 == 0 || iterStat.index % 3 == 1} ? 'tag-box tag-left' : 'tag-box tag-right'"
+             th:text="${tag}">
+        </div>
+    </div>
 </div>
 </body>
 </html>

@@ -1,7 +1,6 @@
 package com.ssd.sthub.repository;
 
 import com.ssd.sthub.domain.Complaint;
-import com.ssd.sthub.dto.complaint.ComplaintRepoDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,8 +16,6 @@ public interface ComplaintRepository extends JpaRepository<Complaint, Long> {
      Long countByComplaint(Long id);
      */
 
-    //memberId 찾기?
-
     // 신고 내역 조회 (키워드 조회)
-    List<Integer>  findComplaintRepoDTOByMemberId(Long memberId);
+    List<Complaint> findBySecondhand_Member_IdOrGroupBuying_Member_Id(Long secondhandMemberId, Long groupBuyingMemberId);
 }
