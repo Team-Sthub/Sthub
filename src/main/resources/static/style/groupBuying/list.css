@@ -145,3 +145,15 @@ hr {
     background-color: #f4f4f4;
     color: #ccc;
 }
+
+#no-list {
+    width: 55%;
+    margin: 0 auto;
+    position: relative;
+}
+
+#no-list-text {
+    margin-top: 13%;
+    margin-bottom: 13%;
+    text-align: center;
+}

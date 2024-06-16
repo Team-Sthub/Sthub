@@ -48,7 +48,7 @@ public class GroupBuying extends BaseTime {
     @Column(nullable = false)
     private String chatLink; // 오픈 채팅 링크
 
-    @Column
+    @Column(nullable = false)
     private String meetingPlace; // 직거래 장소
 
     @Column(nullable = false)
