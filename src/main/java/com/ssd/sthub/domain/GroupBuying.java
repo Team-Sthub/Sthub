@@ -69,8 +69,12 @@ public class GroupBuying extends BaseTime {
     @OneToMany(mappedBy = "groupBuying", cascade = CascadeType.ALL)
     private List<GComment> commentList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "groupBuying", cascade = CascadeType.ALL)
+    private List<Complaint> complaintList = new ArrayList<>();
+
     @Setter
     private Double latitude;
+
     @Setter
     private Double longitude;
 
@@ -109,6 +113,12 @@ public class GroupBuying extends BaseTime {
         this.meetingPlace = groupBuyingDetailDTO.getMeetingPlace();
         this.content = groupBuyingDetailDTO.getContent();
         this.status = groupBuyingDetailDTO.getStatus();
+    }
+
+    public void updateStatus() {
+        if(complaintList.size() >= 5) {
+            this.status = "신고 누적";
+        }
     }
 
 }
