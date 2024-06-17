@@ -37,7 +37,7 @@ public class ReviewController {
     }
 
     // 리뷰 작성
-    @PostMapping(value = "/create")
+    @PostMapping(value = "")
     public RedirectView createReview(@ModelAttribute @Validated ReviewRequestDTO.Request request, RedirectAttributes redirectAttributes) {
         Long purchaseId = request.getPurchaseId();
         Review review = reviewService.createReview(purchaseId, request);

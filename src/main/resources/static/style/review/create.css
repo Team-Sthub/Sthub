@@ -32,9 +32,8 @@ hr { width: 95%}
 }
 
 p {
-    margin-top: 15px;
     margin-right: 30px;
-    margin-left: 37px;
+    margin-left: 60px;
 }
 
 .tag-container {
@@ -42,7 +41,7 @@ p {
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
-    margin: 20px auto;
+    margin: 10px auto;
 }
 
 .tag-box {
@@ -72,7 +71,7 @@ p {
     height: 150px;
     background: rgba(76, 175, 80, 0.2);
     border-radius: 2em;
-    margin: 20px auto; /* 중앙 정렬을 위해 auto 마진 사용 */
+    margin: 1px auto; /* 중앙 정렬을 위해 auto 마진 사용 */
     border: none;
     padding: 10px;
     box-sizing: border-box;
@@ -80,7 +79,7 @@ p {
 
 .review-text::placeholder {
     font-size: 1.1rem; /* placeholder 텍스트 크기 증가 */
-    color: gray;
+    color: rgb(128, 128, 128);
 }
 
 .btn1 {
@@ -90,15 +89,14 @@ p {
     border-radius: 10px;
     border: none;
     align-self: flex-end;
-    margin-top: 19px;
-    margin-bottom: 16px;
+    margin-bottom: 1px;
     margin-right: 13px;
 }
 
 .star-rating {
     display: flex;
     align-items: center;
-    margin: 20px auto;
+    margin: 1% auto;
 }
 
 .star {

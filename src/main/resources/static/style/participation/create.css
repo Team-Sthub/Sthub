@@ -2,6 +2,7 @@
     position: relative;
     margin-top: 40px;
     margin-right: 2%;
+    margin-left: 6%;
 }
 
 .back {
@@ -11,7 +12,8 @@
     width: 40%;
     height: 670px;
     margin: 30%;
-    margin-top: 5%;
+    margin-top: 1%;
+    margin-bottom: 0%;
     border-radius: 5%;
     align-items: center;
 }
@@ -96,7 +98,7 @@ td {
     border: none;
     text-decoration-line: none;
     text-align: center;
-    align-items: center;
+    line-height: 32px;
     color: inherit;
 }
 

@@ -60,8 +60,9 @@ public class ParticipationService {
         Participation participation = participationRepository.findById(participationId)
                 .orElseThrow(() -> new EntityNotFoundException("공동구매 신청서 조회에 실패했습니다."));
 
-        if (!groupBuying.getMember().getId().equals(memberId))
+        if (!groupBuying.getMember().getId().equals(memberId)) {
             throw new BadRequestException("작성자만 수락/거절 할 수 있습니다.");
+        }
 
         if (request.getAccept() == 1 || request.getAccept() == 2) {
             participation.accept(request);

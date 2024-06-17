@@ -9,8 +9,6 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 @Repository
 public interface ComplaintRepository extends JpaRepository<Complaint, Long> {
-    Complaint save(Complaint complaint);
-
     /*
     신고 횟수 카운트
      Long countByComplaint(Long id);
