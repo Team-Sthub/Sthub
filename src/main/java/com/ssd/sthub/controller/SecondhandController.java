@@ -214,7 +214,7 @@ public class SecondhandController {
         try {
             List<SecondhandDTO.ListResponse> secondhandList = secondhandService.getAllAroundSecondhand(memberId, category, pageNum - 1);
             modelAndView.addObject("secondhandList", secondhandList);
-        } catch (EntityNotFoundException | BadRequestException e) {
+        } catch (EntityNotFoundException | BadRequestException | IllegalArgumentException e) {
             modelAndView.addObject("noList", e.getMessage());
         }
 

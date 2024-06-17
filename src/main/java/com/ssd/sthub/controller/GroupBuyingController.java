@@ -213,7 +213,7 @@ public class GroupBuyingController {
         try {
             List<GroupBuyingListDTO.ListResponse> groupBuyingList = groupBuyingService.getAllAroundGroupBuying(memberId, category, pageNum - 1);
             modelAndView.addObject("groupBuyingList", groupBuyingList);
-        } catch (EntityNotFoundException | BadRequestException e) {
+        } catch (EntityNotFoundException | BadRequestException | IllegalArgumentException e) {
             modelAndView.addObject("noList", e.getMessage());
         }
 

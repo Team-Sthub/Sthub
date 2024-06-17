@@ -41,21 +41,27 @@ public interface SecondhandRepository extends JpaRepository<Secondhand, Long> {
             "FROM Secondhand sh " +
             "WHERE " +
             "   6371 * " +
-            "   ACOS(COS(RADIANS(:latitude)) * COS(RADIANS(sh.latitude)) * " +
+            "   ACOS(LEAST(1.0, GREATEST(-1.0, " +
+            "       COS(RADIANS(:latitude)) * COS(RADIANS(sh.latitude)) * " +
             "       COS(RADIANS(sh.longitude) - RADIANS(:longitude)) + " +
-            "       SIN(RADIANS(:latitude)) * SIN(RADIANS(sh.latitude))) <= 5")
-    Page<Secondhand> findByLocationWithin5kmOrderByCreatedAtDesc(@Param("latitude") double latitude, @Param("longitude") double longitude, PageRequest pageRequest);
+            "       SIN(RADIANS(:latitude)) * SIN(RADIANS(sh.latitude))))) <= 5 " +
+            "ORDER BY sh.createdAt DESC")
+    Page<Secondhand> findByLocationWithin5kmOrderByCreatedAtDesc(@Param("latitude") double latitude,
+                                                                  @Param("longitude") double longitude,
+                                                                  PageRequest pageRequest);
 
     @Query("SELECT sh " +
             "FROM Secondhand sh " +
             "WHERE " +
             "   6371 * " +
-            "   ACOS(COS(RADIANS(:latitude)) * COS(RADIANS(sh.latitude)) * " +
+            "   ACOS(LEAST(1.0, GREATEST(-1.0, " +
+            "       COS(RADIANS(:latitude)) * COS(RADIANS(sh.latitude)) * " +
             "       COS(RADIANS(sh.longitude) - RADIANS(:longitude)) + " +
-            "       SIN(RADIANS(:latitude)) * SIN(RADIANS(sh.latitude))) <= 5 " +
+            "       SIN(RADIANS(:latitude)) * SIN(RADIANS(sh.latitude))))) <= 5 " +
             "AND sh.category = :category " +
             "ORDER BY sh.createdAt DESC")
     Page<Secondhand> findByLocationWithin5kmAndCategoryOrderByCreatedAtDesc(@Param("latitude") double latitude,
                                                                              @Param("longitude") double longitude,
-                                                                             @Param("category") Category category, PageRequest pageRequest);
+                                                                             @Param("category") Category category,
+                                                                             PageRequest pageRequest);
 }

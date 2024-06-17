@@ -232,8 +232,14 @@ public class GroupBuyingService {
             log.info("meetingPlace: " + groupBuying.getMeetingPlace());
             Map<String, String> address = googleMapUtil.getGeoDataByAddress(groupBuying.getMeetingPlace());
             if(address != null) {
-                groupBuying.setLatitude(Double.valueOf(address.get("lat")));
-                groupBuying.setLongitude(Double.valueOf(address.get("lng")));
+                Double latitude = Double.valueOf(address.get("lat"));
+                Double longitude = Double.valueOf(address.get("lng"));
+
+                if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
+                    throw new IllegalArgumentException("Invalid latitude or longitude values.");
+                }
+                groupBuying.setLatitude(latitude);
+                groupBuying.setLongitude(longitude);
                 groupBuyingRepository.save(groupBuying);
                 log.info("GroupBuying: " + groupBuying);
             }

@@ -30,23 +30,29 @@ public interface GroupBuyingRepository extends JpaRepository<GroupBuying, Long> 
             "FROM GroupBuying gb " +
             "WHERE " +
             "   6371 * " +
-            "   ACOS(COS(RADIANS(:latitude)) * COS(RADIANS(gb.latitude)) * " +
+            "   ACOS(LEAST(1.0, GREATEST(-1.0, " +
+            "       COS(RADIANS(:latitude)) * COS(RADIANS(gb.latitude)) * " +
             "       COS(RADIANS(gb.longitude) - RADIANS(:longitude)) + " +
-            "       SIN(RADIANS(:latitude)) * SIN(RADIANS(gb.latitude))) <= 5")
-    Page<GroupBuying> findByLocationWithin5kmOrderByCreatedAtDesc(@Param("latitude") double latitude, @Param("longitude") double longitude, PageRequest pageRequest);
+            "       SIN(RADIANS(:latitude)) * SIN(RADIANS(gb.latitude))))) <= 5 " +
+            "ORDER BY gb.createdAt DESC")
+    Page<GroupBuying> findByLocationWithin5kmOrderByCreatedAtDesc(@Param("latitude") double latitude,
+                                                                  @Param("longitude") double longitude,
+                                                                  PageRequest pageRequest);
 
     @Query("SELECT gb " +
             "FROM GroupBuying gb " +
             "WHERE " +
             "   6371 * " +
-            "   ACOS(COS(RADIANS(:latitude)) * COS(RADIANS(gb.latitude)) * " +
+            "   ACOS(LEAST(1.0, GREATEST(-1.0, " +
+            "       COS(RADIANS(:latitude)) * COS(RADIANS(gb.latitude)) * " +
             "       COS(RADIANS(gb.longitude) - RADIANS(:longitude)) + " +
-            "       SIN(RADIANS(:latitude)) * SIN(RADIANS(gb.latitude))) <= 5 " +
+            "       SIN(RADIANS(:latitude)) * SIN(RADIANS(gb.latitude))))) <= 5 " +
             "AND gb.category = :category " +
             "ORDER BY gb.createdAt DESC")
     Page<GroupBuying> findByLocationWithin5kmAndCategoryOrderByCreatedAtDesc(@Param("latitude") double latitude,
                                                                              @Param("longitude") double longitude,
-                                                                             @Param("category") Category category, PageRequest pageRequest);
+                                                                             @Param("category") Category category,
+                                                                             PageRequest pageRequest);
 
     void deleteAllByStatus(String status);
 

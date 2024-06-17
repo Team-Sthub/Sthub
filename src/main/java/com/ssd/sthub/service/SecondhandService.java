@@ -200,13 +200,16 @@ public class SecondhandService {
         // 지오코딩
         List<Secondhand> secondhandList = secondhandRepository.findByPlaceIsNotNull();      // 장소 필드에 값이 있는 것만
         for (Secondhand secondhand : secondhandList) {
-//            log.info("place: " + secondhand.getPlace());
             Map<String, String> address = googleMapUtil.getGeoDataByAddress(secondhand.getPlace());
             if(address != null) {
-//                log.info("lat: " + address.get("lat"));
-//                log.info("lng: " + address.get("lng"));
-                secondhand.setLatitude(Double.valueOf(address.get("lat")));
-                secondhand.setLongitude(Double.valueOf(address.get("lng")));
+                Double latitude = Double.valueOf(address.get("lat"));
+                Double longitude = Double.valueOf(address.get("lng"));
+
+                if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
+                    throw new IllegalArgumentException("Invalid latitude or longitude values.");
+                }
+                secondhand.setLatitude(latitude);
+                secondhand.setLongitude(longitude);
                 secondhandRepository.save(secondhand);
                 log.info("Secondhand: " + secondhand);
             }
