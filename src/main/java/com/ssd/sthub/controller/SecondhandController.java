@@ -6,6 +6,7 @@ import com.ssd.sthub.dto.secondhand.SCommentDTO;
 import com.ssd.sthub.dto.secondhand.SecondhandDTO;
 import com.ssd.sthub.response.SuccessResponse;
 import com.ssd.sthub.service.*;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -205,4 +206,19 @@ public class SecondhandController {
             return new ModelAndView("thyme/secondhand/tracker", "secondhand", secondhand);
         return new ModelAndView("redirect:/purchase/list?pageNum=1", "errorMessage", "운송장번호가 등록되지 않았습니다.");
     }
+
+    // 내 근처 중고거래 조회
+    @GetMapping("/around/{category}")
+    public ModelAndView getAllAroundSecondhand(@SessionAttribute(name = "memberId") Long memberId, @PathVariable Category category, @RequestParam int pageNum) {
+        ModelAndView modelAndView = new ModelAndView("thyme/secondhand/around");
+        try {
+            List<SecondhandDTO.ListResponse> secondhandList = secondhandService.getAllAroundSecondhand(memberId, category, pageNum - 1);
+            modelAndView.addObject("secondhandList", secondhandList);
+        } catch (EntityNotFoundException | BadRequestException e) {
+            modelAndView.addObject("noList", e.getMessage());
+        }
+
+        return modelAndView;
+    }
+
 }

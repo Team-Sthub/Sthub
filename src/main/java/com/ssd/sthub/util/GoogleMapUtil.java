@@ -21,9 +21,9 @@ import java.util.Map;
 public class GoogleMapUtil {
 
     @Value("${google.map-api.secret-key}")
-    private static String API_KEY;
+    private  String API_KEY;
 
-    public static Map<String, String> getGeoDataByAddress(String completeAddress) {
+    public Map<String, String> getGeoDataByAddress(String completeAddress) {
         try {
             String surl = "https://maps.googleapis.com/maps/api/geocode/json?address="+ URLEncoder.encode(completeAddress, "UTF-8")+"&key="+API_KEY;
             URL url = new URL(surl);

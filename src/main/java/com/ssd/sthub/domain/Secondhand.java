@@ -69,6 +69,12 @@ public class Secondhand extends BaseTime {
     @OneToMany(mappedBy = "secondhand", cascade = CascadeType.ALL)
     private List<Complaint> complaintList = new ArrayList<>();
 
+    @Setter
+    private Double latitude;
+
+    @Setter
+    private Double longitude;
+
     @Builder
     public Secondhand(Member member, SecondhandDTO.PostRequest request) {
         this.member = member;
