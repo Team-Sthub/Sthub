@@ -68,6 +68,16 @@ div.userInfo {
 .manner, .location {
     display: flex; /* 부모 요소를 Flexbox 컨테이너로 설정 */
     align-items: center;
+    height: 42px;
+}
+
+#star-container {
+    align-items: center;
+    margin-top: 2%;
+    font-size: 1.8em; /* 별의 크기를 조정 */
+    margin-right: 7px; /* 별 사이의 간격을 조정 */
+    color: #005100; /* 별의 색상을 조정 */
+    display: inline-block;
 }
 
 .rectangle {
