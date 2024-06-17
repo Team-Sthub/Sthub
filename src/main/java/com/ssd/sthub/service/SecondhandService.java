@@ -1,5 +1,6 @@
 package com.ssd.sthub.service;
 
+import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.SImage;
 import com.ssd.sthub.domain.Secondhand;
@@ -9,6 +10,7 @@ import com.ssd.sthub.repository.MemberRepository;
 import com.ssd.sthub.repository.SCommentRepository;
 import com.ssd.sthub.repository.SImageRepository;
 import com.ssd.sthub.repository.SecondhandRepository;
+import com.ssd.sthub.util.GoogleMapUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -32,6 +35,7 @@ public class SecondhandService {
     private final SImageRepository sImageRepository;
     private final SCommentRepository sCommentRepository;
     private final AWSS3SService awss3SService;
+    private final GoogleMapUtil googleMapUtil;
 
     // 중고거래 게시글 작성
     public SecondhandDTO.DetailResponse createSecondhand(Long memberId, List<String> imgUrls, SecondhandDTO.PostRequest request) {
@@ -182,5 +186,46 @@ public class SecondhandService {
 
     public void deleteSecondhandByStatus() {
         secondhandRepository.deleteAllByStatus("신고 누적");
+    }
+
+    // 내 근처 중고거래 조회
+    public List<SecondhandDTO.ListResponse> getAllAroundSecondhand(Long memberId, Category category, int pageNum) throws BadRequestException {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new EntityNotFoundException("회원 조회에 실패했습니다.")
+        );
+
+        PageRequest pageRequest = PageRequest.of(pageNum, 10);
+        Page<Secondhand> secondhands;
+
+        // 지오코딩
+        List<Secondhand> secondhandList = secondhandRepository.findByPlaceIsNotNull();      // 장소 필드에 값이 있는 것만
+        for (Secondhand secondhand : secondhandList) {
+//            log.info("place: " + secondhand.getPlace());
+            Map<String, String> address = googleMapUtil.getGeoDataByAddress(secondhand.getPlace());
+            if(address != null) {
+//                log.info("lat: " + address.get("lat"));
+//                log.info("lng: " + address.get("lng"));
+                secondhand.setLatitude(Double.valueOf(address.get("lat")));
+                secondhand.setLongitude(Double.valueOf(address.get("lng")));
+                secondhandRepository.save(secondhand);
+                log.info("Secondhand: " + secondhand);
+            }
+        }
+
+        // 2. 로그인한 회원의 위치를 기준으로 반경 5km 내에 있는 중고거래 데이터 검색
+        if (category == Category.ALL){
+            secondhands = secondhandRepository.findByLocationWithin5kmOrderByCreatedAtDesc(member.getLatitude(), member.getLongitude(), pageRequest);
+            log.info("secondhands: " + secondhands);
+        } else {
+            secondhands = secondhandRepository.findByLocationWithin5kmAndCategoryOrderByCreatedAtDesc(member.getLatitude(), member.getLongitude(), category, pageRequest);
+            log.info("secondhands: " + secondhands);
+        }
+
+        if(secondhands == null || secondhands.isEmpty())
+            throw new BadRequestException("작성된 게시글이 없습니다.");
+
+        return secondhands.stream()
+                .map(g -> new SecondhandDTO.ListResponse(g, g.getImageList(), category, secondhands.getTotalPages(), pageNum + 1))
+                .collect(Collectors.toList());
     }
 }

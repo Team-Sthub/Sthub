@@ -32,15 +32,15 @@
 <!-- 중고거래 게시글 리스트 -->
 <div class="product-grid" th:if="${not#lists.isEmpty(secondhandList)}">
     <div th:each="secondhand : ${secondhandList}">
-        <a th:href="@{/secondhand/detail(groupBuyingId=${secondhand.getSecondhand().id})}" class="product-box-link">
+        <a th:href="@{/secondhand/detail(secondhandId=${secondhand.getSecondhand().id})}" class="product-box-link">
             <div class="product-box">
                 <span th:text="${#strings.substring(secondhand.getSecondhand().createdAt, 0, 10)}"></span>
                 <!-- 이미지가 있는 경우 가장 첫 번째 이미지를 썸네일로 사용-->
-                <div th:if="${secondhand.getGImages() == null or secondhand.getGImages().isEmpty()}">
+                <div th:if="${secondhand.getSImages() == null or secondhand.getSImages().isEmpty()}">
                     <img th:src="@{/images/no_img.jpg}" alt="No Image" />
                 </div>
-                <div th:if="${secondhand.getGImages() != null and !secondhand.getGImages().isEmpty()}">
-                    <img th:src="@{${secondhand.getGImages[0].path}}" alt="Image"/>
+                <div th:if="${secondhand.getSImages() != null and !secondhand.getSImages().isEmpty()}">
+                    <img th:src="@{${secondhand.getSImages[0].path}}" alt="Image"/>
                 </div>
                 <p id="title" th:text="${secondhand.getSecondhand().title}"><b>제목</b></p>
                 <p th:text="${secondhand.getSecondhand().member.nickname}">작성자</p>

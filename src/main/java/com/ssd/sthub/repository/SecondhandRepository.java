@@ -1,6 +1,5 @@
 package com.ssd.sthub.repository;
 
-import com.ssd.sthub.domain.GroupBuying;
 import com.ssd.sthub.domain.Member;
 import com.ssd.sthub.domain.Secondhand;
 import com.ssd.sthub.domain.enumerate.Category;
@@ -34,4 +33,29 @@ public interface SecondhandRepository extends JpaRepository<Secondhand, Long> {
     List<Secondhand> findAllByTitleContainingOrderByCreatedAtDesc(String title);
 
     void deleteAllByStatus(String status);
+
+    // 내 근처 조회
+    List<Secondhand> findByPlaceIsNotNull();
+
+    @Query("SELECT sh " +
+            "FROM Secondhand sh " +
+            "WHERE " +
+            "   6371 * " +
+            "   ACOS(COS(RADIANS(:latitude)) * COS(RADIANS(sh.latitude)) * " +
+            "       COS(RADIANS(sh.longitude) - RADIANS(:longitude)) + " +
+            "       SIN(RADIANS(:latitude)) * SIN(RADIANS(sh.latitude))) <= 5")
+    Page<Secondhand> findByLocationWithin5kmOrderByCreatedAtDesc(@Param("latitude") double latitude, @Param("longitude") double longitude, PageRequest pageRequest);
+
+    @Query("SELECT sh " +
+            "FROM Secondhand sh " +
+            "WHERE " +
+            "   6371 * " +
+            "   ACOS(COS(RADIANS(:latitude)) * COS(RADIANS(sh.latitude)) * " +
+            "       COS(RADIANS(sh.longitude) - RADIANS(:longitude)) + " +
+            "       SIN(RADIANS(:latitude)) * SIN(RADIANS(sh.latitude))) <= 5 " +
+            "AND sh.category = :category " +
+            "ORDER BY sh.createdAt DESC")
+    Page<Secondhand> findByLocationWithin5kmAndCategoryOrderByCreatedAtDesc(@Param("latitude") double latitude,
+                                                                             @Param("longitude") double longitude,
+                                                                             @Param("category") Category category, PageRequest pageRequest);
 }
