@@ -10,7 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface GCommentRepository extends JpaRepository<GComment, Long> {
-
-    GComment save(GComment gComment);
     List<GComment> findAllByGroupBuyingId(Long groupBuyingId);
 }

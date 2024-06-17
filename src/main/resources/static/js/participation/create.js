@@ -13,6 +13,7 @@ function validateForm(event) {
 async function handleFormSubmit(participationId, memberId) {
     // 폼 데이터 수집
     const content = document.getElementById('content').value;
+    const groupBuyingId = document.getElementById("groupBuyingId").value;
 
     // ParticipationRequestDto.PatchRequest 객체 생성
     const requestData = {
@@ -32,7 +33,7 @@ async function handleFormSubmit(participationId, memberId) {
     if (response.ok) {
         alert("수정합니다");
         // 수정 성공 시 올바른 URL로 리디렉션
-        window.location.href = `/participation/detail?participationId=${participationId}`;
+        window.location.href = `/participation/list?pageNum=0&groupBuyingId=${groupBuyingId}`;
     } else {
         alert("수정 처리에 실패했습니다.");
     }

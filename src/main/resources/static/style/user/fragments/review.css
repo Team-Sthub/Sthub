@@ -1,8 +1,9 @@
 #reviewFragments {
     background: rgba(76, 175, 80, 0.15);
     width: 90%;
-    height: 90%;
+    height: 72%;
     border-radius: 2em;
+    padding: 20px;
 }
 
 .tag-left {

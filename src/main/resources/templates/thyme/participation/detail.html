@@ -9,7 +9,8 @@
 </head>
 <script>
   function is_closed() {
-    window.history.back();
+    const groupBuyingId = new URLSearchParams(window.location.search).get('groupBuyingId');
+    window.location.href = `/participation/list?pageNum=0&groupBuyingId=${groupBuyingId}`;
   }
 </script>
 <body>

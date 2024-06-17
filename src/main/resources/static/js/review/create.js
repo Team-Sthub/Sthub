@@ -35,7 +35,7 @@ function submitReviewForm(event) {
 
     const form = document.createElement('form');
     form.method = 'POST';
-    form.action = '/review/create';
+    form.action = '/review';
 
     const reviewDTO = {
         purchaseId: parseInt(purchaseId),

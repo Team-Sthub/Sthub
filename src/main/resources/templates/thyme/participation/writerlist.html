@@ -30,15 +30,15 @@
         <tbody>
         <tr th:each="participation, iterStat : ${participationList}" style="cursor: pointer;">
             <td th:text="${iterStat.index + 1}" class="left-rounded"
-                th:onclick="'window.location.href=\'/participation/detail?participationId=' + ${participation.participation.id} + '\''"></td>
+                th:onclick="|window.location.href='/participation/{participationId}'.replace('{participationId}', ${participation.participation.id});|"></td>
             <td th:text="${participation.participation.member.nickname}"
-                th:onclick="'window.location.href=\'/participation/detail?participationId=' + ${participation.participation.id} + '\''"></td>
+                th:onclick="|window.location.href='/participation/{participationId}'.replace('{participationId}', ${participation.participation.id});|"></td>
             <td th:text="${participation.participation.member.phone}"
-                th:onclick="'window.location.href=\'/participation/detail?participationId=' + ${participation.participation.id} + '\''"></td>
+                th:onclick="|window.location.href='/participation/{participationId}'.replace('{participationId}', ${participation.participation.id});|"></td>
             <td th:text="${participation.participation.content}"
-                th:onclick="'window.location.href=\'/participation/detail?participationId=' + ${participation.participation.id} + '\''"></td>
+                th:onclick="|window.location.href='/participation/{participationId}'.replace('{participationId}', ${participation.participation.id});|"></td>
             <td th:text="${#temporals.format(participation.participation.createdAt, 'yyyy-MM-dd')}"
-                th:onclick="'window.location.href=\'/participation/detail?participationId=' + ${participation.participation.id} + '\''"></td>
+                th:onclick="|window.location.href='/participation/{participationId}'.replace('{participationId}', ${participation.participation.id});|"></td>
             <td class="right-rounded">
                 <button th:classappend="${participation.participation.accept == 1} ? 'status-accept' : (${participation.participation.accept == 0} ? 'status-accept-pre' : 'status-accept-pre')"
                         th:onclick="|handleAcceptance(1, ${participation.participation.id}, ${memberId}, ${participation.participation.groupBuying.id})|">
