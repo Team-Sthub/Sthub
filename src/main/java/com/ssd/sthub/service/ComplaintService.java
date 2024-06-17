@@ -27,27 +27,38 @@ public class ComplaintService {
     // 중고거래 신고 처리
     public Complaint complaintSecondhand (Long secondhandId, ComplaintDTO.Request request) throws NullPointerException {
         Optional<Secondhand> secondhandOptional = secondhandRepository.findById(secondhandId);
-        if (secondhandOptional.isPresent()) {
-            Secondhand secondhand = secondhandOptional.get();
-            Complaint complaint = new Complaint(request, secondhandOptional, Optional.empty());
-            return complaintRepository.save(complaint);
-        } else {
+
+        if(secondhandOptional.isEmpty())
             throw new EntityNotFoundException("해당 중고거래 게시글을 찾을 수 없습니다.");
-        }
+
+        Secondhand secondhand = secondhandOptional.get();
+        Complaint complaint = new Complaint(request, secondhandOptional, Optional.empty());
+        complaint = complaintRepository.save(complaint);
+
+        secondhand.getComplaintList().add(complaint);
+        secondhand.updateStatus("신고 누적"); // 신고 횟수 체크 및 상태 업데이트
+
+        secondhandRepository.save(secondhand);
+        return complaint;
     }
 
     // 공동구매 신고 처리
     public Complaint complaintGroupBuying(Long groupBuyingId, ComplaintDTO.Request request) throws EntityNotFoundException {
         Optional<GroupBuying> groupBuyingOptional = groupBuyingRepository.findById(groupBuyingId);
-        if (groupBuyingOptional.isPresent()) {
-            GroupBuying groupBuying = groupBuyingOptional.get();
-            Complaint complaint = new Complaint(request, Optional.empty(), groupBuyingOptional);
-            return complaintRepository.save(complaint);
-        } else {
-            throw new EntityNotFoundException("해당 공동구매 게시글을 찾을 수 없습니다.");
-        }
-    }
 
+        if(groupBuyingOptional.isEmpty())
+            throw new EntityNotFoundException("해당 공동구매 게시글을 찾을 수 없습니다.");
+
+        GroupBuying groupBuying = groupBuyingOptional.get();
+        Complaint complaint = new Complaint(request, Optional.empty(), groupBuyingOptional);
+        complaint = complaintRepository.save(complaint);
+
+        groupBuying.getComplaintList().add(complaint);
+        groupBuying.updateStatus();
+
+        groupBuyingRepository.save(groupBuying);
+        return complaint;
+    }
 
     // 신고 내역 조회
     public List<Complaint> getComplaintsByMemberId(Long memberId) {

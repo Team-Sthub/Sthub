@@ -31,18 +31,14 @@ public class Complaint extends BaseTime {
     @Column(name = "tag")
     private List<Integer> tags = new ArrayList<Integer>();
 
-    @CreatedDate
-    @Column(name = "createdAt", updatable = false, nullable = false)
-    private LocalDateTime createdAt;
-
     // 공동구매 조인
-    @ManyToOne(fetch = FetchType.LAZY, optional = true, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "groupBuyingId", nullable = true)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "groupBuyingId")
     private GroupBuying groupBuying;
 
     // 중고거래 조인
-    @ManyToOne(fetch = FetchType.LAZY,optional = true,  cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "secondhandId", nullable = true)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "secondhandId")
     private Secondhand secondhand;
 
     public Complaint(ComplaintDTO.Request request, Optional<Secondhand> secondhandOptional, Optional<GroupBuying> groupBuyingOptional) {

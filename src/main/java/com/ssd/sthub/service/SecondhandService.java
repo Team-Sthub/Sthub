@@ -179,4 +179,8 @@ public class SecondhandService {
             sImageRepository.deleteByPath(image);
         }
     }
+
+    public void deleteSecondhandByStatus() {
+        secondhandRepository.deleteAllByStatus("신고 누적");
+    }
 }

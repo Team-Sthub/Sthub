@@ -255,4 +255,8 @@ public class GroupBuyingService {
                 .map(g -> new GroupBuyingListDTO.ListResponse(g, g.getImageList(), category, groupBuyings.getTotalPages(), pageNum + 1))
                 .collect(Collectors.toList());
     }
+
+    public void deleteGroupBuyingByStatus() {
+        groupBuyingRepository.deleteAllByStatus("신고 누적");
+    }
 }
