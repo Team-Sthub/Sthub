@@ -6,6 +6,28 @@
     <link rel="stylesheet" th:href="@{/style/header.css}">
     <link rel="stylesheet" th:href="@{/style/user/otherUserView.css}">
     <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
+    <script>
+        function getStars(mannergrade) {
+            let roundedGrade = Math.round(mannergrade);
+            let fullStars = roundedGrade;
+            let emptyStars = 5 - fullStars;
+
+            let stars = '';
+            for (let i = 0; i < fullStars; i++) {
+                stars += '★';
+            }
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '☆';
+            }
+            return stars;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const mannergrade = [[${user.mannerGrade}]];
+            const starContainer = document.getElementById('star-container');
+            starContainer.textContent = getStars(mannergrade);
+        });
+    </script>
 </head>
 <body>
 <div th:replace="thyme/frameHeader :: header"></div><br>
@@ -26,8 +48,8 @@
         <div class="userBox">
             <div class="manner">
                 <div class="rectangle" th:text="${user.nickname} + '의 매너 등급'"></div>
-                <!-- 별점 표시.. -->
-
+                <!-- 별점 표시.. -->&nbsp;&nbsp;
+                <p id="star-container"></p>
             </div>
             <br>
             <div class="location">
