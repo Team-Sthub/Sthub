@@ -84,6 +84,4 @@ public class ComplaintController {
 
         return "thyme/user/fragments/complaintFragments";
     }
-
-    // 신고 카운트
 }

@@ -113,7 +113,7 @@ function validateUpdateForm(event) {
         body: formData
     }).then(response => {
         if (response.ok) {
-            window.location.href = `/secondhand/detail?secondhandId=${secondhandId}`;
+            window.location.href = `/secondhand/${secondhandId}`;
         } else {
             alert('수정 중 오류가 발생했습니다.');
         }

@@ -32,7 +32,7 @@
 <!-- 중고거래 게시글 리스트 -->
 <div class="product-grid" th:if="${not#lists.isEmpty(secondhandList)}">
     <div th:each="secondhand : ${secondhandList}">
-        <a th:href="@{/secondhand/detail(secondhandId=${secondhand.getSecondhand().id})}" class="product-box-link">
+        <a th:href="@{/secondhand/{secondhandId}(secondhandId=${secondhand.secondhand.id})}" class="product-box-link">
             <div class="product-box">
                 <span th:text="${#strings.substring(secondhand.getSecondhand().createdAt, 0, 10)}"></span>
                 <!-- 이미지가 있는 경우 가장 첫 번째 이미지를 썸네일로 사용-->

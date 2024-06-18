@@ -20,7 +20,7 @@
         </div>
         <div class="product-grid">
             <div th:each="groupBuying : ${groupBuyingList}">
-                <a th:href="@{/groupBuying/detail(groupBuyingId=${groupBuying.getGroupBuying().id})}" class="product-box-link">
+                <a th:href="@{/groupBuying/{groupBuyingId}(groupBuyingId=${groupBuying.groupBuying.getId()})}" class="product-box-link">
                     <div class="product-box">
                         <!-- 이미지가 있는 경우 가장 첫 번째 이미지를 썸네일로 사용-->
                         <div th:if="${groupBuying.getGImages() == null or groupBuying.getGImages().isEmpty()}">

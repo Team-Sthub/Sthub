@@ -41,7 +41,7 @@ public class SecondhandController {
     }
 
     // 중고거래 게시글 생성
-    @PostMapping("/create")
+    @PostMapping("")
     public ModelAndView createSecondhand(@SessionAttribute Long memberId, @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @ModelAttribute @Validated SecondhandDTO.PostRequest request) {
         List<String> imgUrls = null;
         if (!multipartFiles.get(0).isEmpty()) {
@@ -50,7 +50,7 @@ public class SecondhandController {
 
         SecondhandDTO.DetailResponse secondhand = secondhandService.createSecondhand(memberId, imgUrls, request);
         Long secondhandId = secondhand.getSecondhand().getId();
-        return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + secondhandId);
+        return new ModelAndView("redirect:/secondhand/" + secondhandId);
     }
 
     // 중고거래 게시글 수정 클릭
@@ -86,7 +86,7 @@ public class SecondhandController {
 
         SecondhandDTO.DetailResponse secondhand = secondhandService.updateSecondhand(memberId, imgUrls, request);
         Long secondhandId = request.getSecondhandId();
-        return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + secondhandId);
+        return new ModelAndView("redirect:/secondhand/" + secondhandId);
     }
 
     // 중고거래 거래 최종 방식 수정
@@ -95,24 +95,24 @@ public class SecondhandController {
                                          @RequestBody @Validated SecondhandDTO.CheckRequest request) throws BadRequestException {
         SecondhandDTO.DetailResponse secondhand = secondhandService.checkSecondhand(memberId, request);
         Long secondhandId = request.getSecondhandId();
-        return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + secondhandId);
+        return new ModelAndView("redirect:/secondhand/" + secondhandId);
     }
 
     // 중고거래 게시글 삭제
     @ResponseStatus(HttpStatus.SEE_OTHER)
-    @DeleteMapping("/delete")
+    @DeleteMapping("")
     public ModelAndView deleteSecondhand(@SessionAttribute Long memberId, @RequestParam Long secondhandId) throws BadRequestException {
         String result = secondhandService.deleteSecondhand(memberId, secondhandId);
 
         if(result.equals("delete success"))
             return new ModelAndView("redirect:/secondhand/list/ALL?pageNum=1");
         else
-            return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + secondhandId, "result", "delete fail");
+            return new ModelAndView("redirect:/secondhand/" + secondhandId, "result", "delete fail");
     }
 
     // 중고거래 게시글 상세 조회 + 판매 내역 상세 조회 + 구매 내역 상세 조회
-    @GetMapping("/detail")
-    public ModelAndView getSecondhand(@SessionAttribute Long memberId, @RequestParam Long secondhandId) {
+    @GetMapping("/{secondhandId}")
+    public ModelAndView getSecondhand(@SessionAttribute Long memberId, @PathVariable Long secondhandId) {
         SecondhandDTO.DetailResponse secondhand = secondhandService.getSecondhand(secondhandId);
         Long writerId = secondhand.getSecondhand().getMember().getId();
 
@@ -140,16 +140,16 @@ public class SecondhandController {
     }
 
     // 중고거래 게시글 댓글 작성
-    @PostMapping("/detail/comment")
-    public ModelAndView createComment(@SessionAttribute Long memberId, @ModelAttribute SCommentDTO.Request request) {
+    @PostMapping("/{secondhandId}/comment")
+    public ModelAndView createComment(@SessionAttribute Long memberId, @ModelAttribute SCommentDTO.Request request, @PathVariable Long secondhandId) {
         log.info("secondhandId " + request.getSecondhandId());
         SCommentDTO.Response comment = sCommentService.createComment(memberId, request);
-        return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + request.getSecondhandId());
+        return new ModelAndView("redirect:/secondhand/" + request.getSecondhandId());
     }
 
     // 중고거래 게시글 댓글 전체 조회
-    @GetMapping("/detail/comment")
-    public ResponseEntity<SuccessResponse<List<SCommentDTO.Response>>> getComments(@RequestParam Long secondhandId) {
+    @GetMapping("/{secondhandId}/comment")
+    public ResponseEntity<SuccessResponse<List<SCommentDTO.Response>>> getComments(@PathVariable Long secondhandId) {
         return ResponseEntity.ok(SuccessResponse.create(sCommentService.getComments(secondhandId)));
     }
 

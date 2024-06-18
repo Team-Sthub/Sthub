@@ -17,7 +17,7 @@
 <!-- 공동구매 게시글 리스트 -->
 <div class="product-grid">
     <div th:each="groupBuying : ${myGroupBuyingList}">
-        <a th:href="@{/groupBuying/detail(groupBuyingId=${groupBuying.getGroupBuying().id})}" class="product-box-link">
+        <a th:href="@{/groupBuying/{groupBuyingId}(groupBuyingId=${groupBuying.groupBuying.getId()})}" class="product-box-link">
             <div class="product-box">
                 <div class="box-top">
                     <p id="date" th:text="${#strings.substring(groupBuying.getGroupBuying().createdAt, 0, 10)}"></p>
