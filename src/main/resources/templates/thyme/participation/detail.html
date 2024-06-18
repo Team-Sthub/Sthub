@@ -7,12 +7,6 @@
   <link rel="stylesheet" th:href="@{/style/participation/create.css}" href="../../../static/style/participation/create.css"/>
   <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css}"/>
 </head>
-<script>
-  function is_closed() {
-    const groupBuyingId = new URLSearchParams(window.location.search).get('groupBuyingId');
-    window.location.href = `/participation/list?pageNum=0&groupBuyingId=${groupBuyingId}`;
-  }
-</script>
 <body>
 <div th:insert="~{thyme/frameHeader :: header}"></div>
 <div class="back">
@@ -46,7 +40,7 @@
       </tr>
     </table>
     <div class="btn-container">
-      <input class="btn1" type="button" value="닫기" onclick="is_closed()">
+      <a th:href="@{|/participation/list?pageNum=0&groupBuyingId=${participation.groupBuying.id}|}" class="btn1">닫기</a>
     </div>
   </div>
 </div>
