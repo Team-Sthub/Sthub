@@ -32,7 +32,7 @@
 <!-- 중고거래 게시글 리스트 -->
 <div class="product-grid">
     <div th:each="secondhand : ${myPurchaseList}">
-        <a th:href="@{/secondhand/detail(secondhandId=${secondhand.secondhand.id})}" class="product-box-link">
+        <a th:href="@{/secondhand/{secondhandId}(secondhandId=${secondhand.secondhand.id})}" class="product-box-link">
             <div class="product-box">
                 <div class="box-top">
                     <p id="date" th:text="${#strings.substring(secondhand.secondhand.createdAt, 0, 10)}"></p>

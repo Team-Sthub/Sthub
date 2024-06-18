@@ -32,7 +32,7 @@
 <!-- 중고거래 게시글 리스트 -->
 <div class="product-grid" th:if="${not#lists.isEmpty(groupBuyingList)}">
     <div th:each="groupBuying : ${groupBuyingList}">
-        <a th:href="@{/groupBuying/detail(groupBuyingId=${groupBuying.getGroupBuying().id})}" class="product-box-link">
+        <a th:href="@{/groupBuying/{groupBuyingId}(groupBuyingId=${groupBuying.groupBuying.getId()})}" class="product-box-link">
             <div class="product-box">
                 <span th:text="${#strings.substring(groupBuying.getGroupBuying().createdAt, 0, 10)}"></span>
                 <!-- 이미지가 있는 경우 가장 첫 번째 이미지를 썸네일로 사용-->

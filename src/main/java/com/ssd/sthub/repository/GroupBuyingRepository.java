@@ -14,8 +14,6 @@ import java.util.Optional;
 
 @Repository
 public interface GroupBuyingRepository extends JpaRepository<GroupBuying, Long> {
-
-    Optional<GroupBuying> findById(Long groupBuyingId);
     Page<GroupBuying> findAllByMemberId(Long memberId, PageRequest pageRequest);
     Page<GroupBuying> findAllByCategoryOrderByCreatedAtDesc(Category category, PageRequest pageRequest);
     Page<GroupBuying> findAllByOrderByCreatedAtDesc(PageRequest pageRequest);
@@ -55,5 +53,4 @@ public interface GroupBuyingRepository extends JpaRepository<GroupBuying, Long> 
                                                                              PageRequest pageRequest);
 
     void deleteAllByStatus(String status);
-
 }

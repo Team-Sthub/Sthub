@@ -87,8 +87,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         })
             .then(response => {
                 if (response.ok) {
-                    window.location.href = `/groupBuying/detail?groupBuyingId=${groupBuyingId}`;
-
+                    window.location.href = `/groupBuying/${groupBuyingId}`;
                 }else{
                     throw new Error('수정 실패');
                 }

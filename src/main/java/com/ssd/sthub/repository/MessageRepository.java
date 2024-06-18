@@ -10,7 +10,4 @@ import java.util.List;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    Page<Message> findAllBySenderId(Long senderId, PageRequest pageRequest);
-    List<Message> findAllBySenderIdAndReceiverId(Long senderId, Long receiverId);
-    Message save(Message msg);
 }

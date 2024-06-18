@@ -17,7 +17,7 @@
 <p id="main-title">중고거래 글 작성하기</p>
 <hr/>
 
-<form id="create" th:action="@{/secondhand/create}" method="post" enctype="multipart/form-data" onsubmit="return validateCreateForm()">
+<form id="create" th:action="@{/secondhand}" method="post" enctype="multipart/form-data" onsubmit="return validateCreateForm()">
     <div class="title-context">
         <input type="text" th:id="title" th:name="title" placeholder="제목을 입력하세요."/>
     </div>

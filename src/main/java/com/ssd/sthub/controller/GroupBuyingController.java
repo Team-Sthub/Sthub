@@ -32,8 +32,6 @@ public class GroupBuyingController {
 
     private final GroupBuyingService groupBuyingService;
     private final AWSS3SService awss3SService;
-    private final HttpServletRequest httpServletRequest;
-    private final MemberService memberService;
 
     // 공동구매 전체 조회
     @GetMapping("/list/{category}")
@@ -50,9 +48,8 @@ public class GroupBuyingController {
     }
 
     // 공동구매 게시글(상세) 조회 (작성자 확인은 controller에서 하고 뷰 설정) 작성자 수락 여부 확인 후 링크 공개 및 미공개 해야함.
-    @GetMapping("/detail")
-    public ModelAndView getGroupBuying(@SessionAttribute(name = "memberId") Long memberId, @RequestParam Long groupBuyingId) {
-        log.info("detail 드러옴");
+    @GetMapping("/{groupBuyingId}")
+    public ModelAndView getGroupBuying(@SessionAttribute(name = "memberId") Long memberId, @PathVariable Long groupBuyingId) {
         ModelAndView modelAndView = new ModelAndView();
 
         try {
@@ -80,7 +77,7 @@ public class GroupBuyingController {
     }
 
     // 공동구매 게시글 작성
-    @PostMapping("/create")
+    @PostMapping("")
     public ModelAndView postGroupBuying(@SessionAttribute(name = "memberId") Long memberId, @RequestPart("imgUrl") List<MultipartFile> multipartFiles, @ModelAttribute @Validated PostGroupBuyingDTO.Request request, BindingResult result) {
         ModelAndView modelAndView = new ModelAndView();
 
@@ -98,7 +95,7 @@ public class GroupBuyingController {
             PostGroupBuyingDTO.Response groupBuying = groupBuyingService.postGroupBuying(memberId, imgUrls, request);
             Long groupBuyingId = groupBuying.getGroupBuying().getId();
             log.info("groupBuyingId =" + groupBuyingId);
-            modelAndView.setViewName("redirect:/groupBuying/detail?groupBuyingId=" + groupBuyingId);
+            modelAndView.setViewName("redirect:/groupBuying/" + groupBuyingId);
         } catch (EntityNotFoundException e) {
             modelAndView.setViewName("thyme/groupBuying/create");
             modelAndView.addObject("errorMessage", e.getMessage());
@@ -169,13 +166,13 @@ public class GroupBuyingController {
 
     // 공동구매 게시글 삭제
     @ResponseStatus(HttpStatus.SEE_OTHER) // 리다이렉션 할 때 사용
-    @DeleteMapping("/delete")
+    @DeleteMapping("")
     public ModelAndView updateGroupBuying(@SessionAttribute(name = "memberId") Long memberId, @RequestParam Long groupBuyingId) {
         String result = groupBuyingService.deleteGroupBuying(memberId, groupBuyingId);
         if(result.equals("delete success"))
             return new ModelAndView("redirect:/groupBuying/list/ALL?pageNum=1");
         else
-            return new ModelAndView("redirect:/groupBuying/detail?groupBuying=" + groupBuyingId, "result", "delete fail");
+            return new ModelAndView("redirect:/groupBuying/" + groupBuyingId, "result", "delete fail");
     }
 
     // 마이페이지 - 공구 내역 (더보기)

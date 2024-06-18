@@ -33,8 +33,7 @@ function toggleTransaction(type) {
 }
 
 function sendDeleteRequest(secondhandId) {
-    alert(secondhandId);
-    var url = '/secondhand/delete?secondhandId=' + secondhandId;
+    var url = '/secondhand?secondhandId=' + secondhandId;
 
     fetch(url, {
         method: 'DELETE',
@@ -129,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }).then(response => {
             if (response.ok) {
-                window.location.href = `/secondhand/detail?secondhandId=` + secondhandId;
+                window.location.href = `/secondhand/` + secondhandId;
             } else {
                 alert('수정 중 오류가 발생했습니다.');
             }

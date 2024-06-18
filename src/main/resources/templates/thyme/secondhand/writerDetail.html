@@ -92,7 +92,7 @@
 <!-- 댓글 섹션 -->
 <hr/>
 <div id="comment">
-    <form class="comment-form" th:action="@{/secondhand/detail/comment}" method="post">
+    <form class="comment-form" th:action="@{/secondhand/{secondhandId}/comment(secondhandId=${secondhand.secondhand.id})}" method="post">
         <div class="comment-area">
             <input type="hidden" id="secondhandId" th:name="secondhandId" th:value="${secondhand.secondhand.id}"/>
             <p id="comment-nickname" th:text="${nickname}">블러드234</p>

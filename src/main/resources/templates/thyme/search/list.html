@@ -28,7 +28,7 @@
 <!-- 중고거래, 공동구매 검색 결과 리스트 -->
 <div class="product-grid">
     <div th:each="search : ${searchList.searchs}">
-        <a th:if="${search.type == 'groupBuying'}" th:href="@{/groupBuying/detail(groupBuyingId=${search.id})}" class="product-box-link">
+        <a th:if="${search.type == 'groupBuying'}" th:href="@{/groupBuying/{groupBuyingId}(groupBuyingId=${search.id})}" class="product-box-link">
             <div class="product-box">
                 <span th:text="${#strings.substring(search.createdAt, 0, 10)}"></span>
                 <!-- 이미지가 있는 경우 가장 첫 번째 이미지를 썸네일로 사용-->
@@ -43,7 +43,7 @@
                 <p th:text="${search.price} + '원'">가격</p>
             </div>
         </a>
-        <a th:if="${search.type == 'secondhand'}" th:href="@{/secondhand/detail(secondhandId=${search.id})}" class="product-box-link">
+        <a th:if="${search.type == 'secondhand'}" th:href="@{/secondhand/{secondhandId}(secondhandId=${search.id})}" class="product-box-link">
             <div class="product-box">
                 <span th:text="${#strings.substring(search.createdAt, 0, 10)}"></span>
                 <!-- 이미지가 있는 경우 가장 첫 번째 이미지를 썸네일로 사용-->

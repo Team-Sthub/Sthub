@@ -12,13 +12,5 @@ import java.util.Optional;
 
 @Repository
 public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
-    Optional<Purchase> findById(Long purchaseId);
-
-    Purchase save(Purchase purchase);
-
     Optional<Purchase> findBySecondhandId(Long secondhandId);
-
-    Page<Secondhand> findAllSecondhandByMemberId(Long memberId, PageRequest pageRequest);
-
-    List<Secondhand> findTop4SecondhandByMemberIdOrderByCreatedAtDesc(Long memberId);
 }
