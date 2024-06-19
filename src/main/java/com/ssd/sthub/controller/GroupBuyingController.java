@@ -152,7 +152,7 @@ public class GroupBuyingController {
 
             GroupBuyingDetailDTO.PatchResponse groupBuying = groupBuyingService.updateGroupBuying(memberId, imgUrls, request);
 
-            modelAndView.setViewName("redirect:/groupBuying/detail?groupBuyingId=" + groupBuying.getGroupBuying().getId());
+            modelAndView.setViewName("redirect:/groupBuying/" + groupBuying.getGroupBuying().getId());
             //modelAndView.addObject("groupBuying", groupBuying); -> 안넣어도 됨
         } catch (BadRequestException | EntityNotFoundException e) {
             modelAndView.setViewName("redirect:/groupBuying/moveToUpdateForm?groupBuyingId=" + groupBuyingId);
