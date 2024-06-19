@@ -5,10 +5,7 @@ import com.ssd.sthub.domain.Purchase;
 import com.ssd.sthub.domain.Review;
 import com.ssd.sthub.domain.Secondhand;
 import com.ssd.sthub.dto.review.ReviewRequestDTO;
-import com.ssd.sthub.repository.MemberRepository;
-import com.ssd.sthub.repository.PurchaseRepository;
-import com.ssd.sthub.repository.ReviewRepository;
-import com.ssd.sthub.repository.SecondhandRepository;
+import com.ssd.sthub.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +21,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReviewRepository reviewRepository;
+    private final ReviewRepositoryImpl reviewRepositoryImpl;
     private final SecondhandRepository secondhandRepository;
     private final MemberRepository memberRepository;
     private final PurchaseRepository purchaseRepository;
@@ -53,16 +51,11 @@ public class ReviewService {
 
     // 후기 조회 - 중복 제거
     public List<String> getTags(Long memberId) {
-        List<Review> reviews = reviewRepository.findReviewBySecondhand_MemberId(memberId);
+        List<Integer> tagIndexes = reviewRepositoryImpl.findReviewRepoDTOByMemberId(memberId);
         Set<String> uniqueTags = new HashSet<>();
 
-        for (Review review : reviews) {
-            List<Integer> reviewTags = review.getTags();
-            for (int i = 0; i < reviewTags.size(); i++) {
-                if (reviewTags.get(i) == 1) {
-                    uniqueTags.add(convertIndexToTag(i));
-                }
-            }
+        for (Integer index : tagIndexes) {
+            uniqueTags.add(convertIndexToTag(index));
         }
 
         return new ArrayList<>(uniqueTags);

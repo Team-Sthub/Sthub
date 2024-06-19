@@ -1,9 +1,8 @@
 package com.ssd.sthub.repository;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssd.sthub.domain.*;
-import com.ssd.sthub.dto.complaint.ComplaintRepoDTO;
+import com.ssd.sthub.domain.Complaint;
+import com.ssd.sthub.domain.QComplaint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
@@ -29,8 +28,10 @@ public class ComplaintRepositoryImpl extends QuerydslRepositorySupport {
         // 특정 회원의 신고 내역 조회
         List<Complaint> complaints = jpaQueryFactory
                 .selectFrom(complaint)
-                .leftJoin(complaint.groupBuying).on(complaint.groupBuying.member.id.eq(memberId))
-                .leftJoin(complaint.secondhand).on(complaint.secondhand.member.id.eq(memberId))
+                .leftJoin(complaint.groupBuying)
+                .leftJoin(complaint.secondhand)
+                .where(complaint.groupBuying.member.id.eq(memberId)
+                        .or(complaint.secondhand.member.id.eq(memberId)))
                 .fetch();
         log.info("======================1");
 

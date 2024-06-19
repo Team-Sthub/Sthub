@@ -2,10 +2,7 @@ package com.ssd.sthub.service;
 
 import com.ssd.sthub.domain.*;
 import com.ssd.sthub.dto.complaint.ComplaintDTO;
-import com.ssd.sthub.repository.ComplaintRepository;
-import com.ssd.sthub.repository.GroupBuyingRepository;
-import com.ssd.sthub.repository.MemberRepository;
-import com.ssd.sthub.repository.SecondhandRepository;
+import com.ssd.sthub.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +17,7 @@ import java.util.*;
 public class ComplaintService {
 
     private final ComplaintRepository complaintRepository;
+    private final ComplaintRepositoryImpl complaintRepositoryImpl;
     private final SecondhandRepository secondhandRepository;
     private final GroupBuyingRepository groupBuyingRepository;
     public final MemberRepository memberRepository;
@@ -61,25 +59,17 @@ public class ComplaintService {
     }
 
     // 신고 내역 조회
-    public List<Complaint> getComplaintsByMemberId(Long memberId) {
-        return complaintRepository.findBySecondhand_Member_IdOrGroupBuying_Member_Id(memberId, memberId);
-    }
-
     public List<String> getTags(Long memberId) {
-        List<Complaint> complaints = getComplaintsByMemberId(memberId);
+        List<Integer> tagIndexes = complaintRepositoryImpl.findComplaintRepoDTOByMemberId(memberId);
         Set<String> uniqueTags = new HashSet<>();
 
-        for (Complaint complaint : complaints) {
-            List<Integer> complaintTags = complaint.getTags();
-            for (int i = 0; i < complaintTags.size(); i++) {
-                if (complaintTags.get(i) == 1) {
-                    uniqueTags.add(convertIndexToTag(i));
-                }
-            }
+        for (Integer index : tagIndexes) {
+            uniqueTags.add(convertIndexToTag(index));
         }
 
         return new ArrayList<>(uniqueTags);
     }
+
 
     private String convertIndexToTag(int index) {
         switch (index) {
