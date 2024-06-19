@@ -14,10 +14,17 @@
         }
 
         function validateForm(event) {
+            const content = document.getElementById('content').value;
             const checkbox = document.getElementById('my_checkbox');
             if (!checkbox.checked) {
                 alert('체크박스를 선택해주세요.');
                 event.preventDefault(); // 폼 제출을 막습니다.
+            }
+
+            if (content.trim() === "") {
+                alert("모든 필수 입력란을 작성해주세요.");
+                event.preventDefault();
+                return false;
             }
         }
     </script>
