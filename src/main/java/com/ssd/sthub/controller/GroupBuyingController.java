@@ -157,10 +157,7 @@ public class GroupBuyingController {
         } catch (BadRequestException | EntityNotFoundException e) {
             modelAndView.setViewName("redirect:/groupBuying/moveToUpdateForm?groupBuyingId=" + groupBuyingId);
             modelAndView.addObject("errorMessage", e.getMessage());
-        } // catch (BadRequestException e) {
-//            modelAndView.setViewName("redirect:/groupBuying/detail?groupBuyingId=" + groupBuyingId);
-//            modelAndView.addObject("errorMessage", e.getMessage());
-//        }
+        }
         return modelAndView;
     }
 
