@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }).then(response => {
             if (response.ok) {
                 alert('구매에 성공했습니다.');
-                window.location.href = `/secondhand/detail?secondhandId=` + secondhandId;
+                window.location.href = `/secondhand/` + secondhandId;
             } else {
                 alert('구매 중 오류가 발생했습니다.');
             }

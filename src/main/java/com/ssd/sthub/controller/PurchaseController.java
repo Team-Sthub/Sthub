@@ -27,7 +27,7 @@ public class PurchaseController {
     @PostMapping("")
     public ModelAndView createPurchase(@SessionAttribute Long memberId, @RequestParam Long secondhandId) {
         boolean result = purchaseService.createPurchase(memberId, secondhandId);
-        return new ModelAndView("redirect:/secondhand/detail?secondhandId=" + secondhandId);
+        return new ModelAndView("redirect:/secondhand/" + secondhandId);
     }
 
     // 마이페이지 - 구매 내역 (더보기)

@@ -25,7 +25,7 @@
 <body>
 <div th:insert="~{thyme/frameHeader :: header}"></div>
 <div class="back">
-    <form method="post" class="participation-form" th:action="@{/participation/create}"
+    <form method="post" class="participation-form" th:action="@{/participation}"
           th:object="${participationRequest}" onsubmit="validateForm(event)">
         <!--        <input type="hidden" name="memberId" value="1"> &lt;!&ndash; 이 값을 서버에서 동적으로 설정 &ndash;&gt;-->
         <input type="hidden" name="groupBuyingId" th:value="${groupBuying.id}">

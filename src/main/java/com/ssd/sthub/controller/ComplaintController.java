@@ -52,8 +52,7 @@ public class ComplaintController {
         Complaint complaint = complaintService.complaintSecondhand(secondhandId, request);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("complaint", complaint);
-        modelAndView.setViewName("thyme/user/login");
-        return modelAndView;
+        return new ModelAndView("redirect:/secondhand/" + secondhandId);
     }
 
     // 공동구매 신고 처리
@@ -63,8 +62,7 @@ public class ComplaintController {
         Complaint complaint = complaintService.complaintGroupBuying(groupBuyingId, request);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("complaint", complaint);
-        modelAndView.setViewName("thyme/user/login");
-        return modelAndView;
+        return new ModelAndView("redirect:/groupBuying/" + groupBuyingId);
     }
 
     // 신고 조회
@@ -84,6 +82,4 @@ public class ComplaintController {
 
         return "thyme/user/fragments/complaintFragments";
     }
-
-    // 신고 카운트
 }

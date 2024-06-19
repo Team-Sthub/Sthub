@@ -15,12 +15,8 @@ import java.util.Optional;
 
 @Repository
 public interface SecondhandRepository extends JpaRepository<Secondhand, Long> {
-    Secondhand save(Secondhand secondhand);
-
     void deleteById(Long secondhandId);
 
-    Optional<Secondhand> findById(Long secondhandId);
-    List<Secondhand> findAllByMemberId(Long memberId);
     List<Secondhand> findTop4ByMemberIdOrderByCreatedAtDesc(Long memberId);
 
     Page<Secondhand> findAllByMemberId(Long memberId, PageRequest pageRequest);

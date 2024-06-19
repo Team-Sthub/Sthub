@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             return; // 사용자가 삭제를 취소하면 함수 종료
         }
 
-        fetch(`/groupBuying/delete?groupBuyingId=${groupBuyingId}`, {
+        fetch(`/groupBuying?groupBuyingId=${groupBuyingId}`, {
             method: 'DELETE',
         })
             .then(response => {

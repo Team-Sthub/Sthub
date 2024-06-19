@@ -46,7 +46,7 @@ public class ParticipationController {
     }
 
     // 참여 신청폼 작성
-    @PostMapping("/create")
+    @PostMapping("")
     public ModelAndView createParticipation(@SessionAttribute(name = "memberId") Long memberId, Long groupBuyingId, @ModelAttribute @Validated ParticipationRequestDTO.Request request) {
         Participation participation = participationService.createParticipation(memberId, groupBuyingId, request);
         Member member = memberRepository.findById(memberId)
@@ -59,8 +59,8 @@ public class ParticipationController {
     }
 
     // 참여 신청폼 상세 조회
-    @GetMapping("/detail")
-    public ModelAndView getParticipation(@SessionAttribute(name = "memberId") Long memberId, @RequestParam Long participationId) {
+    @GetMapping("/{participationId}")
+    public ModelAndView getParticipation(@SessionAttribute(name = "memberId") Long memberId, @PathVariable Long participationId) {
         Participation participation = participationService.getParticipation(participationId);
 
         ModelAndView modelAndView;
@@ -89,9 +89,9 @@ public class ParticipationController {
         return modelAndView;
     }
 
-    // 참여 신청폼으로 이동
+    // 참여 신청 수정 폼으로 이동
     @GetMapping("/moveToUpdateForm")
-    public ModelAndView showUpdateForm(Model model, @RequestParam Long participationId, @SessionAttribute(name = "memberId") Long memberId) {
+    public ModelAndView showUpdateForm(Model model, @RequestParam(name = "participationId") Long participationId, @SessionAttribute(name = "memberId") Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 조회에 실패했습니다."));
         model.addAttribute("member", member);
@@ -107,7 +107,7 @@ public class ParticipationController {
         Participation participation = participationService.updateParticipation(memberId, participationId, request);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("participation", participation);
-        return new ModelAndView("redirect:/participation/detail?participationId=" + participation.getId());
+        return new ModelAndView("redirect:/participation/" + participation.getId());
     }
 
     // 참여 신청폼 수락/거절

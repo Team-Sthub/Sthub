@@ -96,7 +96,7 @@
 <!-- 댓글 섹션 -->
 <hr/>
 <div id="comment">
-    <form class="comment-form" th:action="@{/groupBuying/detail/comment}" method="post">
+    <form class="comment-form" th:action="@{/groupBuying/{groupBuyingId}/comment(groupBuyingId=${groupBuying.groupBuying.id})}" method="post">
         <div class="comment-area">
             <input type="hidden" th:name="groupBuyingId" th:value="${groupBuying.groupBuying.id}"/>
             <p id="comment-nickname" th:text="${memberNickname}">블러드234</p>

@@ -22,15 +22,15 @@ public class GCommentController {
     private final GCommentService gCommentService;
 
     // 공동구매 게시글 댓글 작성
-    @PostMapping("/detail/comment")
-    public ModelAndView createComment(@SessionAttribute Long memberId, @ModelAttribute @Validated GCommentRequestDto.request request) {
+    @PostMapping("/{groupBuyingId}/comment")
+    public ModelAndView createComment(@SessionAttribute Long memberId, @ModelAttribute @Validated GCommentRequestDto.request request, @PathVariable Long groupBuyingId) {
         GComment gComment = gCommentService.createGComment(memberId, request);
-        return new ModelAndView("redirect:/groupBuying/detail?groupBuyingId=" + request.getGroupBuyingId());
+        return new ModelAndView("redirect:/groupBuying/" + request.getGroupBuyingId());
     }
 
     // 공동구매 게시글 댓글 전체 조회
-    @GetMapping("/detail/comment")
-    public ResponseEntity<SuccessResponse<List<GCommentResponseDto.GCommentDto>>> getComments(@RequestParam Long groupBuyingId) {
+    @GetMapping("/{groupBuyingId}/comment")
+    public ResponseEntity<SuccessResponse<List<GCommentResponseDto.GCommentDto>>> getComments(@PathVariable Long groupBuyingId) {
         return ResponseEntity.ok(SuccessResponse.create(gCommentService.getGCommentList(groupBuyingId)));
     }
 }
