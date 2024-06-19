@@ -1,7 +1,8 @@
 package com.ssd.sthub.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssd.sthub.domain.*;
+import com.ssd.sthub.domain.QReview;
+import com.ssd.sthub.domain.Review;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
@@ -26,7 +27,8 @@ public class ReviewRepositoryImpl extends QuerydslRepositorySupport {
         // 특정 회원의 후기 조회
         List<Review> reviews = jpaQueryFactory
                 .selectFrom(review)
-                .leftJoin(review.secondhand).on(review.secondhand.member.id.eq(memberId))
+                .join(review.secondhand).on(review.secondhand.member.id.eq(memberId))
+                .where(review.secondhand.member.id.eq(memberId))
                 .fetch();
         log.info("======================1");
 
