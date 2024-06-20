@@ -4,6 +4,8 @@ var address;
 var file;
 var marker;
 var previousMarker;
+var changeLat;
+var changeLng;
 
 function initMap() {
     // 지도 생성
@@ -116,18 +118,29 @@ function searchAddress() {
             if (previousMarker) {       // 기존 검색 마커 제거
                 previousMarker.setMap(null);
             }
-            var newMarker = new google.maps.Marker;
-            newMarker = new google.maps.Marker({
+
+            marker = new google.maps.Marker({
                 position: pos,
                 map: map,
                 title: inputAddress
             });
-            // 새로운 마커를 이전 마커로 설정
-            previousMarker = newMarker;
 
-            displayAddress(results[0].formatted_address);
+            previousMarker = marker;
+            // Hidden input에 값 설정
+            const formattedAddress = results[0].formatted_address;
+
+            // '대한민국'을 제외한 나머지 주소 부분 추출
+            const addressWithoutCountry = formattedAddress.replace(/^대한민국\s*/, '');
+
+            //displayAddress(addressWithoutCountry);
+            document.getElementById('address-input').value = addressWithoutCountry;
             document.getElementById('latitude').value = pos.lat();
+            changeLat = pos.lat();
+            console.log("지도 검색 위도는 " + pos.lat());
             document.getElementById('longitude').value = pos.lng();
+            changeLng = pos.lng();
+            console.log("지도 검색 위도는 " + pos.lng());
+
         } else {
             console.error('Geocode was not successful for the following reason: ' + status);
         }
@@ -182,24 +195,28 @@ function getLocationAndSubmit() {
     const addressInput = document.getElementById('address-input');
     const addressField = document.getElementById('address');
 
+    // 주소 입력 따로 안하고 현재 위치로 회원가입 할 때
     if (addressInput.value !== "") {
         addressField.value = addressInput.value;
+        document.getElementById('latitude').value = changeLat;
+        document.getElementById('longitude').value = changeLng;
+        submitForm();
+
     } else {
         addressField.value = address;
-    }
-    
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            document.getElementById('latitude').value = position.coords.latitude;
-            document.getElementById('longitude').value = position.coords.longitude;
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                document.getElementById('latitude').value = position.coords.latitude;
+                document.getElementById('longitude').value = position.coords.longitude;
+                submitForm();
+            }, function(error) {
+                alert("Geolocation is not supported by this browser or an error occurred.");
+                submitForm();
+            });
+        } else {
+            alert("Geolocation is not supported by this browser.");
             submitForm();
-        }, function(error) {
-            alert("Geolocation is not supported by this browser or an error occurred.");
-            submitForm();
-        });
-    } else {
-        alert("Geolocation is not supported by this browser.");
-        submitForm();
+        }
     }
 }
 
