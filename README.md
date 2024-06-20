@@ -35,7 +35,7 @@
 ## 3️⃣ 테스트용 ID/PW
 ### ⚠️ 주의사항
 - application.yml에서 active profile이 prod로 설정되어 있는지 확인
-- 중고거래 타유저가 구매 -> 작성자가 구매 수락 필수
+- 중고거래 타유저가 구매 -> 작성자가 거래 최종 방식 선택 필수
 - 배송 조회 및 후기 작성은 마이페이지 내역에서 더보기 페이지에서 가능
 
 ### 🔐 계정
@@ -43,11 +43,11 @@
    - ID : cspark
    - PWD : cspark1111!
 2. 계정 2
+   - ID : gywjd
+   - PWD : gywjd1111!
+3. 계정 3
    - ID : mangba
    - PWD : MANGBA1111!
-3. 계정 3
-   - ID : cspark1
-   - PWD : cspark1111!
 
 <br>
 
