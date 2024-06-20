@@ -67,3 +67,12 @@ ex. `feat(#40) : login 파일 추가'
 | test | 테스트 코드 추가 |
 | refactoring | 코드 리팩토링 |
 | chore | 빌드, 패키지 매니저 수정 |
+
+<br>
+
+## 5️⃣ Development Environment
+<p align="left">
+<img src ="https://img.shields.io/badge/Thymeleaf-5.0-005F0F">
+<img src ="https://img.shields.io/badge/SpringBoot-13.3-6DB33F">
+<img src ="https://img.shields.io/badge/SpringDataJPA-15.0-6DB33F">
+<img src ="https://img.shields.io/badge/Java-17.0-white">
