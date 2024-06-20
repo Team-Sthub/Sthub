@@ -6,6 +6,8 @@ var marker;
 var previousMarker;
 var changeLat;
 var changeLng;
+var password;
+var confirmPassword;
 
 function initMap() {
     // 지도 생성
@@ -179,8 +181,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // 비밀번호 확인
 function checkPasswordMatch() {
-    var password = document.getElementById("password").value;
-    var confirmPassword = document.getElementById("checkPassword").value;
+    password = document.getElementById("password").value;
+    confirmPassword = document.getElementById("checkPassword").value;
     var passwordMatchMessage = document.getElementById("checkpwd");
 
     if (password !== confirmPassword) {
@@ -208,6 +210,7 @@ function getLocationAndSubmit() {
             navigator.geolocation.getCurrentPosition(function(position) {
                 document.getElementById('latitude').value = position.coords.latitude;
                 document.getElementById('longitude').value = position.coords.longitude;
+
                 submitForm();
             }, function(error) {
                 alert("Geolocation is not supported by this browser or an error occurred.");
@@ -241,6 +244,10 @@ function submitForm() {
         method: 'POST',
         body: formData,
     }).then(response => {
+        if (password !== confirmPassword) {
+            throw new Error('회원가입에 실패하였습니다.');
+        }
+
         if (!response.ok) {
             // 기존 에러 메시지 제거
             document.querySelectorAll('.error-message').forEach(element => {
